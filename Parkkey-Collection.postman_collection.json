@@ -1,0 +1,3286 @@
+{
+	"info": {
+		"_postman_id": "d256c205-18f4-486b-a087-3e13e3b5e003",
+		"name": "Parkkey-Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33991161",
+		"_collection_link": "https://turbofinn.postman.co/workspace/Turbofinn-Workspace~760581c9-181b-4e47-9269-711fdf389834/collection/33991161-d256c205-18f4-486b-a087-3e13e3b5e003?action=share&source=collection_link&creator=33991161"
+	},
+	"item": [
+		{
+			"name": "Parking Ticket Creation",
+			"item": [
+				{
+					"name": "create-ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiODM4MjAyNWQtOGU5OC00OTJlLWIyMTYtMmJlZGNkOTQwN2Y3IiwianRpIjoiNDcxNzIyMTItMzQzNC00MmE1LThiZDktODk5MmI4NTJhNTdkIiwiaWF0IjoxNzE1NDA5MzEwLCJleHAiOjIwMzA3NjkzMTB9.6c75Mjo-9JYbQPl4zStMT3FNLH2i2ssrwZCVB6quWr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userID\": \"8382025d-8e98-492e-b216-2bedcd9407f7\",\n    \"vehicleID\": \"7a6298e9-0dd6-487a-9f12-d1750f116462\",\n    \"requestType\":\"CREATE_TICKET\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/ticket-handler/create-ticket",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"ticket-handler",
+								"create-ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirm-ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiODM4MjAyNWQtOGU5OC00OTJlLWIyMTYtMmJlZGNkOTQwN2Y3IiwianRpIjoiNDcxNzIyMTItMzQzNC00MmE1LThiZDktODk5MmI4NTJhNTdkIiwiaWF0IjoxNzE1NDA5MzEwLCJleHAiOjIwMzA3NjkzMTB9.6c75Mjo-9JYbQPl4zStMT3FNLH2i2ssrwZCVB6quWr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"parkingTicketID\": \"56019a74-2f7d-48b4-9b8b-da25c008bf7e\",\n    \"requestType\": \"CONFIRM_TICKET\",\n    \"employeeID\": \"b2f8fc4e-efb2-4844-a338-9a191e6b301c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/ticket-handler/confirm-ticket",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"ticket-handler",
+								"confirm-ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "otp-exit-ticket",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"parkingTicketID\": \"a904a1fc-4439-4ab6-942b-cd9eff1b6fb4\",\n    \"exitOTP\" : \"6470\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/ticket-handler/otp-exit-ticket",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"ticket-handler",
+								"otp-exit-ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "exit-ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiODM4MjAyNWQtOGU5OC00OTJlLWIyMTYtMmJlZGNkOTQwN2Y3IiwianRpIjoiNDcxNzIyMTItMzQzNC00MmE1LThiZDktODk5MmI4NTJhNTdkIiwiaWF0IjoxNzE1NDA5MzEwLCJleHAiOjIwMzA3NjkzMTB9.6c75Mjo-9JYbQPl4zStMT3FNLH2i2ssrwZCVB6quWr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"parkingTicketID\": \"7e15ec6a-9a7d-4173-802e-35f1b32f7222\",\n    \"employeeID\": \"fd0092b0-292e-4ae5-95c8-59c28a497c1f\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/ticket-handler/exit-ticket",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"ticket-handler",
+								"exit-ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiODM4MjAyNWQtOGU5OC00OTJlLWIyMTYtMmJlZGNkOTQwN2Y3IiwianRpIjoiNDcxNzIyMTItMzQzNC00MmE1LThiZDktODk5MmI4NTJhNTdkIiwiaWF0IjoxNzE1NDA5MzEwLCJleHAiOjIwMzA3NjkzMTB9.6c75Mjo-9JYbQPl4zStMT3FNLH2i2ssrwZCVB6quWr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/ticket-handler/get-ticket?parkingTicketID=a904a1fc-4439-4ab6-942b-cd9eff1b6fb4",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"ticket-handler",
+								"get-ticket"
+							],
+							"query": [
+								{
+									"key": "parkingTicketID",
+									"value": "a904a1fc-4439-4ab6-942b-cd9eff1b6fb4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-parking-charges",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiODM4MjAyNWQtOGU5OC00OTJlLWIyMTYtMmJlZGNkOTQwN2Y3IiwianRpIjoiNDcxNzIyMTItMzQzNC00MmE1LThiZDktODk5MmI4NTJhNTdkIiwiaWF0IjoxNzE1NDA5MzEwLCJleHAiOjIwMzA3NjkzMTB9.6c75Mjo-9JYbQPl4zStMT3FNLH2i2ssrwZCVB6quWr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/ticket-handler/get-parking-charges?parkingTicketID=7e15ec6a-9a7d-4173-802e-35f1b32f7222",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"ticket-handler",
+								"get-parking-charges"
+							],
+							"query": [
+								{
+									"key": "parkingTicketID",
+									"value": "7e15ec6a-9a7d-4173-802e-35f1b32f7222"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "customer flow handler",
+			"item": [
+				{
+					"name": "create-customer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiYjkwMjRhMjEtYzhmOS00MmQwLWE5M2EtY2Y4Nzk0ZGE0ZDM3IiwianRpIjoiZDkzZDdmZjktOGU1OS00ZjE0LTgzNWQtZjNiMWRhZTU4ZThmIiwiaWF0IjoxNzE1ODgzMzY4LCJleHAiOjIwMzEyNDMzNjh9.pPQZALU-qxIkZaKh_MuYp_PbqpR-uzh3JdrS6MZ4e5E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001276\",\n    \"vehicleNo\" :\"KA04MK0109\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/create-customer",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"create-customer"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0115\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-vehicle-details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-vehicle-details?vehicleNo=KA04MK0112",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-vehicle-details"
+							],
+							"query": [
+								{
+									"key": "vehicleNo",
+									"value": "KA04MK0112"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-vehicle-parking-history",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-vehicle-parking-history?vehicleID=7a6298e9-0dd6-487a-9f12-d1750f116462",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-vehicle-parking-history"
+							],
+							"query": [
+								{
+									"key": "vehicleID",
+									"value": "7a6298e9-0dd6-487a-9f12-d1750f116462"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-customer-vehicle-details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiODM4MjAyNWQtOGU5OC00OTJlLWIyMTYtMmJlZGNkOTQwN2Y3IiwianRpIjoiNDcxNzIyMTItMzQzNC00MmE1LThiZDktODk5MmI4NTJhNTdkIiwiaWF0IjoxNzE1NDA5MzEwLCJleHAiOjIwMzA3NjkzMTB9.6c75Mjo-9JYbQPl4zStMT3FNLH2i2ssrwZCVB6quWr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-customer-vehicle-details?userID=7d2406b4-0e74-4d92-a27f-8bc11a81e1e9",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-customer-vehicle-details"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "7d2406b4-0e74-4d92-a27f-8bc11a81e1e9"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-customer-parking-history",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiODM4MjAyNWQtOGU5OC00OTJlLWIyMTYtMmJlZGNkOTQwN2Y3IiwianRpIjoiNDcxNzIyMTItMzQzNC00MmE1LThiZDktODk5MmI4NTJhNTdkIiwiaWF0IjoxNzE1NDA5MzEwLCJleHAiOjIwMzA3NjkzMTB9.6c75Mjo-9JYbQPl4zStMT3FNLH2i2ssrwZCVB6quWr8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-customer-parking-history?userID=9244e7c8-abce-41c6-ba77-3a3499a89cc9",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-customer-parking-history"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "9244e7c8-abce-41c6-ba77-3a3499a89cc9"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-customer-details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-customer-details?userID=8382025d-8e98-492e-b216-2bedcd9407f7",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-customer-details"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "8382025d-8e98-492e-b216-2bedcd9407f7"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-wallet-details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiN2QyNDA2YjQtMGU3NC00ZDkyLWEyN2YtOGJjMTFhODFlMWU5IiwianRpIjoiNGJiYjVhN2UtNjRhMS00YzUzLTliNzctNTk5Y2VlZGZjNGViIiwiaWF0IjoxNzE2MTAyMTI2LCJleHAiOjIwMzE0NjIxMjZ9.uCXUpJQRhqgnLL1o-_k8jo6UEK5EGQgsNyrQURFY0ck",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-wallet-details?userID=122656cf-4d73-424f-8154-d49c005322dc",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-wallet-details"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "122656cf-4d73-424f-8154-d49c005322dc"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-latest-parked-ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiN2QyNDA2YjQtMGU3NC00ZDkyLWEyN2YtOGJjMTFhODFlMWU5IiwianRpIjoiNGJiYjVhN2UtNjRhMS00YzUzLTliNzctNTk5Y2VlZGZjNGViIiwiaWF0IjoxNzE2MTAyMTI2LCJleHAiOjIwMzE0NjIxMjZ9.uCXUpJQRhqgnLL1o-_k8jo6UEK5EGQgsNyrQURFY0ck",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-latest-parked-ticket?userID=8382025d-8e98-492e-b216-2bedcd9407f7",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-latest-parked-ticket"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "8382025d-8e98-492e-b216-2bedcd9407f7"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "get-customer-qr",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-customer-qr?userID=8382025d-8e98-492e-b216-2bedcd9407f7",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-customer-qr"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "8382025d-8e98-492e-b216-2bedcd9407f7"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-customer",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"mobileNo\": \"9000001233\",\n    \"vehicleNo\" :\"KA04MK0112\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/create-customer",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"create-customer"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "update-customer-details",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"source\":\"CUSTOMER_APP\",\n    \"userID\": \"8382025d-8e98-492e-b216-2bedcd9407f7\",\n    \"gender\": \"Male\",\n    \"emailID\" :\"rt@gmail.com\",\n    \"primaryVehicle\":\"Car\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/update-customer-details",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"update-customer-details"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "EMPLOYEE_APP - example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"userID\": \"8382025d-8e98-492e-b216-2bedcd9407f7\",\n     \"vehicleID\": \"7a6298e9-0dd6-487a-9f12-d1750f116462\",\n    \"customerName\": \"Rohit\",\n    \"vehicleType\" :\"Car\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/update-customer-details",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"update-customer-details"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Customer-app example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"CUSTOMER_APP\",\n    \"userID\": \"8382025d-8e98-492e-b216-2bedcd9407f7\",\n    \"gender\": \"Male\",\n    \"emailID\" :\"rt@gmail.com\",\n    \"primaryVehicle\":\"Car\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/update-customer-details",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"update-customer-details"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "add-vehicle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiN2QyNDA2YjQtMGU3NC00ZDkyLWEyN2YtOGJjMTFhODFlMWU5IiwianRpIjoiNGJiYjVhN2UtNjRhMS00YzUzLTliNzctNTk5Y2VlZGZjNGViIiwiaWF0IjoxNzE2MTAyMTI2LCJleHAiOjIwMzE0NjIxMjZ9.uCXUpJQRhqgnLL1o-_k8jo6UEK5EGQgsNyrQURFY0ck",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userID\": \"8382025d-8e98-492e-b216-2bedcd9407f7\",\n    \"vehicleNo\": \"KA04MK0119\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/add-vehicle",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"add-vehicle"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "EMPLOYEE_APP - example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"EMPLOYEE_APP\",\n    \"userID\": \"8382025d-8e98-492e-b216-2bedcd9407f7\",\n     \"vehicleID\": \"7a6298e9-0dd6-487a-9f12-d1750f116462\",\n    \"customerName\": \"Rohit\",\n    \"vehicleType\" :\"Car\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/update-customer-details",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"update-customer-details"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Customer-app example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"source\":\"CUSTOMER_APP\",\n    \"userID\": \"8382025d-8e98-492e-b216-2bedcd9407f7\",\n    \"gender\": \"Male\",\n    \"emailID\" :\"rt@gmail.com\",\n    \"primaryVehicle\":\"Car\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/update-customer-details",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"update-customer-details"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get All Parking Space by city",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}customer-flow-handler/get-parking-space-by-city?city=Benanhallil",
+							"host": [
+								"{{base-url}}customer-flow-handler"
+							],
+							"path": [
+								"get-parking-space-by-city"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": "Benanhallil"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}customer-flow-handler/get-parking-space-by-city?city=Benanhallil",
+									"host": [
+										"{{base-url}}customer-flow-handler"
+									],
+									"path": [
+										"get-parking-space-by-city"
+									],
+									"query": [
+										{
+											"key": "city",
+											"value": "Benanhallil"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 19 May 2024 06:35:05 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "742"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "e6d72bc2-801c-4023-b1b0-d0238aa44a8e"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "YAWPkGMBBcwEPfA="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, GET, OPTIONS"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-66499d96-7185ed5f3d7a1c432f6bf36b;Parent=55b15e550c9c74c1;Sampled=0;lineage=fb73228a:0"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"parkingSpaceID\": \"bf12bb34-a36a-47c9-a10f-5233840ca966\",\n        \"parkingSpaceName\": \"Abhijeet Parking\",\n        \"latitude\": \"72.2133\",\n        \"longitude\": \"67.9782\"\n    },\n    {\n        \"parkingSpaceID\": \"d071d97b-5130-4fb6-8c46-be6178c7206c\",\n        \"parkingSpaceName\": \"palki sharma\"\n    },\n    {\n        \"parkingSpaceID\": \"bf2e9ebb-5680-454b-80e4-9a813eaafb56\",\n        \"parkingSpaceName\": \"sky Parking\",\n        \"latitude\": \"72.2133\",\n        \"longitude\": \"67.9782\"\n    },\n    {\n        \"parkingSpaceID\": \"f3e91662-967d-47de-b40c-cb24dfcb7056\",\n        \"parkingSpaceName\": \"Akash Parking sss Uip\",\n        \"latitude\": \"72.2133\",\n        \"longitude\": \"67.9782\"\n    },\n    {\n        \"parkingSpaceID\": \"ed49fa1e-6884-4cce-b515-9a8f3625d602\",\n        \"parkingSpaceName\": \"why Parking\",\n        \"latitude\": \"72.2133\",\n        \"longitude\": \"67.9782\"\n    },\n    {\n        \"parkingSpaceID\": \"59e7a3b3-c3dd-4e06-8771-af438f02a1e0\",\n        \"parkingSpaceName\": \"Gaurav Parking Uip\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "delete-vehicle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiN2QyNDA2YjQtMGU3NC00ZDkyLWEyN2YtOGJjMTFhODFlMWU5IiwianRpIjoiNGJiYjVhN2UtNjRhMS00YzUzLTliNzctNTk5Y2VlZGZjNGViIiwiaWF0IjoxNzE2MTAyMTI2LCJleHAiOjIwMzE0NjIxMjZ9.uCXUpJQRhqgnLL1o-_k8jo6UEK5EGQgsNyrQURFY0ck",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/customer-flow-handler/delete-vehilcle?vehicleNo=UP45RT1234",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"customer-flow-handler",
+								"delete-vehilcle"
+							],
+							"query": [
+								{
+									"key": "vehicleNo",
+									"value": "UP45RT1234"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete-vehicle",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/customer-flow-handler/delete-vehilcle?vehicleNo=KA01BW6548",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"customer-flow-handler",
+										"delete-vehilcle"
+									],
+									"query": [
+										{
+											"key": "vehicleNo",
+											"value": "KA01BW6548"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 10 Oct 2024 19:14:53 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "8b3f8d80-f2f7-45a1-bba3-8d82a8ded7b3"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "fcsiMHDvBcwEGOA="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, GET, OPTIONS"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-670827a7-2e3d364226cb600355ddfa0e;Parent=39458f00bf06ffd4;Sampled=0;Lineage=04d7044b:0|fb73228a:0"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"vehicleNo\": \"KA01BW6548\",\n    \"vehicleType\": \"Bike\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "UserManagement",
+			"item": [
+				{
+					"name": "Vendor",
+					"item": [
+						{
+							"name": "Create Vendor",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiVkVORE9SIiwiaXNzIjoiUGFya2tleSIsInN1YiI6ImI5MDI0YTIxLWM4ZjktNDJkMC1hOTNhLWNmODc5NGRhNGQzNyIsImp0aSI6IjRmMTViNTIwLWUyNzktNGU5MS05ODUwLWI5OGFkMmU3MTU0MiIsImlhdCI6MTcxNTA1MDI0MiwiZXhwIjoyMDMwNDEwMjQyfQ.2Vamt4FXCMT25aZxwvAaOybzKYfCn18R3JIYahUp4tE",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vendorName\":\"Abhijeet Parking Serviceugb Latest\" ,\n    \"vendorMobileNo\":\"9621560066\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor-onboarding",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"vendor-onboarding"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create Vendor",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"vendorName\":\"Abhijeet Parking Services Latest\" ,\n    \"vendorMobileNo\":\"9621560766\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor-onboarding",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"vendor-onboarding"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 13:19:14 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "231"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "fe14d3a0-24a4-4e23-a4ee-b4585c9fcf0c"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XP1Y2HZBBcwEbnQ="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-663635d1-4314000c711d090f7ac90c98;Parent=143f89b13b348aba;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"vendorID\": \"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n    \"vendorName\": \"Abhijeet Parking Services Latest\",\n    \"mobileNo\": \"9621560766\",\n    \"vendorStatus\": \"Active\",\n    \"createdDate\": \"May 4, 2024, 1:19:14\\u202fPM\",\n    \"updatedDate\": \"May 4, 2024, 1:19:14\\u202fPM\"\n}"
+								},
+								{
+									"name": "Create Vendor",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"vendorName\":\"Abhijeet Parking Serviceugb Latest\" ,\n    \"vendorMobileNo\":\"9621560066\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor-onboarding",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"vendor-onboarding"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 07 May 2024 02:51:01 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "233"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "18c6cfa9-64c0-48f7-b329-183a76fbcae5"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XYSKqGhUBcwEGZA="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-66399710-6523323607dc58c200b06119;Parent=17ea84376fec76be;Sampled=0;lineage=04d7044b:0|39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"vendorID\": \"253b7e6f-fd14-446d-9070-667612093bd8\",\n    \"vendorName\": \"Abhijeet Parking Serviceugb Latest\",\n    \"mobileNo\": \"9621560066\",\n    \"vendorStatus\": \"Active\",\n    \"createdDate\": \"May 7, 2024, 2:51:01\\u202fAM\",\n    \"updatedDate\": \"May 7, 2024, 2:51:01\\u202fAM\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Fetch All Parking Space of Vendor",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-all-parking-space/d7e4e25e-8bb2-480e-a807-5e5eb8342ce9",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"vendor",
+										"fetch-all-parking-space",
+										"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Fetch Vendor Info Copy",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-all-parking-space/b9024a21-c8f9-42d0-a93a-cf8794da4d37",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"vendor",
+												"fetch-all-parking-space",
+												"b9024a21-c8f9-42d0-a93a-cf8794da4d37"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 11:13:33 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "324"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "bba41d2f-cd3c-4916-8c0f-0032ea665e03"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XPi-LHUqBcwEY2g="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6636185a-60df136c263ce317509ea86f;Parent=794a2e9e141ab612;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n        \"vehicleType\": [\n            \"Heavy\"\n        ],\n        \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n        \"availableSpace\": 10,\n        \"totalSpace\": 25,\n        \"rating\": 5,\n        \"review\": \"Good parking Space\",\n        \"parkingSpaceStatus\": \"Active\",\n        \"createdDate\": \"May 1, 2024, 3:09:34\\u202fPM\",\n        \"updatedDate\": \"May 1, 2024, 8:52:27\\u202fPM\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "Update Vendor Info",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vendorName\":\"Abhijeet New Services\",\n    \"vendorStatus\":\"Active\",\n    \"mobileNo\":\"9621560366\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/update-vendor-info/b9024a21-c8f9-42d0-a93a-cf8794da4d37",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"vendor",
+										"update-vendor-info",
+										"b9024a21-c8f9-42d0-a93a-cf8794da4d37"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update Vendor Info",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"vendorName\":\"Abhijeet New Services\",\n    \"vendorStatus\":\"Active\",\n    \"mobileNo\":\"9621560366\"\n\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/update-vendor-info/b9024a21-c8f9-42d0-a93a-cf8794da4d37",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"vendor",
+												"update-vendor-info",
+												"b9024a21-c8f9-42d0-a93a-cf8794da4d37"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 12:57:28 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "222"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "5bdb3f67-02ba-4172-b3a6-d22fbf8496af"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XPyM2Ew6BcwEG3Q="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-663630b8-2faa000b0ba1b4d31770487e;Parent=1e10cf75207e1590;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n    \"vendorName\": \"Abhijeet New Services\",\n    \"mobileNo\": \"9621560366\",\n    \"vendorStatus\": \"Active\",\n    \"createdDate\": \"May 1, 2024, 11:36:21\\u202fAM\",\n    \"updatedDate\": \"May 4, 2024, 12:57:28\\u202fPM\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Fetch Vendor Info",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-by-id/b9024a21-c8f9-42d0-a93a-cf8794da4d37",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"vendor",
+										"fetch-by-id",
+										"b9024a21-c8f9-42d0-a93a-cf8794da4d37"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-by-id/b9024a21-c8f9-42d0-a93a-cf8794da4d37",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"vendor",
+												"fetch-by-id",
+												"b9024a21-c8f9-42d0-a93a-cf8794da4d37"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 10:59:00 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "226"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "47f440b8-3890-466b-b7c7-d00f9ff6c931"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XPg1wE4qBcwEbnQ="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-663614f1-1fef2d135c71f7d853264e0a;Parent=5a225dba430c961e;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n    \"vendorName\": \"Abhijeet Parking Services\",\n    \"mobileNo\": \"9621560466\",\n    \"vendorStatus\": \"Active\",\n    \"createdDate\": \"May 1, 2024, 11:36:21\\u202fAM\",\n    \"updatedDate\": \"May 1, 2024, 11:36:21\\u202fAM\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Fetch all employees of Vendor",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-all-employee/b9024a21-c8f9-42d0-a93a-cf8794da4d37",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"vendor",
+										"fetch-all-employee",
+										"b9024a21-c8f9-42d0-a93a-cf8794da4d37"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-all-employee/b9024a21-c8f9-42d0-a93a-cf8794da4d37",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"vendor",
+												"fetch-all-employee",
+												"b9024a21-c8f9-42d0-a93a-cf8794da4d37"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 16:46:02 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "343"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "82495bfe-07d3-4d35-a216-0e6a7b32aca8"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XQTrvG1BBcwEXHw="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6636664a-17f221027e87361e08a57a03;Parent=1aa70c460eba2abb;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"employeeID\": \"b2f8fc4e-efb2-4844-a338-9a191e6b301c\",\n        \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n        \"employeeName\": \"Rohit Vermaw\",\n        \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n        \"mobileNo\": \"9621560066\",\n        \"employeeStatus\": \"Active\",\n        \"gender\": \"Female\",\n        \"createdDate\": \"May 1, 2024, 3:12:21\\u202fPM\",\n        \"updatedDate\": \"May 4, 2024, 1:18:38\\u202fPM\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "Fetch All Vendors",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-all-vendors",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"vendor",
+										"fetch-all-vendors"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/vendor/fetch-all-vendors",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"vendor",
+												"fetch-all-vendors"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 16:37:46 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "456"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "bf270aa1-7fd9-4588-b484-65126c34ae1d"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XQSeNE4EBcwEUYw="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6636645a-3cf06aa236cfdced5ad03305;Parent=66a53adafda1e342;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"vendorID\": \"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n        \"vendorName\": \"Abhijeet Parking Services Latest\",\n        \"mobileNo\": \"9621560766\",\n        \"vendorStatus\": \"Active\",\n        \"createdDate\": \"May 4, 2024, 1:19:14\\u202fPM\",\n        \"updatedDate\": \"May 4, 2024, 1:19:14\\u202fPM\"\n    },\n    {\n        \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n        \"vendorName\": \"Abhijeet New Services\",\n        \"mobileNo\": \"9621560366\",\n        \"vendorStatus\": \"Active\",\n        \"createdDate\": \"May 1, 2024, 11:36:21\\u202fAM\",\n        \"updatedDate\": \"May 4, 2024, 12:57:28\\u202fPM\"\n    }\n]"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Parking Space",
+					"item": [
+						{
+							"name": "Create Parking Space",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiVkVORE9SIiwiaXNzIjoiUGFya2tleSIsInN1YiI6ImI5MDI0YTIxLWM4ZjktNDJkMC1hOTNhLWNmODc5NGRhNGQzNyIsImp0aSI6IjRmMTViNTIwLWUyNzktNGU5MS05ODUwLWI5OGFkMmU3MTU0MiIsImlhdCI6MTcxNTA1MDI0MiwiZXhwIjoyMDMwNDEwMjQyfQ.2Vamt4FXCMT25aZxwvAaOybzKYfCn18R3JIYahUp4tE",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vendorID\":\"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n    \"vehicleType\":[\"Heavy\"],\n    \"parkingName\":\"Abhijeet Parking sss Uip\",\n    \"availableSpace\" :100,\n    \"totalSpace\":25,\n    \"rating\" : 5,\n    \"review\":\"Good parking Space\",\n    \"location\" : \"Benanhallil\",\n    \"tariffTime\" : 6,\n    \"tariffCharges\" : 30,\n    \"latitude\":\"72.2133\",\n    \"longitude\":\"67.9782\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/parking-space-onboarding",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"parking-space-onboarding"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create Parking Space",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"vendorID\":\"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n    \"vehicleType\":[\"Heavy\"],\n    \"parkingName\":\"Abhijeet Parking sss Uip\",\n    \"availableSpace\" :100,\n    \"totalSpace\":25,\n    \"rating\" : 5,\n    \"review\":\"Good parking Space\",\n    \"location\" : \"Benanhallil\",\n    \"tariffTime\" : 6,\n    \"tariffCharges\" : 30,\n    \"latitude\":\"72.2133\",\n    \"longitude\":\"67.9782\"\n\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/parking-space-onboarding",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"parking-space-onboarding"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Fri, 10 May 2024 14:58:21 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "670"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "1b266e85-4bb8-45f1-9ca8-2c4719869885"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "Xj1hUFx5hcwEKjQ="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-663e3608-454a865451c827182ff7174f;Parent=5f66f12c2ceb0df0;Sampled=0;lineage=04d7044b:0|39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"parkingSpace\": {\n        \"parkingSpaceID\": \"bf12bb34-a36a-47c9-a10f-5233840ca966\",\n        \"vehicleType\": [\n            \"Heavy\"\n        ],\n        \"vendorID\": \"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n        \"availableSpace\": 100,\n        \"totalSpace\": 25,\n        \"rating\": 5,\n        \"parkingName\": \"Abhijeet Parking sss Uip\",\n        \"review\": \"Good parking Space\",\n        \"location\": \"Benanhallil\",\n        \"parkingSpaceStatus\": \"Active\",\n        \"latitude\": \"72.2133\",\n        \"longitude\": \"67.9782\",\n        \"createdDate\": \"May 10, 2024, 2:58:21\\u202fPM\",\n        \"updatedDate\": \"May 10, 2024, 2:58:21\\u202fPM\"\n    },\n    \"charges\": {\n        \"parkingSpaceID\": \"bf12bb34-a36a-47c9-a10f-5233840ca966\",\n        \"tariffTime\": 6,\n        \"tariffRate\": 30,\n        \"fixedTime\": 0,\n        \"fixedTimeCharge\": 0,\n        \"createdDate\": \"May 10, 2024, 2:58:21\\u202fPM\",\n        \"updatedDate\": \"May 10, 2024, 2:58:21\\u202fPM\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Fetch Parking Space Info",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiVkVORE9SIiwiaXNzIjoiUGFya2tleSIsInN1YiI6ImI5MDI0YTIxLWM4ZjktNDJkMC1hOTNhLWNmODc5NGRhNGQzNyIsImp0aSI6Ijc3YjEzNWJkLWNjYzMtNDNhMy04NGE0LTk2MzU1NWEzOGE5OSIsImlhdCI6MTcxNTAwNzk1MywiZXhwIjoyMDMwMzY3OTUzfQ.KEnyft-Qcuo1Vagqu9j-CsV2a9mMtEMHcR7k56M6OGA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/parking-space/fetch-parking-space-info/d071d97b-5130-4fb6-8c46-be6178c7206c",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"parking-space",
+										"fetch-parking-space-info",
+										"d071d97b-5130-4fb6-8c46-be6178c7206c"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success Response",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/parking-space/fetch-parking-space-info/3dc13754-1647-4acd-81fc-27d89a0280d7",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"parking-space",
+												"fetch-parking-space-info",
+												"3dc13754-1647-4acd-81fc-27d89a0280d7"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 11:21:48 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "322"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "7142e425-ea5c-4b44-9593-4a794a082596"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XPkMBGKBhcwEWtw="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-66361a4c-0df62949207a95c41920790a;Parent=008d452f763d3716;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n    \"vehicleType\": [\n        \"Heavy\"\n    ],\n    \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n    \"availableSpace\": 10,\n    \"totalSpace\": 25,\n    \"rating\": 5,\n    \"review\": \"Good parking Space\",\n    \"parkingSpaceStatus\": \"Active\",\n    \"createdDate\": \"May 1, 2024, 3:09:34\\u202fPM\",\n    \"updatedDate\": \"May 1, 2024, 8:52:27\\u202fPM\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Update Parking Space Info",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n    \"vehicleType\": [\n        \"Heavy\",\"Bike\"\n    ],\n    \"availableSpace\": 100,\n    \"totalSpace\": 55,\n    \"rating\": 5,\n    \"review\": \"Good parking Space with luxusy\",\n    \"parkingSpaceStatus\": \"Active\",\n    \"latitude\": \"26.234529\",\n    \"longitude\": \"81.240868\",\n    \"tariffTime\":5,\n    \"tariffCharges\":60,\n    \"createdDate\": \"May 1, 2024, 3:09:34 PM\",\n    \"updatedDate\": \"May 1, 2024, 8:52:27 PM\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/parking-space/update-parking-space-info/3dc13754-1647-4acd-81fc-27d89a0280d7",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"parking-space",
+										"update-parking-space-info",
+										"3dc13754-1647-4acd-81fc-27d89a0280d7"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update Parking Space Info",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n    \"vehicleType\": [\n        \"Heavy\",\"Bike\"\n    ],\n    \"availableSpace\": 100,\n    \"totalSpace\": 55,\n    \"rating\": 5,\n    \"review\": \"Good parking Space with luxusy\",\n    \"parkingSpaceStatus\": \"InActive\",\n    \"latitude\": \"26.234529\",\n    \"longitude\": \"81.240868\",\n    \"createdDate\": \"May 1, 2024, 3:09:34 PM\",\n    \"updatedDate\": \"May 1, 2024, 8:52:27 PM\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/parking-space/update-parking-space-info/3dc13754-1647-4acd-81fc-27d89a0280d7",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"parking-space",
+												"update-parking-space-info",
+												"3dc13754-1647-4acd-81fc-27d89a0280d7"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 12:58:45 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "409"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "dfe50f0d-9d90-496b-b2bc-0f6658e2bd5b"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XPyY7FsdBcwEIwg="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-66363105-107f172128296ed64f697e44;Parent=3a316efd36869871;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"parkingSpace\": {\n        \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n        \"vehicleType\": [\n            \"Heavy\",\n            \"Bike\"\n        ],\n        \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n        \"availableSpace\": 100,\n        \"totalSpace\": 55,\n        \"rating\": 5,\n        \"review\": \"Good parking Space with luxusy\",\n        \"parkingSpaceStatus\": \"InActive\",\n        \"latitude\": \"26.234529\",\n        \"longitude\": \"81.240868\",\n        \"createdDate\": \"May 1, 2024, 3:09:34\\u202fPM\",\n        \"updatedDate\": \"May 4, 2024, 12:58:45\\u202fPM\"\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Employee",
+					"item": [
+						{
+							"name": "Create Employee",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vendorID\":\"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n    \"employeeName\":\"Rohit Verma u\",\n    \"parkingSpaceID\":\"d071d97b-5130-4fb6-8c46-be6178c7206c\",\n    \"mobileNo\":\"9621560987\",\n    \"gender\":\"Male\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/employee-onboarding",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"employee-onboarding"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create Employee",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"vendorID\":\"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n    \"employeeName\":\"Rohit Verma u\",\n    \"parkingSpaceID\":\"d071d97b-5130-4fb6-8c46-be6178c7206c\",\n    \"mobileNo\":\"9621560987\",\n    \"gender\":\"Male\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/employee-onboarding",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"employee-onboarding"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 13:24:58 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "340"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "8fb84822-854f-458d-8e54-471884a6936e"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XP2OnG-QhcwEDdA="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6636372a-24564db23872fc0e5ad37594;Parent=21566faee0e18796;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"employeeID\": \"7a967fee-04ff-4d75-af92-1ae5e96dc8ee\",\n    \"vendorID\": \"d7e4e25e-8bb2-480e-a807-5e5eb8342ce9\",\n    \"employeeName\": \"Rohit Verma u\",\n    \"parkingSpaceID\": \"d071d97b-5130-4fb6-8c46-be6178c7206c\",\n    \"mobileNo\": \"9621560987\",\n    \"employeeStatus\": \"Active\",\n    \"gender\": \"Male\",\n    \"createdDate\": \"May 4, 2024, 1:24:58\\u202fPM\",\n    \"updatedDate\": \"May 4, 2024, 1:24:58\\u202fPM\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Fetch Employee Info",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/employee/fetch-employee-info/b2f8fc4e-efb2-4844-a338-9a191e6b301c",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"employee",
+										"fetch-employee-info",
+										"b2f8fc4e-efb2-4844-a338-9a191e6b301c"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/employee/fetch-employee-info/b2f8fc4e-efb2-4844-a338-9a191e6b301c",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"employee",
+												"fetch-employee-info",
+												"b2f8fc4e-efb2-4844-a338-9a191e6b301c"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 11:23:05 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "338"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "c4fd77fa-b658-44bf-9d6c-640c76827f75"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XPkYFEOOhcwEVjg="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-66361a99-041802504937dab83f0ce8db;Parent=28ebb8bfa703bbe6;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"employeeID\": \"b2f8fc4e-efb2-4844-a338-9a191e6b301c\",\n    \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n    \"employeeName\": \"Rohit Verma\",\n    \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n    \"mobileNo\": \"9621560366\",\n    \"employeeStatus\": \"Active\",\n    \"gender\": \"Male\",\n    \"createdDate\": \"May 1, 2024, 3:12:21\\u202fPM\",\n    \"updatedDate\": \"May 1, 2024, 3:12:21\\u202fPM\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Update Employee Info",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"employeeName\":\"Rohit Vermaw\",\n    \"mobileNo\":\"9621560066\",\n    \"gender\":\"Female\",\n    \"employeeStatus\":\"Active\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/employee/update-employee-info/b2f8fc4e-efb2-4844-a338-9a191e6b301c",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"user-management",
+										"employee",
+										"update-employee-info",
+										"b2f8fc4e-efb2-4844-a338-9a191e6b301c"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update Employee Info",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"employeeName\":\"Rohit Vermaw\",\n    \"mobileNo\":\"9621560066\",\n    \"gender\":\"Female\",\n    \"employeeStatus\":\"Active\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/user-management/employee/update-employee-info/b2f8fc4e-efb2-4844-a338-9a191e6b301c",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"user-management",
+												"employee",
+												"update-employee-info",
+												"b2f8fc4e-efb2-4844-a338-9a191e6b301c"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 04 May 2024 13:18:38 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "341"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "511d28d2-7064-4f93-9a30-2f0745541f74"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XP1SpH9fhcwEDBQ="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-663635aa-684d66c825ac8f3d016ff16b;Parent=31cfe8d82ef66869;Sampled=0;lineage=39fc2fc0:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"employeeID\": \"b2f8fc4e-efb2-4844-a338-9a191e6b301c\",\n    \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n    \"employeeName\": \"Rohit Vermaw\",\n    \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n    \"mobileNo\": \"9621560066\",\n    \"employeeStatus\": \"Active\",\n    \"gender\": \"Female\",\n    \"createdDate\": \"May 1, 2024, 3:12:21\\u202fPM\",\n    \"updatedDate\": \"May 4, 2024, 1:18:38\\u202fPM\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "LoginService",
+			"item": [
+				{
+					"name": "VerifyOTP",
+					"item": [
+						{
+							"name": "VerifyOTP-Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"mobileNo\":\"9621560366\",\n    \"otp\":\"9229\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/admin",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"login-service",
+										"verify-otp",
+										"admin"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"mobileNo\":\"9621560366\",\n    \"otp\":\"9229\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/admin",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"login-service",
+												"verify-otp",
+												"admin"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sun, 05 May 2024 17:22:34 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "980"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "e905cdcc-d152-4b88-8880-83d0e8ba619b"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XTr9lF3QhcwEIFA="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6637c056-00d9f8c14f876e697c29f210;Parent=6b158180cdc2fdf6;Sampled=0;lineage=77decb0a:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": {\n        \"code\": 1001,\n        \"message\": \"SUCCESS\"\n    },\n    \"admin\": {\n        \"adminID\": \"96950387-02db-4ce7-aec5-32567c25752d\",\n        \"adminName\": \"Gaurav Singh\",\n        \"mobileNo\": \"9621560366\",\n        \"gender\": \"Male\",\n        \"adminStatus\": \"Active\",\n        \"createdDate\": \"May 4, 2024, 4:58:40\\u202fPM\",\n        \"updatedDate\": \"May 4, 2024, 4:58:40\\u202fPM\"\n    },\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQURNSU4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiOTY5NTAzODctMDJkYi00Y2U3LWFlYzUtMzI1NjdjMjU3NTJkIiwianRpIjoiM2JhZTQ1MTEtZjMzNS00MmFmLTg0ZWItZDJjNmFmNDE4MjExIiwiaWF0IjoxNzE0OTI5NzU0LCJleHAiOjIwMzAyODk3NTR9.yKpSv0CRXqucxwTWbaendVIbSVVRnNdrOY26LK7fZiA\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoicmVmcmVzaC10b2tlbiIsInVzZXJUeXBlIjoiQURNSU4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiOTY5NTAzODctMDJkYi00Y2U3LWFlYzUtMzI1NjdjMjU3NTJkIiwianRpIjoiODcxNDNkNjgtMzYyMi00N2NlLTg2NDEtNWNkNzEwZDk3ZmIwIiwiaWF0IjoxNzE0OTI5NzU0LCJleHAiOjIwMzAyODk3NTR9.XJu2QqIgPPG68wwt5XatzJK3eqYN5NiR5sTTTzPm9dI\"\n}"
+								}
+							]
+						},
+						{
+							"name": "VerifyOTP-Employee",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"mobileNo\":\"9621560066\",\n    \"otp\":\"9837\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/employee",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"login-service",
+										"verify-otp",
+										"employee"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "VerifyOTP-Employee",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"mobileNo\":\"9621560066\",\n    \"otp\":\"9837\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/employee",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"login-service",
+												"verify-otp",
+												"employee"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sun, 05 May 2024 17:24:53 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "1108"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "ebd709e4-3e9b-44a0-b715-f9fa63a3dd74"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XTsTzHM9hcwEQ7Q="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6637c0e4-63d3a7057a4bc19e4890d309;Parent=1d050042a64295d6;Sampled=0;lineage=77decb0a:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": {\n        \"code\": 1001,\n        \"message\": \"SUCCESS\"\n    },\n    \"employee\": {\n        \"employeeID\": \"b2f8fc4e-efb2-4844-a338-9a191e6b301c\",\n        \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n        \"employeeName\": \"Rohit Vermaw\",\n        \"parkingSpaceID\": \"3dc13754-1647-4acd-81fc-27d89a0280d7\",\n        \"mobileNo\": \"9621560066\",\n        \"employeeStatus\": \"Active\",\n        \"gender\": \"Female\",\n        \"createdDate\": \"May 1, 2024, 3:12:21\\u202fPM\",\n        \"updatedDate\": \"May 4, 2024, 1:18:38\\u202fPM\"\n    },\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiYjkwMjRhMjEtYzhmOS00MmQwLWE5M2EtY2Y4Nzk0ZGE0ZDM3IiwianRpIjoiZGU0ZTE5MTYtYzZkYi00ZDMwLThiMTgtMWQ5NjFmMmY5MTViIiwiaWF0IjoxNzE0OTI5ODkzLCJleHAiOjIwMzAyODk4OTN9.zfD8k1KGGarLpzqzyGct2rf4v5j7FDnhppFH7lNKsng\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoicmVmcmVzaC10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiYjkwMjRhMjEtYzhmOS00MmQwLWE5M2EtY2Y4Nzk0ZGE0ZDM3IiwianRpIjoiYTZmYmFmY2MtNTU5MS00MjM4LWFlOTgtNzBmZGYyY2ExMmM3IiwiaWF0IjoxNzE0OTI5ODkzLCJleHAiOjIwMzAyODk4OTN9.h13OLoOYy3WhHiCiQeXzyquElJXcYwn9y8oZNwOjlQQ\"\n}"
+								}
+							]
+						},
+						{
+							"name": "VerifyOTP-Vendor",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"mobileNo\":\"9621560366\",\n    \"otp\":\"1433\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/vendor",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"login-service",
+										"verify-otp",
+										"vendor"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "VerifyOTP-Vendor",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"mobileNo\":\"9621560366\",\n    \"otp\":\"1433\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/vendor",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"login-service",
+												"verify-otp",
+												"vendor"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sun, 05 May 2024 17:26:23 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "983"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "e8fd7750-bb97-4791-bfd5-85d84104c70e"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XTsh8H9qhcwEOPg="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6637c13f-1240ab501752f54636b25768;Parent=6471287f8824e3bb;Sampled=0;lineage=77decb0a:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": {\n        \"code\": 1001,\n        \"message\": \"SUCCESS\"\n    },\n    \"vendor\": {\n        \"vendorID\": \"b9024a21-c8f9-42d0-a93a-cf8794da4d37\",\n        \"vendorName\": \"Abhijeet New Services\",\n        \"mobileNo\": \"9621560366\",\n        \"vendorStatus\": \"Active\",\n        \"createdDate\": \"May 1, 2024, 11:36:21\\u202fAM\",\n        \"updatedDate\": \"May 4, 2024, 12:57:28\\u202fPM\"\n    },\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiVkVORE9SIiwiaXNzIjoiUGFya2tleSIsInN1YiI6ImI5MDI0YTIxLWM4ZjktNDJkMC1hOTNhLWNmODc5NGRhNGQzNyIsImp0aSI6IjI4NDUyMmIyLTJkMGYtNDRkNi04MjUyLTU4MTQ0NmQzNzFmYiIsImlhdCI6MTcxNDkyOTk4MywiZXhwIjoyMDMwMjg5OTgzfQ.bD2j-I4_afhxBwNcaWLZg1932xVFqdn21OhmJVJuzkg\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoicmVmcmVzaC10b2tlbiIsInVzZXJUeXBlIjoiVkVORE9SIiwiaXNzIjoiUGFya2tleSIsInN1YiI6ImI5MDI0YTIxLWM4ZjktNDJkMC1hOTNhLWNmODc5NGRhNGQzNyIsImp0aSI6IjU3Yzk0YzU0LTc0MmUtNDIzOS1hYTgwLTMxZGEwY2NjMzUwNyIsImlhdCI6MTcxNDkyOTk4MywiZXhwIjoyMDMwMjg5OTgzfQ.jm1CvqNRoEtZJLL_Lo49ft7F6OmMn9cNmXEVTB1U-hA\"\n}"
+								}
+							]
+						},
+						{
+							"name": "VerifyOTP-Customer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"mobileNo\":\"9621565366\",\n    \"otp\":\"2985\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/customer",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"login-service",
+										"verify-otp",
+										"customer"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "VerifyOTP-Customer",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"mobileNo\":\"9621565366\",\n    \"otp\":\"2985\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/verify-otp/customer",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"login-service",
+												"verify-otp",
+												"customer"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sun, 05 May 2024 17:28:17 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "920"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "4cb24d6f-d747-4003-8e33-8b1d31d99c02"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XTsztEv3hcwEfGw="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6637c1b1-0912e2373fdb88e0472b391a;Parent=610d66132c044454;Sampled=0;lineage=77decb0a:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": {\n        \"code\": 1001,\n        \"message\": \"SUCCESS\"\n    },\n    \"user\": {\n        \"userID\": \"08bc5c73-5765-43c6-af5f-7c505c3663be\",\n        \"mobileNo\": \"9621565366\",\n        \"createdDate\": \"May 5, 2024, 5:28:17\\u202fPM\",\n        \"updatedDate\": \"May 5, 2024, 5:28:17\\u202fPM\"\n    },\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiNGY0ZDE3YWItMmQ4Yy00ZmUyLWJlOWUtMDhkNDI3NzY4MmEyIiwiaWF0IjoxNzE0OTMwMDk3LCJleHAiOjIwMzAyOTAwOTd9.627hVBSZnWgOMDrE-d5-anLL7eGOBi-jS00ULPIY720\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoicmVmcmVzaC10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiOGUzM2ZjY2ItZDBiOC00ZDViLTlhNDAtN2Y4ZDE2MTliY2Y1IiwiaWF0IjoxNzE0OTMwMDk3LCJleHAiOjIwMzAyOTAwOTd9.paR7hpDiG5x5LlNfdMxMhjcuzq-lx0ZTxmUr6M9Jmb0\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "SendOTP",
+					"item": [
+						{
+							"name": "SendOTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"mobileNo\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/send-otp",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"login-service",
+										"send-otp"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "RefreshToken",
+					"item": [
+						{
+							"name": "Refresh Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"accessToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiMDRjZDZlYjMtYTc3Yy00NDQ5LTgxNWEtYTM0OThlYjM5NjU1IiwiaWF0IjoxNzE0OTMyMzY3LCJleHAiOjIwMzAyOTIzNjd9.3MQoQED-3HOyybb1z7qtXMBDnmniLIotSY40yI5DrhQ\",\n    \"refreshToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoicmVmcmVzaC10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiOTlkZmE0M2YtMDI1YS00NTc5LTgyYzItMzZjMWZkMTFiNzMzIiwiaWF0IjoxNzE0OTMyMzY3LCJleHAiOjIwMzAyOTIzNjd9.-KvoKAZk7d3HzGwoFD1V134kyl8FvgSI3DGlXm6Elx0\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/refresh-token",
+									"protocol": "https",
+									"host": [
+										"xkzd75f5kd",
+										"execute-api",
+										"ap-south-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"prod",
+										"login-service",
+										"refresh-token"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"accessToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiMDRjZDZlYjMtYTc3Yy00NDQ5LTgxNWEtYTM0OThlYjM5NjU1IiwiaWF0IjoxNzE0OTMyMzY3LCJleHAiOjIwMzAyOTIzNjd9.3MQoQED-3HOyybb1z7qtXMBDnmniLIotSY40yI5DrhQ\",\n    \"refreshToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoicmVmcmVzaC10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiOTlkZmE0M2YtMDI1YS00NTc5LTgyYzItMzZjMWZkMTFiNzMzIiwiaWF0IjoxNzE0OTMyMzY3LCJleHAiOjIwMzAyOTIzNjd9.-KvoKAZk7d3HzGwoFD1V134kyl8FvgSI3DGlXm6Elx0\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/login-service/refresh-token",
+											"protocol": "https",
+											"host": [
+												"xkzd75f5kd",
+												"execute-api",
+												"ap-south-1",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"prod",
+												"login-service",
+												"refresh-token"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sun, 05 May 2024 18:07:13 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "733"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "x-amzn-RequestId",
+											"value": "d37aef27-20a7-4289-b9d5-9a6e01fdd955"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "x-amz-apigw-id",
+											"value": "XTyguEuxBcwEOfw="
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "POST, GET, OPTIONS"
+										},
+										{
+											"key": "X-Amzn-Trace-Id",
+											"value": "Root=1-6637cad1-7793005130428b3b66e4187d;Parent=6441bc6eae8c5c84;Sampled=0;lineage=77decb0a:0"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiNTk0ODJiYTgtMDFiMy00NTUwLWFjYWItMzM5MWM0OGFlMjZiIiwiaWF0IjoxNzE0OTMyNDMzLCJleHAiOjIwMzAyOTI0MzN9.i_eAUulWspcbvY8gEK_vCu3cL49HuZqhZvSjk3-ioss\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoicmVmcmVzaC10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMDhiYzVjNzMtNTc2NS00M2M2LWFmNWYtN2M1MDVjMzY2M2JlIiwianRpIjoiYWFhYWYzMTgtNThiNS00OWY1LTk2ZDgtNzlkZTJjOTRiNGRlIiwiaWF0IjoxNzE0OTMyNDMzLCJleHAiOjIwMzAyOTI0MzN9.c6tR2mMker4PmUlorOr3xitrVY3NgDsmV6eD8kBk80k\",\n    \"warmUp\": false\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "employee App",
+			"item": [
+				{
+					"name": "get-parking-space-stats",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiN2QyNDA2YjQtMGU3NC00ZDkyLWEyN2YtOGJjMTFhODFlMWU5IiwianRpIjoiNGJiYjVhN2UtNjRhMS00YzUzLTliNzctNTk5Y2VlZGZjNGViIiwiaWF0IjoxNzE2MTAyMTI2LCJleHAiOjIwMzE0NjIxMjZ9.uCXUpJQRhqgnLL1o-_k8jo6UEK5EGQgsNyrQURFY0ck",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/employee-handler/get-parking-space-stats?employeeID=b2f8fc4e-efb2-4844-a338-9a191e6b301c",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"employee-handler",
+								"get-parking-space-stats"
+							],
+							"query": [
+								{
+									"key": "employeeID",
+									"value": "b2f8fc4e-efb2-4844-a338-9a191e6b301c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-parking-space-vehicle-history",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiQ1VTVE9NRVIiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiN2QyNDA2YjQtMGU3NC00ZDkyLWEyN2YtOGJjMTFhODFlMWU5IiwianRpIjoiNGJiYjVhN2UtNjRhMS00YzUzLTliNzctNTk5Y2VlZGZjNGViIiwiaWF0IjoxNzE2MTAyMTI2LCJleHAiOjIwMzE0NjIxMjZ9.uCXUpJQRhqgnLL1o-_k8jo6UEK5EGQgsNyrQURFY0ck",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/employee-handler/get-parking-space-vehicle-history?employeeID=b2f8fc4e-efb2-4844-a338-9a191e6b301c",
+							"protocol": "https",
+							"host": [
+								"xkzd75f5kd",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"prod",
+								"employee-handler",
+								"get-parking-space-vehicle-history"
+							],
+							"query": [
+								{
+									"key": "employeeID",
+									"value": "b2f8fc4e-efb2-4844-a338-9a191e6b301c"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Razorpay callback",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://l5nhjbhi47.execute-api.ap-south-1.amazonaws.com/test/callback",
+							"protocol": "https",
+							"host": [
+								"l5nhjbhi47",
+								"execute-api",
+								"ap-south-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"test",
+								"callback"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base-url",
+			"value": "https://xkzd75f5kd.execute-api.ap-south-1.amazonaws.com/prod/"
+		}
+	]
+}
