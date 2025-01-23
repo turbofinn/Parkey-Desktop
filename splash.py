@@ -5,10 +5,10 @@ import sys
 import cv2
 import numpy as np
 import tensorflow as tf
-import easyocr
+import pytesseract
 import re
 
-reader = easyocr.Reader(['en'])
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 class ParkingApp(QMainWindow):
     def __init__(self):
@@ -153,51 +153,73 @@ class ParkingApp(QMainWindow):
             self.cap.release()
             cv2.destroyAllWindows()
 
+
     # def update_frame_with_detection(self):
-        # """Capture a frame, run number plate detection, and display the result."""
-        # ret, frame = self.cap.read()
-        # if not ret:
-        #     print("Error: Failed to grab frame")
-        #     self.timer.stop()
-        #     self.cap.release()
-        #     return
+    #     """Capture a frame, run number plate detection, and display the result."""
+    #     ret, frame = self.cap.read()
+    #     if not ret:
+    #         print("Error: Failed to grab frame")
+    #         self.timer.stop()
+    #         self.cap.release()
+    #         return
 
-        # # Preprocess the frame for the model
-        # input_frame = cv2.resize(frame, (300, 300))  # Resize frame to model's input size
-        # input_frame = np.expand_dims(input_frame, axis=0)  # Add batch dimension
+    #     # Preprocess the frame for the model
+    #     input_frame = cv2.resize(frame, (300, 300))  # Resize frame to model's input size
+    #     input_frame = np.expand_dims(input_frame, axis=0)  # Add batch dimension
 
-        # # Run inference
-        # outputs = self.sess.run(
-        #     [self.num_detections, self.detection_boxes, self.detection_scores, self.detection_classes],
-        #     feed_dict={self.input_tensor: input_frame}
-        # )
+    #     # Run inference
+    #     outputs = self.sess.run(
+    #         [self.num_detections, self.detection_boxes, self.detection_scores, self.detection_classes],
+    #         feed_dict={self.input_tensor: input_frame}
+    #     )
 
-        # # Process the predictions
-        # num_detected = int(outputs[0][0])
-        # for i in range(num_detected):
-        #     score = outputs[2][0][i]
-        #     if score > 0.5:  # Confidence threshold
-        #         box = outputs[1][0][i]
-        #         class_id = int(outputs[3][0][i])
-        #         label = f"Class {class_id} ({score:.2f})"
+    #     # Process the predictions
+    #     num_detected = int(outputs[0][0])
+    #     detected_plates = set()  # Store detected valid plates to avoid duplicate prints
 
-        #         # Convert box coordinates to pixel values
-        #         h, w, _ = frame.shape
-        #         y1, x1, y2, x2 = int(box[0] * h), int(box[1] * w), int(box[2] * h), int(box[3] * w)
+    #     for i in range(num_detected):
+    #         score = outputs[2][0][i]
+    #         if score > 0.5:  # Confidence threshold
+    #             box = outputs[1][0][i]
 
-        #         # Draw the bounding box and label
-        #         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        #         cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+             
+    #             h, w, _ = frame.shape
+    #             y1, x1, y2, x2 = int(box[0] * h), int(box[1] * w), int(box[2] * h), int(box[3] * w)
 
-        # # Convert the frame to RGB format for PyQt
-        # rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        # h, w, ch = rgb_frame.shape
-        # bytes_per_line = ch * w
-        # qt_image = QImage(rgb_frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
-        # pixmap = QPixmap.fromImage(qt_image)
+               
+    #             roi = frame[y1:y2, x1:x2]
 
-        # # Update the QLabel in the GUI with the new frame
-        # self.vehicle_image.setPixmap(pixmap)
+               
+    #             try:
+    #                 if roi.size > 0: 
+    #                     result = reader.readtext(roi)
+    #                     for detection in result:
+    #                         text = detection[1].strip()  
+    #                         pattern = "^[A-Z]{2}[ -]?[0-9]{2}[ -]?[A-Z]{1,2}[ -]?[0-9]{4}$"
+
+    #                         if re.match(pattern, text):  
+    #                             if text not in detected_plates:  
+    #                                 print(f"Detected Valid Number Plate: {text}")
+    #                                 detected_plates.add(text) 
+    #                         else:
+    #                             print(f"Ignored Invalid Plate: {text}")
+    #             except Exception as e:
+    #                 print(f"Error with OCR: {e}")
+
+    #             # Draw the bounding box and label
+    #             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+    #             cv2.putText(frame, "Number Plate", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+    #     # Convert the frame to RGB format for PyQt
+    #     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #     h, w, ch = rgb_frame.shape
+    #     bytes_per_line = ch * w
+    #     qt_image = QImage(rgb_frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
+    #     pixmap = QPixmap.fromImage(qt_image)
+
+    #     # Update the QLabel in the GUI with the new frame
+    #     self.vehicle_image.setPixmap(pixmap)
+
 
 
     def update_frame_with_detection(self):
@@ -221,40 +243,45 @@ class ParkingApp(QMainWindow):
 
         # Process the predictions
         num_detected = int(outputs[0][0])
-        detected_plates = set()  # Store detected valid plates to avoid duplicate prints
-
         for i in range(num_detected):
             score = outputs[2][0][i]
             if score > 0.5:  # Confidence threshold
                 box = outputs[1][0][i]
 
-             
+                # Convert box coordinates to pixel values
                 h, w, _ = frame.shape
                 y1, x1, y2, x2 = int(box[0] * h), int(box[1] * w), int(box[2] * h), int(box[3] * w)
 
-               
+                # Draw the bounding box and label before OCR
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.putText(frame, "Processing OCR...", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                # Crop the region of interest (ROI)
                 roi = frame[y1:y2, x1:x2]
 
-               
                 try:
-                    if roi.size > 0: 
-                        result = reader.readtext(roi)
-                        for detection in result:
-                            text = detection[1].strip()  
-                            pattern = r'^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$'
+                    if roi.size > 0:
+                        # Preprocess the ROI for Tesseract
+                        roi_gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+                        roi_thresh = cv2.threshold(roi_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
-                            if re.match(pattern, text):  
-                                if text not in detected_plates:  
-                                    print(f"Detected Valid Number Plate: {text}")
-                                    detected_plates.add(text) 
-                            else:
-                                print(f"Ignored Invalid Plate: {text}")
+                        # Perform OCR with Tesseract
+                        custom_config = r'--oem 3 --psm 6'  # Tesseract configuration
+                        text = pytesseract.image_to_string(roi_thresh, config=custom_config)
+                        print(f"OCR Raw Output: {text}")
+
+                        # Temporarily commenting out the validation logic
+                        # text = re.sub(r'[^A-Z0-9]', '', text.strip())  # Clean the OCR output
+                        # pattern = r'^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$'  # Example: MH12AB1234
+                        # if re.match(pattern, text):
+                        #     print(f"Detected Valid Number Plate: {text}")
+                        # else:
+                        #     print(f"Ignored Invalid Plate: {text}")
+
+                    else:
+                        print("Ignored Invalid ROI due to size 0")
                 except Exception as e:
                     print(f"Error with OCR: {e}")
-
-                # Draw the bounding box and label
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                cv2.putText(frame, "Number Plate", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         # Convert the frame to RGB format for PyQt
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -265,6 +292,9 @@ class ParkingApp(QMainWindow):
 
         # Update the QLabel in the GUI with the new frame
         self.vehicle_image.setPixmap(pixmap)
+
+
+
 
 
 
