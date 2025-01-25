@@ -7,8 +7,18 @@ import numpy as np
 import tensorflow as tf
 import pytesseract
 import re
+import time  
+import os
+
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+
+save_directory = r'imges'
+
+if not os.path.exists(save_directory):
+    os.makedirs(save_directory)
+
 
 class ParkingApp(QMainWindow):
     def __init__(self):
@@ -35,14 +45,18 @@ class ParkingApp(QMainWindow):
 
         # Detected Number Plate
         detected_box = QVBoxLayout()
-        self.detected_label = QLabel("Detected Number Plate")
-        self.detected_label.setStyleSheet("color: black; font-size: 18px;")
-        self.detected_image = QLabel()
-        self.detected_image.setPixmap(QPixmap("carimage.png"))  # Replace with actual image path
-        self.detected_image.setScaledContents(True)
-        self.detected_image.setFixedSize(200, 50)
+        self.detected_image_label = QLabel("Detected Number Plate")
+        self.detected_image_label.setFixedSize(200,50)
+        self.detected_image_label.setScaledContents(True)
+        self.detected_image_label.setStyleSheet("color: black; font-size: 18px;")
 
-        detected_box.addWidget(self.detected_label, alignment=Qt.AlignCenter)
+        
+        self.detected_image = QLabel()
+          
+        self.detected_image.setScaledContents(True)
+        self.detected_image.setFixedSize(200, 100)
+
+        detected_box.addWidget(self.detected_image_label, alignment=Qt.AlignCenter)
         detected_box.addWidget(self.detected_image, alignment=Qt.AlignCenter)
 
         detected_box_container = QWidget()
@@ -268,7 +282,19 @@ class ParkingApp(QMainWindow):
                         # Perform OCR with Tesseract
                         custom_config = r'--oem 3 --psm 6'  # Tesseract configuration
                         text = pytesseract.image_to_string(roi_thresh, config=custom_config)
-                        print(f"OCR Raw Output: {text}")
+
+                        cleaned_text = re.sub(r'[^A-Za-z0-9]', '', text)
+                        pattern = r'^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$'
+                        
+                        if re.match(pattern, cleaned_text):
+                            
+                            DetectedNumberPlate = cleaned_text.strip()  # Strip any extra whitespace or newline characters
+                            filename = f"{save_directory}/plate_{time.time()}.jpg"
+                            cv2.imwrite(filename, roi) 
+                            print("Valid vehicle number plate!",DetectedNumberPlate)
+                            self.update_detected_image(filename)
+
+                        # print(f"OCR Raw Output: {text}")
 
                         # Temporarily commenting out the validation logic
                         # text = re.sub(r'[^A-Z0-9]', '', text.strip())  # Clean the OCR output
@@ -282,6 +308,7 @@ class ParkingApp(QMainWindow):
                         print("Ignored Invalid ROI due to size 0")
                 except Exception as e:
                     print(f"Error with OCR: {e}")
+        
 
         # Convert the frame to RGB format for PyQt
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -293,7 +320,14 @@ class ParkingApp(QMainWindow):
         # Update the QLabel in the GUI with the new frame
         self.vehicle_image.setPixmap(pixmap)
 
-
+    def update_detected_image(self, image_path):
+            """ Update the detected image label with the new image """
+            pixmap = QPixmap(image_path)
+            if not pixmap.isNull():
+                self.detected_image.setPixmap(pixmap)
+                
+            else:
+                self.detected_image.setText("Image not found")
 
 
 
