@@ -20,6 +20,7 @@ class EnvConfig:
     def set_refresh_token(self, refreshToken):
         os.environ['Refresh-token'] = refreshToken
 
+
 class ApiService:
     def sendOtp(self, url, payload):
         headers = {'Content-Type': 'application/json'}
@@ -42,12 +43,23 @@ class ApiService:
         
         return response.text
 
-    def getVehicleDetails(self, url):
+    def getVehicleDetails(self, vehicleNo):
+        url = "customer-flow-handler/get-vehicle-details?vehicleNo="+vehicleNo
         headers = {'Authorization': "Bearer "+ env_config.get_token()}
         print(headers)
         response = requests.get(BASE_URL + url, headers=headers)
         print(response.text)
-        return response.text
+        response_data = response.json()
+        return response_data
+
+    def getCreateCustomer(self,url,source,mobileNo,vehicleNo):
+        headers = { 'Content-Type': 'application/json','Authorization': "Bearer "+ env_config.get_token()}
+        payload = json.dumps({"source": source,"mobileNo": mobileNo,"vehicleNo": vehicleNo})
+        print(headers)
+        response = requests.get(BASE_URL + url, headers=headers)
+        print(response.text)
+        response_data = response.json()
+        return response_data
 
 
 env_config = EnvConfig()
@@ -70,8 +82,8 @@ def main():
 
     # vehicleNo = input("Input OTP: ")
     vehicleNo = "UP32TY5645"
-    url = "customer-flow-handler/get-vehicle-details?vehicleNo="+vehicleNo
-    print(api.getVehicleDetails(url))
+   
+    print(api.getVehicleDetails(url,vehicleNo))
 
 if __name__ == "__main__":
     main()
