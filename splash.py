@@ -35,6 +35,7 @@ class ParkingApp(QMainWindow):
         self.detection_scores = None
         self.detection_classes = None
         self.num_detections = None
+        self.detected_number_plate = ""
 
     def initUI(self):
         main_widget = QWidget()
@@ -44,82 +45,52 @@ class ParkingApp(QMainWindow):
         left_layout = QVBoxLayout()
 
         # Detected Number Plate
-
-
         detected_box = QVBoxLayout()
         detected_label = QLabel("Detected Number Plate")
         detected_label.setStyleSheet("color: black; font-size: 18px;")
         detected_label.setAlignment(Qt.AlignCenter)
-        detected_image = QLabel()
-        detected_image.setFixedSize(200, 100)
-        detected_image.setStyleSheet("background-color: white; border: 2px solid black;")
-        detected_image.setAlignment(Qt.AlignCenter)
+        self.detected_image = QLabel()
+        self.detected_image.setFixedSize(130, 100)  # Reduced width here
+        self.detected_image.setStyleSheet("background-color: white; border: 2px;")
+        self.detected_image.setAlignment(Qt.AlignCenter)
         detected_box.addWidget(detected_label)
-        detected_box.addWidget(detected_image)
+        detected_box.addWidget(self.detected_image)
         detected_container = QWidget()
         detected_container.setLayout(detected_box)
-        detected_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px solid black;")
+        detected_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
         left_layout.addWidget(detected_container)
 
-
-
-
-        # detected_box = QVBoxLayout()
-        # self.detected_image_label = QLabel("Detected Number Plate")
-        # self.detected_image_label.setFixedSize(200,50)
-        # self.detected_image_label.setScaledContents(True)
-        # self.detected_image_label.setStyleSheet("color: black; font-size: 18px;")
-
-        
-        # self.detected_image = QLabel()
-          
-        # self.detected_image.setScaledContents(True)
-        # self.detected_image.setFixedSize(200, 100)
-
-        # detected_box.addWidget(self.detected_image_label, alignment=Qt.AlignCenter)
-        # detected_box.addWidget(self.detected_image, alignment=Qt.AlignCenter)
-
-        # detected_box_container = QWidget()
-        # detected_box_container.setLayout(detected_box)
-        # detected_box_container.setStyleSheet(
-        #     "background-color: white; border: 2px solid black; border-radius: 10px; padding: 10px;"
-        # )
-        # left_layout.addWidget(detected_box_container)
-
-
-        # Entry fees
+        # Entry Fees
         entry_fees_box = QVBoxLayout()
         entry_fees_label = QLabel("Entry Fees")
         entry_fees_label.setStyleSheet("color: black; font-size: 18px;")
         entry_fees_label.setAlignment(Qt.AlignCenter)
         entry_fees_display = QLabel()
-        entry_fees_display.setFixedSize(200, 100)
-        entry_fees_display.setStyleSheet("background-color: white; border: 2px solid black;")
+        entry_fees_display.setFixedSize(130, 100)  # Reduced width here
+        entry_fees_display.setStyleSheet("background-color: white; border: 2px;")
         entry_fees_display.setAlignment(Qt.AlignCenter)
         entry_fees_box.addWidget(entry_fees_label)
         entry_fees_box.addWidget(entry_fees_display)
         entry_fees_container = QWidget()
         entry_fees_container.setLayout(entry_fees_box)
-        entry_fees_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px solid black;")
+        entry_fees_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
         left_layout.addWidget(entry_fees_container)
 
-
-        # Entry time
+        # Entry Time
         entry_time_box = QVBoxLayout()
         entry_time_label = QLabel("Entry Time")
         entry_time_label.setStyleSheet("color: black; font-size: 18px;")
         entry_time_label.setAlignment(Qt.AlignCenter)
         entry_time_display = QLabel()
-        entry_time_display.setFixedSize(200, 100)
-        entry_time_display.setStyleSheet("background-color: white; border: 2px solid black;")
+        entry_time_display.setFixedSize(130, 100)  # Reduced width here
+        entry_time_display.setStyleSheet("background-color: white; border: 2px;")
         entry_time_display.setAlignment(Qt.AlignCenter)
         entry_time_box.addWidget(entry_time_label)
         entry_time_box.addWidget(entry_time_display)
         entry_time_container = QWidget()
         entry_time_container.setLayout(entry_time_box)
-        entry_time_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px solid black;")
+        entry_time_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
         left_layout.addWidget(entry_time_container)
-
 
 
         # Center section
@@ -132,24 +103,24 @@ class ParkingApp(QMainWindow):
         center_layout.addWidget(self.vehicle_image, alignment=Qt.AlignCenter)
 
 
-
-
         # Two side-by-side boxes below the camera feed
         box_layout = QHBoxLayout()
 
         # Left box
-        left_box_layout = QVBoxLayout()
-        left_box_label = QLabel("Verify Vehicle Details")
-        left_box_label.setStyleSheet("color: black; font-size: 16px;")
-        left_box_label.setAlignment(Qt.AlignCenter)
-        left_box_input = QLineEdit()
-        left_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
-        left_box_layout.addWidget(left_box_label)
-        left_box_layout.addWidget(left_box_input)
-        left_box_container = QWidget()
-        left_box_container.setLayout(left_box_layout)
-        left_box_container.setStyleSheet("padding: 10px;  background-color: white; border: 2px solid black; border-radius: 10px;")
-        box_layout.addWidget(left_box_container)
+      
+        verify_box = QVBoxLayout()
+        verify_label = QLabel("Verify Vehicle Details")
+        verify_label.setStyleSheet("color: black; font-size: 16px;")
+        self.left_box_input = QLineEdit()
+        self.left_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
+        self.left_box_input.setFixedHeight(50)  # Reduce height of QLineEdit
+        verify_box.addWidget(verify_label)
+        verify_box.addWidget(self.left_box_input)
+        verify_container = QWidget()
+        verify_container.setLayout(verify_box)
+        verify_container.setStyleSheet("padding: 5px; background-color: white; border: 2px solid black; border-radius: 10px;")  # Adjust padding if needed
+        verify_container.setFixedHeight(130)  # Reduce container height
+        box_layout.addWidget(verify_container)
 
         # Right box
         right_box_layout = QVBoxLayout()
@@ -158,19 +129,16 @@ class ParkingApp(QMainWindow):
         right_box_label.setAlignment(Qt.AlignCenter)
         right_box_input = QLineEdit()
         right_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
+        right_box_input.setFixedHeight(50)  # Reduce height of QLineEdit
         right_box_layout.addWidget(right_box_label)
         right_box_layout.addWidget(right_box_input)
         right_box_container = QWidget()
         right_box_container.setLayout(right_box_layout)
-        right_box_container.setStyleSheet("padding: 10px;  background-color: white; border: 2px solid black; border-radius: 10px;")
+        right_box_container.setStyleSheet("padding: 5px; background-color: white; border: 2px solid black; border-radius: 10px;")
+        right_box_container.setFixedHeight(130)  # Reduce container height
         box_layout.addWidget(right_box_container)
 
         center_layout.addLayout(box_layout)
-
-
-
-
-
 
 
         # Buttons
@@ -192,7 +160,8 @@ class ParkingApp(QMainWindow):
 
         center_layout.addLayout(button_layout)
 
-        # Right section (recent entry and exit lists)
+        # # Right section (recent entry and exit lists)
+
         right_layout = QVBoxLayout()
         self.recent_entry_label = QLabel("Recent Entry")
         self.recent_entry_label.setStyleSheet("color: black; font-size: 18px;")
@@ -200,12 +169,14 @@ class ParkingApp(QMainWindow):
         self.recent_entry_list.setStyleSheet(
             "font-size: 16px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
         )
+        self.recent_entry_list.setFixedWidth(250)  # Set fixed width for the list
         self.recent_exit_label = QLabel("Recent Exit")
         self.recent_exit_label.setStyleSheet("color: black; font-size: 18px;")
         self.recent_exit_list = QListWidget()
         self.recent_exit_list.setStyleSheet(
             "font-size: 16px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
         )
+        self.recent_exit_list.setFixedWidth(250)  # Set fixed width for the list
 
         # Add dummy data
         for name in ["Julia Howard", "Eleanor Cooper", "Bessie Fox", "Gloria Mccoy"]:
@@ -224,6 +195,15 @@ class ParkingApp(QMainWindow):
 
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
+
+
+
+
+
+
+
+
+
 
     def keyPressEvent(self, event):
         """Close the camera on pressing 'Q'"""
@@ -321,8 +301,9 @@ class ParkingApp(QMainWindow):
                             DetectedNumberPlate = cleaned_text.strip()  # Strip any extra whitespace or newline characters
                             filename = f"{save_directory}/plate_{time.time()}.jpg"
                             cv2.imwrite(filename, roi) 
-                            print("Valid vehicle number plate!",DetectedNumberPlate)
                             self.update_detected_image(filename)
+                            print(DetectedNumberPlate)
+                            self.update_vehicle_details(DetectedNumberPlate)  
 
                         # print(f"OCR Raw Output: {text}")
 
@@ -351,15 +332,24 @@ class ParkingApp(QMainWindow):
         self.vehicle_image.setPixmap(pixmap)
 
     def update_detected_image(self, image_path):
-            """ Update the detected image label with the new image """
-            pixmap = QPixmap(image_path)
-            if not pixmap.isNull():
-                self.detected_image.setPixmap(pixmap)
+            # """ Update the detected image label with the new image """
+            # pixmap = QPixmap(image_path)
+            # if not pixmap.isNull():
+            #     self.detected_image.setPixmap(pixmap)
                 
-            else:
-                self.detected_image.setText("Image not found")
+            # else:
+            #     self.detected_image.setText("Image not found")
+        """Update the detected image display in the UI."""
+        pixmap = QPixmap(image_path)
+        self.detected_image.setPixmap(pixmap.scaled(self.detected_image.width(), self.detected_image.height(), Qt.KeepAspectRatio))
+        self.detected_image.setAlignment(Qt.AlignCenter)
 
 
+    def update_vehicle_details(self, number_plate):
+        """Update the verify vehicle details input field with the detected number plate."""
+        self.detected_number_plate = number_plate  # Store in global variable
+        self.left_box_input.setText(self.detected_number_plate)
+            
 
 
 
