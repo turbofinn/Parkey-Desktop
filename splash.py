@@ -50,12 +50,12 @@ class ParkingApp(QMainWindow):
         detected_label = QLabel("Detected Number Plate")
         detected_label.setStyleSheet("color: black; font-size: 18px;")
         detected_label.setAlignment(Qt.AlignCenter)
-        detected_image = QLabel()
-        detected_image.setFixedSize(200, 100)
-        detected_image.setStyleSheet("background-color: white; border: 2px solid black;")
-        detected_image.setAlignment(Qt.AlignCenter)
+        self.detected_image = QLabel()
+        self.detected_image.setFixedSize(200, 100)
+        self.detected_image.setStyleSheet("background-color: white; border: 2px solid black;")
+        self.detected_image.setAlignment(Qt.AlignCenter)
         detected_box.addWidget(detected_label)
-        detected_box.addWidget(detected_image)
+        detected_box.addWidget(self.detected_image)
         detected_container = QWidget()
         detected_container.setLayout(detected_box)
         detected_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px solid black;")
@@ -109,12 +109,12 @@ class ParkingApp(QMainWindow):
         entry_time_label = QLabel("Entry Time")
         entry_time_label.setStyleSheet("color: black; font-size: 18px;")
         entry_time_label.setAlignment(Qt.AlignCenter)
-        entry_time_display = QLabel()
-        entry_time_display.setFixedSize(200, 100)
-        entry_time_display.setStyleSheet("background-color: white; border: 2px solid black;")
-        entry_time_display.setAlignment(Qt.AlignCenter)
+        self.entry_time_display = QLabel()
+        self.entry_time_display.setFixedSize(200, 100)
+        self.entry_time_display.setStyleSheet("background-color: white; border: 2px solid black;")
+        self.entry_time_display.setAlignment(Qt.AlignCenter)
         entry_time_box.addWidget(entry_time_label)
-        entry_time_box.addWidget(entry_time_display)
+        entry_time_box.addWidget(self.entry_time_display)
         entry_time_container = QWidget()
         entry_time_container.setLayout(entry_time_box)
         entry_time_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px solid black;")
@@ -142,10 +142,10 @@ class ParkingApp(QMainWindow):
         left_box_label = QLabel("Verify Vehicle Details")
         left_box_label.setStyleSheet("color: black; font-size: 16px;")
         left_box_label.setAlignment(Qt.AlignCenter)
-        left_box_input = QLineEdit()
-        left_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
+        self.left_box_input = QLineEdit()
+        self.left_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
         left_box_layout.addWidget(left_box_label)
-        left_box_layout.addWidget(left_box_input)
+        left_box_layout.addWidget(self.left_box_input)
         left_box_container = QWidget()
         left_box_container.setLayout(left_box_layout)
         left_box_container.setStyleSheet("padding: 10px;  background-color: white; border: 2px solid black; border-radius: 10px;")
@@ -322,7 +322,7 @@ class ParkingApp(QMainWindow):
                             filename = f"{save_directory}/plate_{time.time()}.jpg"
                             cv2.imwrite(filename, roi) 
                             print("Valid vehicle number plate!",DetectedNumberPlate)
-                            self.update_detected_image(filename)
+                            self.update_detected_image(filename,DetectedNumberPlate)
 
                         # print(f"OCR Raw Output: {text}")
 
@@ -350,11 +350,13 @@ class ParkingApp(QMainWindow):
         # Update the QLabel in the GUI with the new frame
         self.vehicle_image.setPixmap(pixmap)
 
-    def update_detected_image(self, image_path):
+    def update_detected_image(self, image_path,DetectedNumberPlate):
             """ Update the detected image label with the new image """
             pixmap = QPixmap(image_path)
             if not pixmap.isNull():
                 self.detected_image.setPixmap(pixmap)
+                self.left_box_input.setText(DetectedNumberPlate)
+                self.entry_time_display.setText(time.strftime("%H:%M:%S"))
                 
             else:
                 self.detected_image.setText("Image not found")
