@@ -25,7 +25,7 @@ class ParkingApp(QMainWindow):
         super().__init__()
         self.setWindowTitle("Parking Management System")
         self.setGeometry(100, 100, 1200, 700)
-        self.setStyleSheet("background-color: #118B50;")
+        self.setStyleSheet("background-color: #117554;")
         self.initUI()
         self.cap = None  # Camera object
         self.timer = None  # Timer for updating frames
@@ -99,15 +99,23 @@ class ParkingApp(QMainWindow):
         # Vehicle image (camera feed)
         self.vehicle_image = QLabel()
         self.vehicle_image.setScaledContents(True)
-        self.vehicle_image.setFixedSize(300, 200)
-        center_layout.addWidget(self.vehicle_image, alignment=Qt.AlignCenter)
 
+        # Increase camera feed size
+        self.vehicle_image.setFixedSize(500, 400)  # Adjusted size
+
+        # Add a thick white border
+        self.vehicle_image.setStyleSheet("""
+            background-color: black;  /* Ensures visibility */
+            border: 8px solid white;  /* Fat white border */
+            border-radius: 10px;      /* Optional rounded corners */
+        """)
+
+        center_layout.addWidget(self.vehicle_image, alignment=Qt.AlignCenter)
 
         # Two side-by-side boxes below the camera feed
         box_layout = QHBoxLayout()
 
         # Left box
-      
         verify_box = QVBoxLayout()
         verify_label = QLabel("Verify Vehicle Details")
         verify_label.setStyleSheet("color: black; font-size: 16px;")
@@ -195,15 +203,6 @@ class ParkingApp(QMainWindow):
 
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
-
-
-
-
-
-
-
-
-
 
     def keyPressEvent(self, event):
         """Close the camera on pressing 'Q'"""
@@ -332,13 +331,6 @@ class ParkingApp(QMainWindow):
         self.vehicle_image.setPixmap(pixmap)
 
     def update_detected_image(self, image_path):
-            # """ Update the detected image label with the new image """
-            # pixmap = QPixmap(image_path)
-            # if not pixmap.isNull():
-            #     self.detected_image.setPixmap(pixmap)
-                
-            # else:
-            #     self.detected_image.setText("Image not found")
         """Update the detected image display in the UI."""
         pixmap = QPixmap(image_path)
         self.detected_image.setPixmap(pixmap.scaled(self.detected_image.width(), self.detected_image.height(), Qt.KeepAspectRatio))
@@ -350,8 +342,6 @@ class ParkingApp(QMainWindow):
         self.detected_number_plate = number_plate  # Store in global variable
         self.left_box_input.setText(self.detected_number_plate)
             
-
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
