@@ -151,8 +151,8 @@ class ParkingApp(QMainWindow):
 
         # Buttons
         button_layout = QHBoxLayout()
-        self.automatic_button = QPushButton("Automatic")
-        self.manual_button = QPushButton("Manual")
+        self.automatic_button = QPushButton("Start")
+        self.manual_button = QPushButton("Stop")
         self.entry_button = QPushButton("Entry")
 
         for button in [self.automatic_button, self.manual_button, self.entry_button]:
@@ -161,7 +161,8 @@ class ParkingApp(QMainWindow):
             )
             button.setFixedSize(120, 50)
 
-        self.entry_button.clicked.connect(self.start_camera)  # Start camera on button click
+        self.automatic_button.clicked.connect(self.start_camera)  # Start camera on button click
+        self.manual_button.clicked.connect(self.stop_camera)
         button_layout.addWidget(self.automatic_button)
         button_layout.addWidget(self.manual_button)
         button_layout.addWidget(self.entry_button)
