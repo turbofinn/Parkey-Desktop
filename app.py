@@ -153,7 +153,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import json
-from ApiService import ApiService  # Import the API service
+from ApiService import ApiService  
+from duo import ParkingApp
 
 class ParkKeyUI(QWidget):
     def __init__(self):
@@ -269,6 +270,9 @@ class ParkKeyUI(QWidget):
         response_data = json.loads(response)
         if response_data.get("status", {}).get("code") == 1001:
             QMessageBox.information(self, "Login Successful", "You have logged in successfully!")
+            self.parking_window = ParkingApp()  
+            self.parking_window.show()
+            self.close()
         else:
             QMessageBox.warning(self, "Login Failed", "Invalid OTP. Please try again.")
 
