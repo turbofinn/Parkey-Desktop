@@ -9,7 +9,8 @@ import pytesseract
 import re
 import time  
 import os
-
+from ApiService import ApiService 
+import datetime
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
@@ -36,6 +37,8 @@ class ParkingApp(QMainWindow):
         self.detection_classes = None
         self.num_detections = None
         self.detected_number_plate = ""
+        self.entry_time = ""
+        self.api_service = ApiService()
 
     def initUI(self):
         main_widget = QWidget()
@@ -77,20 +80,25 @@ class ParkingApp(QMainWindow):
         left_layout.addWidget(entry_fees_container)
 
         # Entry Time
+        self.entry_time_display = QLabel() 
+        self.entry_time_display.setFixedSize(130, 100)
+        self.entry_time_display.setStyleSheet("background-color: white; border: 2px;")
+        self.entry_time_display.setAlignment(Qt.AlignCenter)
+
         entry_time_box = QVBoxLayout()
         entry_time_label = QLabel("Entry Time")
         entry_time_label.setStyleSheet("color: black; font-size: 18px;")
         entry_time_label.setAlignment(Qt.AlignCenter)
-        entry_time_display = QLabel()
-        entry_time_display.setFixedSize(130, 100)  # Reduced width here
-        entry_time_display.setStyleSheet("background-color: white; border: 2px;")
-        entry_time_display.setAlignment(Qt.AlignCenter)
+
         entry_time_box.addWidget(entry_time_label)
-        entry_time_box.addWidget(entry_time_display)
+        entry_time_box.addWidget(self.entry_time_display)  # Use self.entry_time_display
+
         entry_time_container = QWidget()
         entry_time_container.setLayout(entry_time_box)
         entry_time_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
+
         left_layout.addWidget(entry_time_container)
+
 
 
         # Center section
@@ -303,7 +311,10 @@ class ParkingApp(QMainWindow):
                             cv2.imwrite(filename, roi) 
                             self.update_detected_image(filename)
                             print(DetectedNumberPlate)
-                            self.update_vehicle_details(DetectedNumberPlate)  
+                            self.update_vehicle_details(DetectedNumberPlate)
+                            timing = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            self.update_entry_time(timing)  
+                            self.update_mobile_number(DetectedNumberPlate)
 
                         # print(f"OCR Raw Output: {text}")
 
@@ -342,6 +353,28 @@ class ParkingApp(QMainWindow):
         """Update the verify vehicle details input field with the detected number plate."""
         self.detected_number_plate = number_plate  # Store in global variable
         self.left_box_input.setText(self.detected_number_plate)
+
+    def update_entry_time(self, timing):
+        self.entry_time = timing
+        self.entry_time_display.setText(self.entry_time)
+
+    def update_mobile_number(self, number_plate):
+        try:
+
+            vehicle_no = str(number_plate)
+            response_data = self.api_service.getVehicleDetails(vehicle_no)
+            
+            # Process the response data if needed
+            if response_data:
+                print("Vehicle Details Retrieved Successfully:", response_data)
+                return response_data
+            else:
+                print("Failed to fetch vehicle details:", response_data)
+                return None
+
+        except Exception as e:
+            print("Error fetching vehicle details:", str(e))
+            return None
             
 
 if __name__ == "__main__":
