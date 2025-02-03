@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QListWidget, QListWidgetItem, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QListWidget, QMessageBox, QListWidgetItem, QLineEdit
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QTimer
 import sys
@@ -38,6 +38,7 @@ class ParkingApp(QMainWindow):
         self.num_detections = None
         self.detected_number_plate = ""
         self.entry_time = ""
+        self.entered_mobile_number = ""
         self.api_service = ApiService()
 
     def initUI(self):
@@ -143,11 +144,14 @@ class ParkingApp(QMainWindow):
         right_box_label = QLabel("Enter Mobile Number")
         right_box_label.setStyleSheet("color: black; font-size: 16px;")
         right_box_label.setAlignment(Qt.AlignCenter)
-        right_box_input = QLineEdit()
-        right_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
-        right_box_input.setFixedHeight(50)  # Reduce height of QLineEdit
+
+        # Store the input field as an instance variable
+        self.right_box_input = QLineEdit()  # Use self.right_box_input
+        self.right_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
+        self.right_box_input.setFixedHeight(50)  # Reduce height of QLineEdit
         right_box_layout.addWidget(right_box_label)
-        right_box_layout.addWidget(right_box_input)
+        right_box_layout.addWidget(self.right_box_input)
+
         right_box_container = QWidget()
         right_box_container.setLayout(right_box_layout)
         right_box_container.setStyleSheet("padding: 5px; background-color: white; border: 2px solid black; border-radius: 10px;")
@@ -171,11 +175,14 @@ class ParkingApp(QMainWindow):
 
         self.automatic_button.clicked.connect(self.start_camera)  # Start camera on button click
         self.manual_button.clicked.connect(self.stop_camera)
+        self.entry_button.clicked.connect(self.submit_entry)  # Connect Entry button to print mobile number
+
         button_layout.addWidget(self.automatic_button)
         button_layout.addWidget(self.manual_button)
         button_layout.addWidget(self.entry_button)
 
         center_layout.addLayout(button_layout)
+
 
         # # Right section (recent entry and exit lists)
 
@@ -310,7 +317,7 @@ class ParkingApp(QMainWindow):
                             filename = f"{save_directory}/plate_{time.time()}.jpg"
                             cv2.imwrite(filename, roi) 
                             self.update_detected_image(filename)
-                            print(DetectedNumberPlate)
+                            # print(DetectedNumberPlate)
                             self.update_vehicle_details(DetectedNumberPlate)
                             timing = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                             self.update_entry_time(timing)  
@@ -360,22 +367,53 @@ class ParkingApp(QMainWindow):
 
     def update_mobile_number(self, number_plate):
         try:
-
             vehicle_no = str(number_plate)
             response_data = self.api_service.getVehicleDetails(vehicle_no)
-            
-            # Process the response data if needed
-            if response_data:
-                print("Vehicle Details Retrieved Successfully:", response_data)
-                return response_data
-            else:
-                print("Failed to fetch vehicle details:", response_data)
+
+            if response_data and 'errorMessage' in response_data:
+                self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
+                
+                # Set focus on the right_box_input field for manual entry
+                self.right_box_input.setFocus()
+
+                # Disconnect previous connections to avoid duplicate triggers
+                try:
+                    self.right_box_input.textChanged.disconnect()
+                except TypeError:
+                    pass  # If no previous connection, ignore error
+
+                # Connect text change event to store the number
+                self.right_box_input.textChanged.connect(self.store_mobile_number)
                 return None
 
         except Exception as e:
             print("Error fetching vehicle details:", str(e))
             return None
+
+    def store_mobile_number(self):
+        """Store the manually entered mobile number in a variable and call the API."""
+        self.entered_mobile_number = self.right_box_input.text().strip()
+    
+    def submit_entry(self):
+        
+        if self.entered_mobile_number and self.detected_number_plate:
+            print(self.entered_mobile_number, self.detected_number_plate)
             
+            # Call the API only when both mobile number and vehicle number are present
+            response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.detected_number_plate)
+            
+            # Print the API response for debugging purposes
+            print(f"API Response: {response}")
+        else:
+            print("Error: Mobile number or vehicle number is missing.")
+            
+    def show_popup(self, message):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setWindowTitle("Vehicle Not Found")
+        msg.setText(message)
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
