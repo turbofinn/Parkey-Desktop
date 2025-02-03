@@ -53,56 +53,18 @@ class ApiService:
         return response_data
 
 
-    # def getCreateCustomer(self,mobileNo,vehicleNo, empID):
-    #     url = "customer-flow-handler/create-customer"
-    #     source = "EMPLOYEE_DESKTOP"
-    #     headers = { "Content-Type": "application/json","Authorization": "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiOTMwMmNiZWEtNGVmNS00MmNlLTlhMmYtODdmMWE5MzdkZWNmIiwiaWF0IjoxNzM4NTkyNTczLCJleHAiOjIwNTM5NTI1NzN9.EWnNsyJdryx0OeBhUUyyqHqMw8jMOGlDMCKzjzUvwmo"}
-       
-    #     payload = json.dumps({"source": source,"mobileNo": mobileNo,"vehicleNo": vehicleNo, "employeeID": empID})
-    #     print("payload is this " + payload)
-    #     response = requests.post(BASE_URL + url, headers=headers, data=payload)
-    #     print(response.text)
-    #     response_data = response.json()
-    #     return response_data
-
-    
-
-    def getCreateCustomer(self, mobileNo, vehicleNo):
-        # URL of the API endpoint
+    def getCreateCustomer(self,mobileNo,vehicleNo):
         url = "customer-flow-handler/create-customer"
-        employeeID = ""
-        # Headers - adding Authorization with Bearer token
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer "  # Correct Bearer token format
-        }
-        
-        # Payload - unchanged
-        payload = json.dumps({
-            "source": "EMPLOYEE_DESKTOP",
-            "mobileNo": mobileNo,
-            "vehicleNo": vehicleNo,
-            "employeeID": employeeID
-        })
-
-        # Debugging - Print headers and payload
-        print("Headers:", headers)
-        print("Payload:", payload)
-        
-        # Making the POST request to the API endpoint
+        source = "EMPLOYEE_DESKTOP"
+        empID = "5ec10c00-7eff-48c9-ada3-bce66129246d"
+        headers = { "Content-Type": "application/json","Authorization": "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiMTdiYWNhY2EtOTk1OS00NjlkLTk2MTMtM2EwOTAyMjY2MjI2IiwiaWF0IjoxNzM4NTk1NzU5LCJleHAiOjIwNTM5NTU3NTl9.UANCu12tlox9d0GFGtb1NkOEBHyo2e7xLz0YtPrSnh4"}  
+        payload = json.dumps({"source": source,"mobileNo": mobileNo,"vehicleNo": vehicleNo, "employeeID": empID})
+        print("payload is this " + payload)
         response = requests.post(BASE_URL + url, headers=headers, data=payload)
-
-        # Debugging - Print response status and content
-        print("Response Status Code:", response.status_code)
-        print("Response Text:", response.text)
-        
-        # Parse and return the response JSON, handling errors
-        try:
-            response_data = response.json()
-        except ValueError:
-            response_data = {"error": "Failed to parse JSON response"}
-        
+        print(response.text)
+        response_data = response.json()
         return response_data
+
 
 
 env_config = EnvConfig()
@@ -110,7 +72,7 @@ env_config = EnvConfig()
 def main():
     api = ApiService()
     # mobileNo = input("Input Mobile: ")
-    mobileNo = "7985157933"
+    mobileNo = "9004263507"
     
     url = "login-service/send-otp"
     payload = json.dumps({"mobileNo": mobileNo})
