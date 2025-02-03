@@ -53,21 +53,21 @@ class ApiService:
         return response_data
 
 
-    # def getCreateCustomer(self,mobileNo,vehicleNo, empID):
-    #     url = "customer-flow-handler/create-customer"
-    #     source = "EMPLOYEE_DESKTOP"
-    #     headers = { "Content-Type": "application/json","Authorization": "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiOTMwMmNiZWEtNGVmNS00MmNlLTlhMmYtODdmMWE5MzdkZWNmIiwiaWF0IjoxNzM4NTkyNTczLCJleHAiOjIwNTM5NTI1NzN9.EWnNsyJdryx0OeBhUUyyqHqMw8jMOGlDMCKzjzUvwmo"}
+    def getCreateCustomer(self,mobileNo,vehicleNo):
+        url = "customer-flow-handler/create-customer"
+        source = "EMPLOYEE_DESKTOP"
+        headers = { "Content-Type": "application/json","Authorization": "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiMDM1ZGY0YmQtOTA5YS00MzFlLWI3ZjktODAxN2M2OGFjNDkzIiwiaWF0IjoxNzM4NTk1MTIxLCJleHAiOjIwNTM5NTUxMjF9.SQTURGQugO0j1KJLrDAhbsIJ7jayHhupcdKCK01YRAs"}
        
-    #     payload = json.dumps({"source": source,"mobileNo": mobileNo,"vehicleNo": vehicleNo, "employeeID": empID})
-    #     print("payload is this " + payload)
-    #     response = requests.post(BASE_URL + url, headers=headers, data=payload)
-    #     print(response.text)
-    #     response_data = response.json()
-    #     return response_data
+        payload = json.dumps({"source": source,"mobileNo": mobileNo,"vehicleNo": vehicleNo, "employeeID": "3bd3824c-0dca-4b92-9e60-d42c990c7853"})
+        print("payload is this " + payload)
+        response = requests.post(BASE_URL + url, headers=headers, data=payload)
+        print(response.text)
+        response_data = response.json()
+        return response_data
 
     
 
-    def getCreateCustomer(self, mobileNo, vehicleNo):
+    # def getCreateCustomer(self, mobileNo, vehicleNo):
         # URL of the API endpoint
         url = "customer-flow-handler/create-customer"
         employeeID = ""
@@ -110,23 +110,23 @@ env_config = EnvConfig()
 def main():
     api = ApiService()
     # mobileNo = input("Input Mobile: ")
-    mobileNo = "7985157933"
+    # mobileNo = "7985157933"
     
-    url = "login-service/send-otp"
-    payload = json.dumps({"mobileNo": mobileNo})
-    print(api.sendOtp(url, payload))
+    # url = "login-service/send-otp"
+    # payload = json.dumps({"mobileNo": mobileNo})
+    # print(api.sendOtp(url, payload))
 
-    otp = input("Input OTP: ")
+    # otp = input("Input OTP: ")
 
-    url = "login-service/verify-otp/employee"
-    payload = json.dumps({"mobileNo": mobileNo, "otp": otp})
-    print(api.verifyOtp(url, payload))
+    # url = "login-service/verify-otp/employee"
+    # payload = json.dumps({"mobileNo": mobileNo, "otp": otp})
+    # print(api.verifyOtp(url, payload))
 
 
-    # vehicleNo = input("Input OTP: ")
-    vehicleNo = "UP32TY5645"
+    # # vehicleNo = input("Input OTP: ")
+    # vehicleNo = "UP32TY5645"
    
-    print(api.getVehicleDetails(url,vehicleNo))
+    print(api.getCreateCustomer("8585588585", "UP32TY5645"))
 
 if __name__ == "__main__":
     main()
