@@ -53,7 +53,22 @@ class ApiService:
         return response_data
 
 
-    def getCreateCustomer(self,mobileNo,vehicleNo):
+    # def getCreateCustomer(self,mobileNo,vehicleNo, empID):
+    #     url = "customer-flow-handler/create-customer"
+    #     source = "EMPLOYEE_DESKTOP"
+    #     headers = { "Content-Type": "application/json","Authorization": "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiOTMwMmNiZWEtNGVmNS00MmNlLTlhMmYtODdmMWE5MzdkZWNmIiwiaWF0IjoxNzM4NTkyNTczLCJleHAiOjIwNTM5NTI1NzN9.EWnNsyJdryx0OeBhUUyyqHqMw8jMOGlDMCKzjzUvwmo"}
+       
+    #     payload = json.dumps({"source": source,"mobileNo": mobileNo,"vehicleNo": vehicleNo, "employeeID": empID})
+    #     print("payload is this " + payload)
+    #     response = requests.post(BASE_URL + url, headers=headers, data=payload)
+    #     print(response.text)
+    #     response_data = response.json()
+    #     return response_data
+
+    
+
+    def getCreateCustomer(self, mobileNo, vehicleNo):
+        # URL of the API endpoint
         url = "customer-flow-handler/create-customer"
         source = "EMPLOYEE_DESKTOP"
         empID = "5ec10c00-7eff-48c9-ada3-bce66129246d"
@@ -72,23 +87,23 @@ env_config = EnvConfig()
 def main():
     api = ApiService()
     # mobileNo = input("Input Mobile: ")
-    mobileNo = "9004263507"
+    mobileNo = "7985157933"
     
-    url = "login-service/send-otp"
-    payload = json.dumps({"mobileNo": mobileNo})
-    print(api.sendOtp(url, payload))
+    # url = "login-service/send-otp"
+    # payload = json.dumps({"mobileNo": mobileNo})
+    # print(api.sendOtp(url, payload))
 
-    otp = input("Input OTP: ")
+    # otp = input("Input OTP: ")
 
-    url = "login-service/verify-otp/employee"
-    payload = json.dumps({"mobileNo": mobileNo, "otp": otp})
-    print(api.verifyOtp(url, payload))
+    # url = "login-service/verify-otp/employee"
+    # payload = json.dumps({"mobileNo": mobileNo, "otp": otp})
+    # print(api.verifyOtp(url, payload))
 
 
-    # vehicleNo = input("Input OTP: ")
-    vehicleNo = "UP32TY5645"
+    # # vehicleNo = input("Input OTP: ")
+    # vehicleNo = "UP32TY5645"
    
-    print(api.getVehicleDetails(url,vehicleNo))
+    print(api.getCreateCustomer("8585588585", "UP32TY5645"))
 
 if __name__ == "__main__":
     main()
