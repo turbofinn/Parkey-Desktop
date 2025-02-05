@@ -69,16 +69,17 @@ class ParkingApp(QMainWindow):
         entry_fees_label = QLabel("Entry Fees")
         entry_fees_label.setStyleSheet("color: black; font-size: 18px;")
         entry_fees_label.setAlignment(Qt.AlignCenter)
-        entry_fees_display = QLabel()
-        entry_fees_display.setFixedSize(130, 100)  # Reduced width here
-        entry_fees_display.setStyleSheet("background-color: white; border: 2px;")
-        entry_fees_display.setAlignment(Qt.AlignCenter)
+        self.entry_fees_display = QLabel()
+        self.entry_fees_display.setFixedSize(130, 100) 
+        self.entry_fees_display.setStyleSheet("background-color: white; border: 2px;")
+        self.entry_fees_display.setAlignment(Qt.AlignCenter)
         entry_fees_box.addWidget(entry_fees_label)
-        entry_fees_box.addWidget(entry_fees_display)
+        entry_fees_box.addWidget(self.entry_fees_display)
         entry_fees_container = QWidget()
         entry_fees_container.setLayout(entry_fees_box)
         entry_fees_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
         left_layout.addWidget(entry_fees_container)
+
 
         # Entry Time
         self.entry_time_display = QLabel() 
@@ -189,24 +190,21 @@ class ParkingApp(QMainWindow):
         right_layout = QVBoxLayout()
         self.recent_entry_label = QLabel("Recent Entry")
         self.recent_entry_label.setStyleSheet("color: black; font-size: 18px;")
+
         self.recent_entry_list = QListWidget()
         self.recent_entry_list.setStyleSheet(
             "font-size: 16px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
         )
         self.recent_entry_list.setFixedWidth(250)  # Set fixed width for the list
+
         self.recent_exit_label = QLabel("Recent Exit")
         self.recent_exit_label.setStyleSheet("color: black; font-size: 18px;")
+
         self.recent_exit_list = QListWidget()
         self.recent_exit_list.setStyleSheet(
             "font-size: 16px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
         )
         self.recent_exit_list.setFixedWidth(250)  # Set fixed width for the list
-
-        # Add dummy data
-        for name in ["Julia Howard", "Eleanor Cooper", "Bessie Fox", "Gloria Mccoy"]:
-            item = QListWidgetItem(f"{name}\n+91 98765 43210")
-            self.recent_entry_list.addItem(item)
-            self.recent_exit_list.addItem(item)
 
         right_layout.addWidget(self.recent_entry_label)
         right_layout.addWidget(self.recent_entry_list)
@@ -219,6 +217,7 @@ class ParkingApp(QMainWindow):
 
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
+
 
     def keyPressEvent(self, event):
         """Close the camera on pressing 'Q'"""
@@ -397,13 +396,14 @@ class ParkingApp(QMainWindow):
     def submit_entry(self):
         
         if self.entered_mobile_number and self.detected_number_plate:
-            print(self.entered_mobile_number, self.detected_number_plate)
-            
-            # Call the API only when both mobile number and vehicle number are present
+
             response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.detected_number_plate)
             
-            # Print the API response for debugging purposes
             print(f"API Response: {response}")
+            entry_fee_value = str(response.get("initialCharge", "N/A"))
+            self.entry_fees_display.setText(entry_fee_value)
+            item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
+            self.recent_entry_list.addItem(item)
         else:
             print("Error: Mobile number or vehicle number is missing.")
             
