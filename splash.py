@@ -54,7 +54,7 @@ class ParkingApp(QMainWindow):
         detected_label.setStyleSheet("color: black; font-size: 18px;")
         detected_label.setAlignment(Qt.AlignCenter)
         self.detected_image = QLabel()
-        self.detected_image.setFixedSize(130, 100)  # Reduced width here
+        self.detected_image.setFixedSize(300, 200)
         self.detected_image.setStyleSheet("background-color: white; border: 2px;")
         self.detected_image.setAlignment(Qt.AlignCenter)
         detected_box.addWidget(detected_label)
@@ -71,10 +71,10 @@ class ParkingApp(QMainWindow):
         entry_fees_label.setAlignment(Qt.AlignCenter)
         self.entry_fees_display = QLabel()
         self.entry_fees_display.setFixedSize(130, 100) 
-        self.entry_fees_display.setStyleSheet("background-color: white; border: 2px;")
-        self.entry_fees_display.setAlignment(Qt.AlignCenter)
+        self.entry_fees_display.setStyleSheet("background-color: white; border: 2px; font-size: 26px; font-weight: bold;")
+        self.entry_fees_display.setAlignment(Qt.AlignHCenter)
         entry_fees_box.addWidget(entry_fees_label)
-        entry_fees_box.addWidget(self.entry_fees_display)
+        entry_fees_box.addWidget(self.entry_fees_display + "₹")
         entry_fees_container = QWidget()
         entry_fees_container.setLayout(entry_fees_box)
         entry_fees_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
@@ -84,8 +84,8 @@ class ParkingApp(QMainWindow):
         # Entry Time
         self.entry_time_display = QLabel() 
         self.entry_time_display.setFixedSize(130, 100)
-        self.entry_time_display.setStyleSheet("background-color: white; border: 2px;")
-        self.entry_time_display.setAlignment(Qt.AlignCenter)
+        self.entry_time_display.setStyleSheet("background-color: white; border: 2px; font-weight: bold; font-size: 20px")
+        self.entry_time_display.setAlignment(Qt.AlignHCenter)
 
         entry_time_box = QVBoxLayout()
         entry_time_label = QLabel("Entry Time")
@@ -100,8 +100,6 @@ class ParkingApp(QMainWindow):
         entry_time_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
 
         left_layout.addWidget(entry_time_container)
-
-
 
         # Center section
         center_layout = QVBoxLayout()
@@ -193,7 +191,7 @@ class ParkingApp(QMainWindow):
 
         self.recent_entry_list = QListWidget()
         self.recent_entry_list.setStyleSheet(
-            "font-size: 16px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
+            "font-size: 18px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
         )
         self.recent_entry_list.setFixedWidth(250)  # Set fixed width for the list
 
@@ -202,7 +200,7 @@ class ParkingApp(QMainWindow):
 
         self.recent_exit_list = QListWidget()
         self.recent_exit_list.setStyleSheet(
-            "font-size: 16px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
+            "font-size: 18px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
         )
         self.recent_exit_list.setFixedWidth(250)  # Set fixed width for the list
 
