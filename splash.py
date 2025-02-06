@@ -74,7 +74,7 @@ class ParkingApp(QMainWindow):
         self.entry_fees_display.setStyleSheet("background-color: white; border: 2px; font-size: 26px; font-weight: bold;")
         self.entry_fees_display.setAlignment(Qt.AlignHCenter)
         entry_fees_box.addWidget(entry_fees_label)
-        entry_fees_box.addWidget(self.entry_fees_display + "₹")
+        entry_fees_box.addWidget(self.entry_fees_display)
         entry_fees_container = QWidget()
         entry_fees_container.setLayout(entry_fees_box)
         entry_fees_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
@@ -83,9 +83,11 @@ class ParkingApp(QMainWindow):
 
         # Entry Time
         self.entry_time_display = QLabel() 
-        self.entry_time_display.setFixedSize(130, 100)
-        self.entry_time_display.setStyleSheet("background-color: white; border: 2px; font-weight: bold; font-size: 20px")
-        self.entry_time_display.setAlignment(Qt.AlignHCenter)
+        self.entry_time_display.setFixedSize(250, 180)  
+        self.entry_time_display.setStyleSheet(
+            "background-color: white; border: 2px; font-weight: bold; font-size: 20px; padding: 5px;"
+        )
+        self.entry_time_display.setAlignment(Qt.AlignCenter)  
 
         entry_time_box = QVBoxLayout()
         entry_time_label = QLabel("Entry Time")
@@ -93,13 +95,16 @@ class ParkingApp(QMainWindow):
         entry_time_label.setAlignment(Qt.AlignCenter)
 
         entry_time_box.addWidget(entry_time_label)
-        entry_time_box.addWidget(self.entry_time_display)  # Use self.entry_time_display
+        entry_time_box.addWidget(self.entry_time_display)
 
         entry_time_container = QWidget()
         entry_time_container.setLayout(entry_time_box)
-        entry_time_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
+        entry_time_container.setStyleSheet(
+            "border-radius: 10px; padding: 10px; background-color: white; border: 2px;"
+        )
 
         left_layout.addWidget(entry_time_container)
+
 
         # Center section
         center_layout = QVBoxLayout()

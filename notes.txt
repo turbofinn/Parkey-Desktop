@@ -1,0 +1,3 @@
+disable entry btn after one click
+if customer is already present populate only mobile number & entry fees
+profile API
