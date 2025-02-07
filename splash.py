@@ -46,110 +46,118 @@ class ParkingApp(QMainWindow):
         main_widget = QWidget()
         main_layout = QHBoxLayout()
 
-        # Left section
+       # Left section
         left_layout = QVBoxLayout()
 
-        # Detected Number Plate
-        detected_box = QVBoxLayout()
+        # Set consistent margins and spacing for balanced gaps
+        left_layout.setContentsMargins(5, 5, 5, 5)  # Slight outer margin to prevent sticking to window edges
+        left_layout.setSpacing(15)  # Add space between the containers
 
-        # Updated label with larger font size and centered alignment
+        # --- Detected Number Plate Section ---
+        detected_box = QVBoxLayout()
+        detected_box.setSpacing(5)  # Space between label and image
+
         detected_label = QLabel("Detected Number\nPlate")
-        detected_label.setStyleSheet("color: black; font-size: 24px; font-weight: bold;")
+        detected_label.setStyleSheet("color: black; font-size: 24px; font-weight: bold; margin: 0px;")
         detected_label.setAlignment(Qt.AlignCenter)
 
-        # Adjust image size to fit container and add padding around it
         self.detected_image = QLabel()
-        self.detected_image.setFixedSize(290, 150)  # Slightly smaller than container width to account for padding
+        self.detected_image.setFixedSize(290, 150)
         self.detected_image.setStyleSheet("""
             background-color: white;
-            padding: 10px;  /* Padding inside the image */
-            margin: 5px;   /* Space around the image inside the container */
+            margin: 0px;
         """)
         self.detected_image.setAlignment(Qt.AlignCenter)
 
-        # Add widgets to the layout
         detected_box.addWidget(detected_label)
         detected_box.addWidget(self.detected_image)
 
-        # Adjust container height and ensure proper styling
         detected_container = QWidget()
         detected_container.setLayout(detected_box)
-        detected_container.setFixedHeight(200)  # Increased to accommodate the image height
+        detected_container.setFixedHeight(200)
         detected_container.setStyleSheet("""
             border-radius: 10px;
-            padding: 5px;  /* Padding inside the container */
+            padding: 10px;  /* Added slight padding inside the container */
             background-color: white;
+            margin: 0px;
         """)
 
-        # Add the container to the left layout
         left_layout.addWidget(detected_container)
 
-
-        # Entry Fees
+        # --- Entry Fees Section ---
         entry_fees_box = QVBoxLayout()
-        entry_fees_box.setAlignment(Qt.AlignCenter)  # Center the entire layout content
+        entry_fees_box.setAlignment(Qt.AlignCenter)
+        entry_fees_box.setSpacing(5)
 
-        # Entry Fees Label with bold text and centered alignment
         entry_fees_label = QLabel("Entry Charges")
-        entry_fees_label.setStyleSheet("color: black; font-size: 20px; font-weight: bold;")  # Increase font size and make bold
+        entry_fees_label.setStyleSheet("color: black; font-size: 20px; font-weight: bold; margin: 0px;")
         entry_fees_label.setAlignment(Qt.AlignCenter)
 
-        # Entry Fees Display with Rs/h formatting
-        self.entry_fees_display = QLabel() 
-        self.entry_fees_display.setFixedSize(130, 80)  # Reduce the height
+        self.entry_fees_display = QLabel()
+        self.entry_fees_display.setFixedSize(130, 80)
         self.entry_fees_display.setStyleSheet("""
-            background-color: white; 
-            font-size: 28px;  /* Larger font for emphasis */
-            font-weight: bold; 
+            background-color: white;
+            font-size: 28px;
+            font-weight: bold;
             color: black;
+            margin: 0px;
         """)
-        self.entry_fees_display.setAlignment(Qt.AlignCenter)  # Center the text both horizontally and vertically
+        self.entry_fees_display.setAlignment(Qt.AlignCenter)
 
-        # Adding widgets to the layout
         entry_fees_box.addWidget(entry_fees_label)
         entry_fees_box.addWidget(self.entry_fees_display)
 
-        # Container with reduced height and styling
         entry_fees_container = QWidget()
         entry_fees_container.setLayout(entry_fees_box)
+        entry_fees_container.setFixedHeight(120)
         entry_fees_container.setStyleSheet("""
-            border-radius: 10px; 
-            padding: 5px;  /* Reduce padding */
-            background-color: white; 
+            border-radius: 10px;
+            padding: 10px;  /* Added slight padding for uniformity */
+            background-color: white;
+            margin: 0px;
         """)
-        entry_fees_container.setFixedHeight(120)  # Reduce the container height significantly
 
-        # Add the container to the left layout
         left_layout.addWidget(entry_fees_container)
 
-
-
-        # Entry Time
-        self.entry_time_display = QLabel() 
-        self.entry_time_display.setFixedSize(250, 80)  # Reduced height
-        self.entry_time_display.setStyleSheet(
-            "background-color: white; font-weight: bold; font-size: 28px; padding: 10px;"
-        )
-        self.entry_time_display.setAlignment(Qt.AlignCenter)  
-
+        # --- Entry Time Section ---
         entry_time_box = QVBoxLayout()
+        entry_time_box.setSpacing(5)
+
         entry_time_label = QLabel("Entry Time")
-        entry_time_label.setStyleSheet("color: black; font-size: 22px; font-weight: bold; margin: 0px; padding: 0px; ")  # Bold and larger font
+        entry_time_label.setStyleSheet("color: black; font-size: 22px; font-weight: bold; margin: 0px; padding: 0px;")
         entry_time_label.setAlignment(Qt.AlignCenter)
+
+        self.entry_time_display = QLabel()
+        self.entry_time_display.setFixedSize(250, 80)
+        self.entry_time_display.setStyleSheet("""
+            background-color: white;
+            font-weight: bold;
+            font-size: 28px;
+            margin: 0px;
+            padding: 5px;
+        """)
+        self.entry_time_display.setAlignment(Qt.AlignCenter)
 
         entry_time_box.addWidget(entry_time_label)
         entry_time_box.addWidget(self.entry_time_display)
 
         entry_time_container = QWidget()
         entry_time_container.setLayout(entry_time_box)
-        entry_time_container.setStyleSheet(
-            "border-radius: 10px; padding: 5px; background-color: white;"
-        )
-        entry_time_container.setFixedHeight(120)  # Reduced the container height significantly
+        entry_time_container.setFixedHeight(120)
+        entry_time_container.setStyleSheet("""
+            border-radius: 10px;
+            padding: 10px;  /* Consistent padding with other containers */
+            background-color: white;
+            margin: 0px;
+        """)
 
         left_layout.addWidget(entry_time_container)
 
+        # Optional: Add stretch at the bottom to keep everything aligned to the top
+        left_layout.addStretch(1)
 
+
+        
 
         # Center section
         center_layout = QVBoxLayout()
@@ -194,7 +202,7 @@ class ParkingApp(QMainWindow):
             font-weight: bold;
             color: black;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         """)
         self.left_box_input.setAlignment(Qt.AlignCenter)
         self.left_box_input.setFixedHeight(60)
@@ -224,7 +232,7 @@ class ParkingApp(QMainWindow):
             font-weight: bold;
             color: black;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         """)
         self.right_box_input.setAlignment(Qt.AlignCenter)
         self.right_box_input.setFixedHeight(60)
