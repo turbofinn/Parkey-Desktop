@@ -384,12 +384,12 @@ class ParkingApp(QMainWindow):
         try:
             vehicle_no = str(number_plate)
             response_data = self.api_service.getVehicleDetails(vehicle_no)  # This returns a dictionary
-            
-            # No need to parse again, directly use response_data
-            response = response_data
 
-            if response:
-                if 'errorMessage' in response:
+            # Debugging - Print the API response
+            print("API Response:", response_data)
+
+            if response_data:
+                if 'errorMessage' in response_data:
                     # Vehicle not found in the system
                     self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
 
@@ -406,13 +406,17 @@ class ParkingApp(QMainWindow):
                     self.right_box_input.textChanged.connect(self.store_mobile_number)
                 else:
                     # Vehicle found - Populate mobile number and entry fees
-                    mobile_number = response.get("mobileNo", "")
-                    entry_fee = f"₹{response.get('totalParkingCharges', '0')}"
+                    mobile_number = response_data.get("mobileNo", "")
+                    entry_fee = str(response_data.get('totalParkingCharges', '0'))
+
+                    # Debugging - Print extracted values
+                    print("Mobile Number:", mobile_number)
+                    print("Entry Fee:", entry_fee)
 
                     # Update UI fields
                     self.entered_mobile_number = mobile_number
                     self.right_box_input.setText(self.entered_mobile_number)
-                    self.entry_fees_display.setText(entry_fee)
+                    self.entry_fees_display.setText(f"₹{entry_fee}")  # Adding currency symbol for clarity
 
             else:
                 # Handle cases where API returns an empty response
@@ -421,6 +425,7 @@ class ParkingApp(QMainWindow):
         except Exception as e:
             print("Error fetching vehicle details:", str(e))
             self.show_popup(f"An error occurred: {str(e)}")
+
 
 
 
