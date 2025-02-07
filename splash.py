@@ -51,48 +51,90 @@ class ParkingApp(QMainWindow):
 
         # Detected Number Plate
         detected_box = QVBoxLayout()
-        detected_label = QLabel("Detected Number Plate")
-        detected_label.setStyleSheet("color: black; font-size: 18px;")
+
+        # Updated label with larger font size and centered alignment
+        detected_label = QLabel("Detected Number\nPlate")
+        detected_label.setStyleSheet("color: black; font-size: 24px; font-weight: bold;")
         detected_label.setAlignment(Qt.AlignCenter)
+
+        # Adjust image size to fit container and add padding around it
         self.detected_image = QLabel()
-        self.detected_image.setFixedSize(300, 200)
-        self.detected_image.setStyleSheet("background-color: white; border: 2px;")
+        self.detected_image.setFixedSize(290, 150)  # Slightly smaller than container width to account for padding
+        self.detected_image.setStyleSheet("""
+            background-color: white;
+            padding: 10px;  /* Padding inside the image */
+            margin: 5px;   /* Space around the image inside the container */
+        """)
         self.detected_image.setAlignment(Qt.AlignCenter)
+
+        # Add widgets to the layout
         detected_box.addWidget(detected_label)
         detected_box.addWidget(self.detected_image)
+
+        # Adjust container height and ensure proper styling
         detected_container = QWidget()
         detected_container.setLayout(detected_box)
-        detected_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
+        detected_container.setFixedHeight(200)  # Increased to accommodate the image height
+        detected_container.setStyleSheet("""
+            border-radius: 10px;
+            padding: 5px;  /* Padding inside the container */
+            background-color: white;
+        """)
+
+        # Add the container to the left layout
         left_layout.addWidget(detected_container)
+
 
         # Entry Fees
         entry_fees_box = QVBoxLayout()
-        entry_fees_label = QLabel("Entry Fees")
-        entry_fees_label.setStyleSheet("color: black; font-size: 18px;")
+        entry_fees_box.setAlignment(Qt.AlignCenter)  # Center the entire layout content
+
+        # Entry Fees Label with bold text and centered alignment
+        entry_fees_label = QLabel("Entry Charges")
+        entry_fees_label.setStyleSheet("color: black; font-size: 20px; font-weight: bold;")  # Increase font size and make bold
         entry_fees_label.setAlignment(Qt.AlignCenter)
-        self.entry_fees_display = QLabel()
-        self.entry_fees_display.setFixedSize(130, 100) 
-        self.entry_fees_display.setStyleSheet("background-color: white; border: 2px; font-size: 26px; font-weight: bold;")
-        self.entry_fees_display.setAlignment(Qt.AlignHCenter)
+
+        # Entry Fees Display with Rs/h formatting
+        self.entry_fees_display = QLabel() 
+        self.entry_fees_display.setFixedSize(130, 80)  # Reduce the height
+        self.entry_fees_display.setStyleSheet("""
+            background-color: white; 
+            font-size: 28px;  /* Larger font for emphasis */
+            font-weight: bold; 
+            color: black;
+        """)
+        self.entry_fees_display.setAlignment(Qt.AlignCenter)  # Center the text both horizontally and vertically
+
+        # Adding widgets to the layout
         entry_fees_box.addWidget(entry_fees_label)
         entry_fees_box.addWidget(self.entry_fees_display)
+
+        # Container with reduced height and styling
         entry_fees_container = QWidget()
         entry_fees_container.setLayout(entry_fees_box)
-        entry_fees_container.setStyleSheet("border-radius: 10px; padding: 10px; background-color: white; border: 2px;")
+        entry_fees_container.setStyleSheet("""
+            border-radius: 10px; 
+            padding: 5px;  /* Reduce padding */
+            background-color: white; 
+        """)
+        entry_fees_container.setFixedHeight(120)  # Reduce the container height significantly
+
+        # Add the container to the left layout
         left_layout.addWidget(entry_fees_container)
+
 
 
         # Entry Time
         self.entry_time_display = QLabel() 
-        self.entry_time_display.setFixedSize(250, 180)  
+        self.entry_time_display.setFixedSize(250, 80)  # Reduced height
         self.entry_time_display.setStyleSheet(
-            "background-color: white; border: 2px; font-weight: bold; font-size: 20px; padding: 5px;"
+            "background-color: white; font-weight: bold; font-size: 28px; padding: 10px;"
         )
         self.entry_time_display.setAlignment(Qt.AlignCenter)  
 
         entry_time_box = QVBoxLayout()
         entry_time_label = QLabel("Entry Time")
-        entry_time_label.setStyleSheet("color: black; font-size: 18px;")
+        entry_time_label.setStyleSheet("color: black; font-size: 22px; font-weight: bold; margin: 0px; padding: 0px; ")  # Bold and larger font
         entry_time_label.setAlignment(Qt.AlignCenter)
 
         entry_time_box.addWidget(entry_time_label)
@@ -101,10 +143,12 @@ class ParkingApp(QMainWindow):
         entry_time_container = QWidget()
         entry_time_container.setLayout(entry_time_box)
         entry_time_container.setStyleSheet(
-            "border-radius: 10px; padding: 10px; background-color: white; border: 2px;"
+            "border-radius: 10px; padding: 5px; background-color: white;"
         )
+        entry_time_container.setFixedHeight(120)  # Reduced the container height significantly
 
         left_layout.addWidget(entry_time_container)
+
 
 
         # Center section
@@ -126,45 +170,81 @@ class ParkingApp(QMainWindow):
 
         center_layout.addWidget(self.vehicle_image, alignment=Qt.AlignCenter)
 
+
         # Two side-by-side boxes below the camera feed
         box_layout = QHBoxLayout()
+
+        # Add spacing between the two boxes
+        box_layout.setSpacing(20)  # Space between left and right boxes
+
+        # Push the boxes slightly upwards
+        box_layout.setContentsMargins(0, 10, 0, 0)  # (left, top, right, bottom)
 
         # Left box
         verify_box = QVBoxLayout()
         verify_label = QLabel("Verify Vehicle Details")
-        verify_label.setStyleSheet("color: black; font-size: 16px;")
+        verify_label.setStyleSheet("color: black; font-size: 18px; font-weight: bold;")
+        verify_label.setAlignment(Qt.AlignCenter)
         self.left_box_input = QLineEdit()
-        self.left_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
-        self.left_box_input.setFixedHeight(50)  # Reduce height of QLineEdit
+        self.left_box_input.setStyleSheet("""
+            background-color: white;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            text-align: center;
+            margin-bottom: 15px;
+        """)
+        self.left_box_input.setAlignment(Qt.AlignCenter)
+        self.left_box_input.setFixedHeight(60)
         verify_box.addWidget(verify_label)
         verify_box.addWidget(self.left_box_input)
         verify_container = QWidget()
         verify_container.setLayout(verify_box)
-        verify_container.setStyleSheet("padding: 5px; background-color: white; border: 2px solid black; border-radius: 10px;")  # Adjust padding if needed
-        verify_container.setFixedHeight(130)  # Reduce container height
+        verify_container.setStyleSheet("""
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+        """)
+        verify_container.setFixedHeight(120)
         box_layout.addWidget(verify_container)
 
         # Right box
         right_box_layout = QVBoxLayout()
         right_box_label = QLabel("Enter Mobile Number")
-        right_box_label.setStyleSheet("color: black; font-size: 16px;")
+        right_box_label.setStyleSheet("color: black; font-size: 18px; font-weight: bold;")
         right_box_label.setAlignment(Qt.AlignCenter)
-
-        # Store the input field as an instance variable
-        self.right_box_input = QLineEdit()  # Use self.right_box_input
-        self.right_box_input.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 5px; padding: 5px;")
-        self.right_box_input.setFixedHeight(50)  # Reduce height of QLineEdit
+        self.right_box_input = QLineEdit()
+        self.right_box_input.setStyleSheet("""
+            background-color: white;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            text-align: center;
+            margin-bottom: 15px;
+        """)
+        self.right_box_input.setAlignment(Qt.AlignCenter)
+        self.right_box_input.setFixedHeight(60)
         right_box_layout.addWidget(right_box_label)
         right_box_layout.addWidget(self.right_box_input)
-
         right_box_container = QWidget()
         right_box_container.setLayout(right_box_layout)
-        right_box_container.setStyleSheet("padding: 5px; background-color: white; border: 2px solid black; border-radius: 10px;")
-        right_box_container.setFixedHeight(130)  # Reduce container height
+        right_box_container.setStyleSheet("""
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+        """)
+        right_box_container.setFixedHeight(120)
         box_layout.addWidget(right_box_container)
 
+        # Add the box layout to the center layout
         center_layout.addLayout(box_layout)
 
+        # Add space between the boxes and buttons
+        center_layout.addSpacing(30)  # Space between boxes and buttons
 
         # Buttons
         button_layout = QHBoxLayout()
@@ -178,15 +258,17 @@ class ParkingApp(QMainWindow):
             )
             button.setFixedSize(120, 50)
 
-        self.automatic_button.clicked.connect(self.start_camera)  # Start camera on button click
+        self.automatic_button.clicked.connect(self.start_camera)
         self.manual_button.clicked.connect(self.stop_camera)
-        self.entry_button.clicked.connect(self.submit_entry)  # Connect Entry button to print mobile number
+        self.entry_button.clicked.connect(self.submit_entry)
 
         button_layout.addWidget(self.automatic_button)
         button_layout.addWidget(self.manual_button)
         button_layout.addWidget(self.entry_button)
 
+        # Add the button layout to the center layout
         center_layout.addLayout(button_layout)
+
 
 
         # # Right section (recent entry and exit lists)
@@ -334,7 +416,7 @@ class ParkingApp(QMainWindow):
                             self.update_detected_image(filename)
                             # print(DetectedNumberPlate)
                             self.update_vehicle_details(DetectedNumberPlate)
-                            timing = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            timing = datetime.datetime.now().strftime("%I:%M %p")
                             self.update_entry_time(timing)  
                             self.update_mobile_number(DetectedNumberPlate)
 
@@ -392,6 +474,9 @@ class ParkingApp(QMainWindow):
                 if 'errorMessage' in response_data:
                     # Vehicle not found in the system
                     self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
+                    self.right_box_input.clear()
+                    self.entry_fees_display.clear()
+                    self.entered_mobile_number = ""
 
                     # Set focus on the input field for manual entry
                     self.right_box_input.setFocus()
@@ -416,7 +501,7 @@ class ParkingApp(QMainWindow):
                     # Update UI fields
                     self.entered_mobile_number = mobile_number
                     self.right_box_input.setText(self.entered_mobile_number)
-                    self.entry_fees_display.setText(f"₹{entry_fee}")  # Adding currency symbol for clarity
+                    self.entry_fees_display.setText(f"{entry_fee} Rs")  # Adding currency symbol for clarity
 
             else:
                 # Handle cases where API returns an empty response
@@ -440,7 +525,7 @@ class ParkingApp(QMainWindow):
             response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.detected_number_plate)
             
             print(f"API Response: {response}")
-            entry_fee_value = str(response.get("initialCharge", "N/A"))
+            entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
             self.entry_fees_display.setText(entry_fee_value)
             item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
             self.recent_entry_list.addItem(item)
