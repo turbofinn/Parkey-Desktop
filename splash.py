@@ -11,6 +11,7 @@ import time
 import os
 from ApiService import ApiService 
 import datetime
+import json
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
@@ -230,6 +231,7 @@ class ParkingApp(QMainWindow):
     def start_camera(self):
         """Start the camera and begin detecting number plates."""
         self.cap = cv2.VideoCapture(0)  # Open default camera
+        self.entry_button.setEnabled(True)
         if not self.cap.isOpened():
             print("Error: Cannot access the camera")
             return
@@ -257,10 +259,21 @@ class ParkingApp(QMainWindow):
 
     def stop_camera(self):
         """Stop the camera feed and close OpenCV windows."""
-        if self.cap:
+        if hasattr(self, 'timer') and self.timer.isActive():
             self.timer.stop()
+        
+        if hasattr(self, 'cap') and self.cap is not None and self.cap.isOpened():
             self.cap.release()
-            cv2.destroyAllWindows()
+            self.cap = None  # Reset cap to prevent future issues
+            print("Camera stopped.")
+        else:
+            print("Camera was not running.")
+
+        if hasattr(self, 'sess'):
+            self.sess.close()  # Close TensorFlow session to free resources
+            print("TensorFlow session closed.")
+        
+        cv2.destroyAllWindows()
 
 
     def update_frame_with_detection(self):
@@ -370,34 +383,53 @@ class ParkingApp(QMainWindow):
     def update_mobile_number(self, number_plate):
         try:
             vehicle_no = str(number_plate)
-            response_data = self.api_service.getVehicleDetails(vehicle_no)
+            response_data = self.api_service.getVehicleDetails(vehicle_no)  # This returns a dictionary
+            
+            # No need to parse again, directly use response_data
+            response = response_data
 
-            if response_data and 'errorMessage' in response_data:
-                self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
-                
-                # Set focus on the right_box_input field for manual entry
-                self.right_box_input.setFocus()
+            if response:
+                if 'errorMessage' in response:
+                    # Vehicle not found in the system
+                    self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
 
-                # Disconnect previous connections to avoid duplicate triggers
-                try:
-                    self.right_box_input.textChanged.disconnect()
-                except TypeError:
-                    pass  # If no previous connection, ignore error
+                    # Set focus on the input field for manual entry
+                    self.right_box_input.setFocus()
 
-                # Connect text change event to store the number
-                self.right_box_input.textChanged.connect(self.store_mobile_number)
-                return None
+                    # Disconnect any previous connections to avoid duplicate triggers
+                    try:
+                        self.right_box_input.textChanged.disconnect()
+                    except TypeError:
+                        pass  # Ignore if there's no previous connection
+
+                    # Connect text change event to store the manually entered number
+                    self.right_box_input.textChanged.connect(self.store_mobile_number)
+                else:
+                    # Vehicle found - Populate mobile number and entry fees
+                    mobile_number = response.get("mobileNo", "")
+                    entry_fee = f"₹{response.get('totalParkingCharges', '0')}"
+
+                    # Update UI fields
+                    self.entered_mobile_number = mobile_number
+                    self.right_box_input.setText(self.entered_mobile_number)
+                    self.entry_fees_display.setText(entry_fee)
+
+            else:
+                # Handle cases where API returns an empty response
+                self.show_popup("No data received from server. Please try again.")
 
         except Exception as e:
             print("Error fetching vehicle details:", str(e))
-            return None
+            self.show_popup(f"An error occurred: {str(e)}")
+
+
 
     def store_mobile_number(self):
         """Store the manually entered mobile number in a variable and call the API."""
         self.entered_mobile_number = self.right_box_input.text().strip()
     
     def submit_entry(self):
-        
+        self.entry_button.setEnabled(False)
         if self.entered_mobile_number and self.detected_number_plate:
 
             response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.detected_number_plate)

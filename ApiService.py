@@ -45,10 +45,8 @@ class ApiService:
 
     def getVehicleDetails(self, vehicleNo):
         url = "customer-flow-handler/get-vehicle-details?vehicleNo="+vehicleNo
-        headers = {'Authorization': "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiYTNmM2NlMTctOTBmOC00MGQ0LThjNmYtMThmNmQ2YTYxNjE1IiwiaWF0IjoxNzM4NzY1MDU4LCJleHAiOjIwNTQxMjUwNTh9.-FRQKl9nWfTMLlkh6mrJ3QVY5R60kZ_CzWThW-gU4mM"}
-        print(headers)
+        headers = {'Authorization': "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZmI2MjU5MTctYTg3OC00ZjA0LWIwNjctNTFhMTZiZjZmMWY2IiwiaWF0IjoxNzM4OTEyMjA0LCJleHAiOjIwNTQyNzIyMDR9.VvdsTTTGP5iMEOqjALeURKSqxKsPvVKbdP4oIMzz95M"}
         response = requests.get(BASE_URL + url, headers=headers)
-        print(response.text)
         response_data = response.json()
         return response_data
 
@@ -57,11 +55,11 @@ class ApiService:
         url = "customer-flow-handler/create-customer"
         source = "EMPLOYEE_DESKTOP"
         empID = "5ec10c00-7eff-48c9-ada3-bce66129246d"
-        headers = { "Content-Type": "application/json","Authorization": "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiYmNhMmRkMmQtMjk4NC00NGJjLTg5MTgtZTRmOTg2NzQ5YzIwIiwiaWF0IjoxNzM4ODU1NDQwLCJleHAiOjIwNTQyMTU0NDB9.lFtVkjwuevq0_eJ9hkBBn2MYqoeVXwtjw5OIBVpzUeg"}  
+        headers = { "Content-Type": "application/json","Authorization": "Bearer "+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbi10b2tlbiIsInVzZXJUeXBlIjoiRU1QTE9ZRUUiLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZmI2MjU5MTctYTg3OC00ZjA0LWIwNjctNTFhMTZiZjZmMWY2IiwiaWF0IjoxNzM4OTEyMjA0LCJleHAiOjIwNTQyNzIyMDR9.VvdsTTTGP5iMEOqjALeURKSqxKsPvVKbdP4oIMzz95M"}  
         payload = json.dumps({"source": source,"mobileNo": mobileNo,"vehicleNo": vehicleNo, "employeeID": empID})
-        print("payload is this " + payload)
+        
         response = requests.post(BASE_URL + url, headers=headers, data=payload)
-        print(response.text)
+       
         response_data = response.json()
         return response_data
 
