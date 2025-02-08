@@ -39,6 +39,7 @@ class ParkingApp(QMainWindow):
         self.num_detections = None
         self.detected_number_plate = ""
         self.entry_time = ""
+        self.current_number_plate = ""
         self.entered_mobile_number = ""
         self.api_service = ApiService()
 
@@ -206,6 +207,7 @@ class ParkingApp(QMainWindow):
         """)
         self.left_box_input.setAlignment(Qt.AlignCenter)
         self.left_box_input.setFixedHeight(60)
+        self.left_box_input.textChanged.connect(self.handle_number_plate_edit)
         verify_box.addWidget(verify_label)
         verify_box.addWidget(self.left_box_input)
         verify_container = QWidget()
@@ -491,7 +493,17 @@ class ParkingApp(QMainWindow):
     def update_vehicle_details(self, number_plate):
         """Update the verify vehicle details input field with the detected number plate."""
         self.detected_number_plate = number_plate  # Store in global variable
-        self.left_box_input.setText(self.detected_number_plate)
+        self.current_number_plate = number_plate
+        self.left_box_input.setText(self.current_number_plate)
+
+    def handle_number_plate_edit(self):
+        """Handle changes to the number plate input field"""
+        edited_text = self.left_box_input.text().strip()
+        if edited_text != self.current_number_plate:
+            self.current_number_plate = edited_text
+            self.entry_fees_display.clear()
+            # Fetch new vehicle details with edited plate
+            self.update_mobile_number(self.current_number_plate)
 
     def update_entry_time(self, timing):
         self.entry_time = timing
@@ -555,9 +567,9 @@ class ParkingApp(QMainWindow):
     
     def submit_entry(self):
         self.entry_button.setEnabled(False)
-        if self.entered_mobile_number and self.detected_number_plate:
+        if self.entered_mobile_number and self.current_number_plate:
 
-            response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.detected_number_plate)
+            response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.current_number_plate)
             
             print(f"API Response: {response}")
             entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
