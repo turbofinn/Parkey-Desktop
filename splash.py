@@ -523,6 +523,7 @@ class ParkingApp(QMainWindow):
                     self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
                     self.right_box_input.clear()
                     self.entry_fees_display.clear()
+                    self.recent_entry_list.clear()
                     self.entered_mobile_number = ""
 
                     # Set focus on the input field for manual entry
@@ -540,15 +541,13 @@ class ParkingApp(QMainWindow):
                     # Vehicle found - Populate mobile number and entry fees
                     mobile_number = response_data.get("mobileNo", "")
                     entry_fee = str(response_data.get('totalParkingCharges', '0'))
-
-                    # Debugging - Print extracted values
-                    print("Mobile Number:", mobile_number)
-                    print("Entry Fee:", entry_fee)
-
+                    item = QListWidgetItem(f"John Doe\n+91 {mobile_number}")
+                    
                     # Update UI fields
                     self.entered_mobile_number = mobile_number
                     self.right_box_input.setText(self.entered_mobile_number)
                     self.entry_fees_display.setText(f"{entry_fee} Rs")  # Adding currency symbol for clarity
+                    self.recent_entry_list.addItem(item)
 
             else:
                 # Handle cases where API returns an empty response
@@ -568,14 +567,12 @@ class ParkingApp(QMainWindow):
     def submit_entry(self):
         self.entry_button.setEnabled(False)
         if self.entered_mobile_number and self.current_number_plate:
-
             response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.current_number_plate)
-            
-            print(f"API Response: {response}")
             entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
             self.entry_fees_display.setText(entry_fee_value)
             item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
             self.recent_entry_list.addItem(item)
+            self.show_popup("Added vehicle successfully")
         else:
             print("Error: Mobile number or vehicle number is missing.")
             
