@@ -391,9 +391,15 @@ class ParkingApp(QMainWindow):
         if hasattr(self, 'sess'):
             self.sess.close()  # Close TensorFlow session to free resources
             print("TensorFlow session closed.")
-        
+        self.right_box_input.clear()
+        self.entry_fees_display.clear()
+        self.recent_entry_list.clear()
+        self.left_box_input.clear()
+        self.recent_exit_list.clear()
+        self.entry_time_display.clear()
+        self.detected_image.clear()
         cv2.destroyAllWindows()
-
+        
 
     def update_frame_with_detection(self):
         """Capture a frame, run number plate detection, and display the result."""
@@ -502,8 +508,6 @@ class ParkingApp(QMainWindow):
         if edited_text != self.current_number_plate:
             self.current_number_plate = edited_text
             self.entry_fees_display.clear()
-            # Fetch new vehicle details with edited plate
-            self.update_mobile_number(self.current_number_plate)
 
     def update_entry_time(self, timing):
         self.entry_time = timing
