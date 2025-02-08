@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QListWidget, QMessageBox, QListWidgetItem, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QListWidget, QMessageBox, QListWidgetItem, QLineEdit, QSizePolicy
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QTimer
 import sys
@@ -46,12 +46,12 @@ class ParkingApp(QMainWindow):
         main_widget = QWidget()
         main_layout = QHBoxLayout()
 
-       # Left section
+        # Left section
         left_layout = QVBoxLayout()
 
         # Set consistent margins and spacing for balanced gaps
         left_layout.setContentsMargins(5, 5, 5, 5)  # Slight outer margin to prevent sticking to window edges
-        left_layout.setSpacing(15)  # Add space between the containers
+        left_layout.setSpacing(68)  # Add space between the containers
 
         # --- Detected Number Plate Section ---
         detected_box = QVBoxLayout()
@@ -262,9 +262,9 @@ class ParkingApp(QMainWindow):
 
         for button in [self.automatic_button, self.manual_button, self.entry_button]:
             button.setStyleSheet(
-                "background-color: #FF5733; color: white; font-size: 16px; padding: 10px; border-radius: 10px;"
+                "background-color: #FF5733; color: white; font-size: 20px; padding: 15px; border-radius: 10px;"
             )
-            button.setFixedSize(120, 50)
+            button.setFixedSize(150, 60)  # Increased size from 120x50 to 150x60
 
         self.automatic_button.clicked.connect(self.start_camera)
         self.manual_button.clicked.connect(self.stop_camera)
@@ -278,39 +278,66 @@ class ParkingApp(QMainWindow):
         center_layout.addLayout(button_layout)
 
 
-
-        # # Right section (recent entry and exit lists)
-
+        # Right section (Single white box with Recent Entry and Exit)
         right_layout = QVBoxLayout()
+
+        # Container Widget for the right side
+        right_container = QWidget()
+        right_container.setStyleSheet("background-color: white; border-radius: 10px;")
+        right_container_layout = QVBoxLayout()
+        right_container_layout.setContentsMargins(20, 20, 20, 20)  # Padding inside the white box
+        right_container_layout.setSpacing(20)  # Spacing between sections
+
+        # --- Recent Entry Section ---
+        recent_entry_layout = QVBoxLayout()
         self.recent_entry_label = QLabel("Recent Entry")
-        self.recent_entry_label.setStyleSheet("color: black; font-size: 18px;")
+        self.recent_entry_label.setStyleSheet("color: black; font-size: 22px; font-weight: bold;")
+        self.recent_entry_label.setAlignment(Qt.AlignCenter)
 
         self.recent_entry_list = QListWidget()
         self.recent_entry_list.setStyleSheet(
-            "font-size: 18px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
+            "font-size: 18px; background-color: transparent; padding: 5px;"
         )
-        self.recent_entry_list.setFixedWidth(250)  # Set fixed width for the list
+        self.recent_entry_list.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
+        # Add to recent entry layout
+        recent_entry_layout.addWidget(self.recent_entry_label)
+        recent_entry_layout.addWidget(self.recent_entry_list)
+
+        # --- Recent Exit Section ---
+        recent_exit_layout = QVBoxLayout()
         self.recent_exit_label = QLabel("Recent Exit")
-        self.recent_exit_label.setStyleSheet("color: black; font-size: 18px;")
+        self.recent_exit_label.setStyleSheet("color: black; font-size: 22px; font-weight: bold;")
+        self.recent_exit_label.setAlignment(Qt.AlignCenter)
 
         self.recent_exit_list = QListWidget()
         self.recent_exit_list.setStyleSheet(
-            "font-size: 18px; background-color: white; border: 2px solid black; border-radius: 10px; padding: 5px;"
+            "font-size: 18px; background-color: transparent; padding: 5px;"
         )
-        self.recent_exit_list.setFixedWidth(250)  # Set fixed width for the list
+        self.recent_exit_list.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
-        right_layout.addWidget(self.recent_entry_label)
-        right_layout.addWidget(self.recent_entry_list)
-        right_layout.addWidget(self.recent_exit_label)
-        right_layout.addWidget(self.recent_exit_list)
+        # Add to recent exit layout
+        recent_exit_layout.addWidget(self.recent_exit_label)
+        recent_exit_layout.addWidget(self.recent_exit_list)
 
+        # Add both sections to the container layout
+        right_container_layout.addLayout(recent_entry_layout)
+        right_container_layout.addLayout(recent_exit_layout)
+
+        # Make the container fill the entire right side
+        right_container.setLayout(right_container_layout)
+        right_layout.addWidget(right_container)
+
+        # Add the right layout to the main layout
         main_layout.addLayout(left_layout)
         main_layout.addLayout(center_layout)
         main_layout.addLayout(right_layout)
 
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
+
+
+
 
 
     def keyPressEvent(self, event):
