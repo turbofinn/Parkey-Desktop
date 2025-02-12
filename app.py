@@ -154,7 +154,7 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import json
 from ApiService import ApiService  
-from splash import ParkingApp
+from duo import ParkingApp
 
 class ParkKeyUI(QWidget):
     def __init__(self):

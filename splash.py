@@ -22,7 +22,7 @@ if not os.path.exists(save_directory):
     os.makedirs(save_directory)
 
 
-class ParkingApp(QMainWindow):
+class ParkingAppSplash(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Parking Management System")
@@ -590,7 +590,7 @@ class ParkingApp(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = ParkingApp()
+    window = ParkingAppSplash()
     window.show()
     sys.exit(app.exec_())
 

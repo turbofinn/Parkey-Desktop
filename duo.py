@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QWidget, QVBoxLay
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import sys
-
+from splash import ParkingAppSplash
 class ParkingApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -100,17 +100,18 @@ class ParkingApp(QWidget):
         button_layout.setSpacing(50)
         button_layout.setAlignment(Qt.AlignCenter)
 
-        entry_button = QPushButton("Entry")
-        entry_button.setFixedSize(150, 60)
-        entry_button.setFont(QFont("Arial", 14))
-        entry_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
-
+        self.entry_button = QPushButton("Entry")
+        self.entry_button.setFixedSize(150, 60)
+        self.entry_button.setFont(QFont("Arial", 14))
+        self.entry_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
+        self.entry_button.clicked.connect(self.handle_entry_click)  
+        
         exit_button = QPushButton("Exit")
         exit_button.setFixedSize(150, 60)
         exit_button.setFont(QFont("Arial", 14))
         exit_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
 
-        button_layout.addWidget(entry_button)
+        button_layout.addWidget(self.entry_button)
         button_layout.addSpacerItem(QSpacerItem(50, 20, QSizePolicy.Fixed, QSizePolicy.Minimum))
         button_layout.addWidget(exit_button)
 
@@ -122,6 +123,11 @@ class ParkingApp(QWidget):
         main_layout.addWidget(info_container)
 
         self.setLayout(main_layout)
+
+    def handle_entry_click(self):
+        self.parking_window = ParkingAppSplash()
+        self.parking_window.show()
+        self.close()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

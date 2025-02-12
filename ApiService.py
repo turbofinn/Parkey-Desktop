@@ -64,6 +64,19 @@ class ApiService:
         return response_data
 
 
+    def confirmTicket(self, parkingTicketID):
+        url = "ticket-handler/confirm-ticket"
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
+        payload = json.dumps({"parkingTicketID": parkingTicketID, "requestType": "CONFIRM_TICKET", "employeeID": self.env_config.get_employeeID()})
+        try:
+            response = requests.post(BASE_URL + url, headers=headers, data=payload)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error confirming ticket: {e}")
+            return None
+
+
 
 env_config = EnvConfig()
 
