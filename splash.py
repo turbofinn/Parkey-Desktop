@@ -13,7 +13,9 @@ from ApiService import ApiService
 import datetime
 import json
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
+
 
 
 save_directory = r'imges'
