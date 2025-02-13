@@ -3,6 +3,7 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import sys
 from splash import ParkingAppSplash
+from fourth import ParkingAppFourth
 class ParkingApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -106,14 +107,15 @@ class ParkingApp(QWidget):
         self.entry_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
         self.entry_button.clicked.connect(self.handle_entry_click)  
         
-        exit_button = QPushButton("Exit")
-        exit_button.setFixedSize(150, 60)
-        exit_button.setFont(QFont("Arial", 14))
-        exit_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
+        self.exit_button = QPushButton("Exit")
+        self.exit_button.setFixedSize(150, 60)
+        self.exit_button.setFont(QFont("Arial", 14))
+        self.exit_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
+        self.exit_button.clicked.connect(self.handle_exit_click)  
 
         button_layout.addWidget(self.entry_button)
         button_layout.addSpacerItem(QSpacerItem(50, 20, QSizePolicy.Fixed, QSizePolicy.Minimum))
-        button_layout.addWidget(exit_button)
+        button_layout.addWidget(self.exit_button)
 
         # Add spacing between info boxes and buttons
         info_container_layout.addSpacing(20)  # Reduced spacing
@@ -126,6 +128,11 @@ class ParkingApp(QWidget):
 
     def handle_entry_click(self):
         self.parking_window = ParkingAppSplash()
+        self.parking_window.show()
+        self.close()
+
+    def handle_exit_click(self):
+        self.parking_window = ParkingAppFourth()
         self.parking_window.show()
         self.close()
 
