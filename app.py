@@ -160,7 +160,8 @@ class ParkKeyUI(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Parkkey - Key to Parking")
-        self.setGeometry(100, 100, 900, 500)
+        screen_geometry = QApplication.primaryScreen().geometry()
+        self.setGeometry(screen_geometry)
 
         self.api_service = ApiService()  # Initialize API service
 
@@ -174,53 +175,57 @@ class ParkKeyUI(QWidget):
 
         logo_label = QLabel()
         pixmap = QPixmap("titlepage.png")  # Replace with actual path
-        pixmap = pixmap.scaled(300, 300, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        pixmap = pixmap.scaled(500, 700, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         logo_label.setPixmap(pixmap)
         logo_label.setAlignment(Qt.AlignCenter)
 
         # Login Label
         login_label = QLabel("LOGIN")
-        login_label.setFont(QFont("Arial", 20, QFont.Bold))
+        login_label.setFont(QFont("Arial", 30, QFont.Bold))
         login_label.setAlignment(Qt.AlignCenter)
 
         # Subheading
         subheading_label = QLabel("Streamlining Parking, One Space at a Time.")
-        subheading_label.setFont(QFont("Arial", 10))
+        subheading_label.setFont(QFont("Arial", 23))
         subheading_label.setAlignment(Qt.AlignCenter)
 
         # Form Layout
-        form_layout = QFormLayout()
+        form_wrapper = QVBoxLayout()
+        form_wrapper.setAlignment(Qt.AlignCenter)
 
         # Mobile Number Input
         self.mobile_input = QLineEdit()
         self.mobile_input.setPlaceholderText("Mobile No")
         self.mobile_input.setFixedSize(400, 40)
+        
 
         # OTP Input
         self.otp_input = QLineEdit()
         self.otp_input.setPlaceholderText("Otp")
         self.otp_input.setFixedSize(400, 40)
+        
 
         # Add inputs to the form layout
-        form_layout.addRow(self.mobile_input)
-        form_layout.addRow(self.otp_input)
+        form_wrapper.addWidget(self.mobile_input, alignment=Qt.AlignCenter)
+        form_wrapper.addWidget(self.otp_input, alignment=Qt.AlignCenter)
+        
 
         # Buttons
         send_otp_button = QPushButton("Send OTP")
-        send_otp_button.setStyleSheet("background-color: #118B50; color: white; padding: 10px; border-radius: 5px;")
-        send_otp_button.setFixedSize(150, 40)
+        send_otp_button.setStyleSheet("background-color: #118B50; color: white; padding: 10px; border-radius: 5px; font-size:20px")
+        send_otp_button.setFixedSize(200, 60)
         send_otp_button.clicked.connect(self.send_otp)
 
         login_button = QPushButton("Login Now")
-        login_button.setStyleSheet("background-color: #118B50; color: white; padding: 10px; border-radius: 5px;")
-        login_button.setFixedSize(150, 40)
+        login_button.setStyleSheet("background-color: #118B50; color: white; padding: 10px; border-radius: 5px; font-size:20px")
+        login_button.setFixedSize(200, 60)
         login_button.clicked.connect(self.validate_credentials)
 
         # Add widgets to layout
         left_layout.addWidget(logo_label)
         left_layout.addWidget(login_label)
         left_layout.addWidget(subheading_label)
-        left_layout.addLayout(form_layout)
+        left_layout.addLayout(form_wrapper)
         left_layout.addWidget(send_otp_button, alignment=Qt.AlignCenter)
         left_layout.addWidget(login_button, alignment=Qt.AlignCenter)
         left_layout.setAlignment(Qt.AlignCenter)

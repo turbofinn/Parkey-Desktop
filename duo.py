@@ -8,7 +8,8 @@ class ParkingApp(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Parkkey - Key to Parking")
-        self.setGeometry(100, 100, 800, 500)  # Set specific window size
+        screen_geometry = QApplication.primaryScreen().geometry()
+        self.setGeometry(screen_geometry)
         self.setStyleSheet("background-color: #117554;")
 
         self.initUI()
@@ -30,11 +31,11 @@ class ParkingApp(QWidget):
         pixmap = QPixmap("titlepage.png")
         title_image.setPixmap(pixmap)
         title_image.setScaledContents(True)
-        title_image.setFixedSize(450, 140) 
+        title_image.setFixedSize(600, 150) 
 
         # Station name box
         station_frame = QFrame()
-        station_frame.setStyleSheet("background-color: #C4D9FF; color: black; border-radius: 15px; padding: 8px;")
+        station_frame.setStyleSheet("background-color: #C4D9FF; color: black; border-radius: 15px;")
         station_label = QLabel("Raipur Railway Station")
         station_label.setFont(QFont("Arial", 16, QFont.Bold))
         station_label.setAlignment(Qt.AlignCenter)
@@ -42,7 +43,7 @@ class ParkingApp(QWidget):
         station_layout = QVBoxLayout()
         station_layout.addWidget(station_label)
         station_frame.setLayout(station_layout)
-        station_frame.setFixedSize(350, 80)
+        station_frame.setFixedSize(450, 100)
 
         header_layout.addWidget(title_image)
         header_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
@@ -73,9 +74,9 @@ class ParkingApp(QWidget):
 
         for title, value in info_data:
             info_frame = QFrame()
-            info_frame.setFixedSize(200, 150)
+            info_frame.setFixedSize(400, 350)
             info_frame.setStyleSheet(
-                "background-color: white; border-radius: 10px; padding: 5px;"
+                "background-color: white; border-radius: 10px; padding: 5px; font-size:40px"
             )
             info_layout_inner = QVBoxLayout()
 
@@ -102,23 +103,22 @@ class ParkingApp(QWidget):
         button_layout.setAlignment(Qt.AlignCenter)
 
         self.entry_button = QPushButton("Entry")
-        self.entry_button.setFixedSize(150, 60)
+        self.entry_button.setFixedSize(250, 100)
         self.entry_button.setFont(QFont("Arial", 14))
-        self.entry_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
+        self.entry_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px; font-size:36px")
         self.entry_button.clicked.connect(self.handle_entry_click)  
         
         self.exit_button = QPushButton("Exit")
-        self.exit_button.setFixedSize(150, 60)
+        self.exit_button.setFixedSize(250, 100)
         self.exit_button.setFont(QFont("Arial", 14))
-        self.exit_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px;")
+        self.exit_button.setStyleSheet("background-color: #FF5733; color: white; padding: 10px; border-radius: 10px; font-size:36px")
         self.exit_button.clicked.connect(self.handle_exit_click)  
 
         button_layout.addWidget(self.entry_button)
-        button_layout.addSpacerItem(QSpacerItem(50, 20, QSizePolicy.Fixed, QSizePolicy.Minimum))
+        button_layout.addSpacerItem(QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum))
         button_layout.addWidget(self.exit_button)
 
-        # Add spacing between info boxes and buttons
-        info_container_layout.addSpacing(20)  # Reduced spacing
+        
         info_container_layout.addLayout(button_layout)
         
         info_container.setLayout(info_container_layout)
