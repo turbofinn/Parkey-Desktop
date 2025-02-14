@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QListWidget, QMessageBox, QListWidgetItem, QLineEdit, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QListWidget, QMessageBox, QListWidgetItem, QLineEdit, QSizePolicy, QSpacerItem
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QTimer
 import sys
@@ -13,7 +13,9 @@ from ApiService import ApiService
 import datetime
 import json
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
+
 
 
 save_directory = r'imges'
@@ -26,7 +28,8 @@ class ParkingAppFourth(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Parking Management System")
-        self.setGeometry(100, 100, 1200, 700)
+        screen_geometry = QApplication.primaryScreen().geometry()
+        self.setGeometry(screen_geometry)
         self.setStyleSheet("background-color: #117554;")
         self.initUI()
         self.cap = None  # Camera object
@@ -47,27 +50,22 @@ class ParkingAppFourth(QMainWindow):
         main_widget = QWidget()
         main_layout = QHBoxLayout()
 
-        # Left section
+        # Left section layout
         left_layout = QVBoxLayout()
+        left_layout.setContentsMargins(10, 20, 10, 10)  # Uniform margins
 
-        # Set consistent margins and spacing for balanced gaps
-        left_layout.setContentsMargins(5, 5, 5, 5)  # Slight outer margin to prevent sticking to window edges
-        left_layout.setSpacing(68)  # Add space between the containers
+        # Spacer at the top for equal spacing
+        left_layout.addStretch(1)
 
         # --- Detected Number Plate Section ---
         detected_box = QVBoxLayout()
-        detected_box.setSpacing(5)  # Space between label and image
-
         detected_label = QLabel("Detected Number\nPlate")
-        detected_label.setStyleSheet("color: black; font-size: 24px; font-weight: bold; margin: 0px;")
+        detected_label.setStyleSheet("color: black; font-size: 26px; font-weight: bold;")
         detected_label.setAlignment(Qt.AlignCenter)
 
         self.detected_image = QLabel()
-        self.detected_image.setFixedSize(290, 150)
-        self.detected_image.setStyleSheet("""
-            background-color: white;
-            margin: 0px;
-        """)
+        self.detected_image.setFixedSize(320, 180)
+        self.detected_image.setStyleSheet("background-color: white;")
         self.detected_image.setAlignment(Qt.AlignCenter)
 
         detected_box.addWidget(detected_label)
@@ -75,34 +73,23 @@ class ParkingAppFourth(QMainWindow):
 
         detected_container = QWidget()
         detected_container.setLayout(detected_box)
-        detected_container.setFixedHeight(200)
-        detected_container.setStyleSheet("""
-            border-radius: 10px;
-            padding: 10px;  /* Added slight padding inside the container */
-            background-color: white;
-            margin: 0px;
-        """)
+        detected_container.setFixedHeight(250)
+        detected_container.setStyleSheet("border-radius: 10px; padding: 20px; background-color: white;")
 
         left_layout.addWidget(detected_container)
 
+        # Spacer for equal spacing
+        left_layout.addStretch(1)
+
         # --- Entry Fees Section ---
         entry_fees_box = QVBoxLayout()
-        entry_fees_box.setAlignment(Qt.AlignCenter)
-        entry_fees_box.setSpacing(5)
-
         entry_fees_label = QLabel("Exit Charges")
-        entry_fees_label.setStyleSheet("color: black; font-size: 20px; font-weight: bold; margin: 0px;")
+        entry_fees_label.setStyleSheet("color: black; font-size: 22px; font-weight: bold;")
         entry_fees_label.setAlignment(Qt.AlignCenter)
 
         self.entry_fees_display = QLabel()
-        self.entry_fees_display.setFixedSize(130, 80)
-        self.entry_fees_display.setStyleSheet("""
-            background-color: white;
-            font-size: 28px;
-            font-weight: bold;
-            color: black;
-            margin: 0px;
-        """)
+        self.entry_fees_display.setFixedSize(160, 100)
+        self.entry_fees_display.setStyleSheet("background-color: white; font-size: 32px; font-weight: bold; color: black;")
         self.entry_fees_display.setAlignment(Qt.AlignCenter)
 
         entry_fees_box.addWidget(entry_fees_label)
@@ -110,33 +97,23 @@ class ParkingAppFourth(QMainWindow):
 
         entry_fees_container = QWidget()
         entry_fees_container.setLayout(entry_fees_box)
-        entry_fees_container.setFixedHeight(120)
-        entry_fees_container.setStyleSheet("""
-            border-radius: 10px;
-            padding: 10px;  /* Added slight padding for uniformity */
-            background-color: white;
-            margin: 0px;
-        """)
+        entry_fees_container.setFixedHeight(160)
+        entry_fees_container.setStyleSheet("border-radius: 10px; padding: 20px; background-color: white;")
 
         left_layout.addWidget(entry_fees_container)
 
+        # Spacer for equal spacing
+        left_layout.addStretch(1)
+
         # --- Entry Time Section ---
         entry_time_box = QVBoxLayout()
-        entry_time_box.setSpacing(5)
-
         entry_time_label = QLabel("Exit Time")
-        entry_time_label.setStyleSheet("color: black; font-size: 22px; font-weight: bold; margin: 0px; padding: 0px;")
+        entry_time_label.setStyleSheet("color: black; font-size: 24px; font-weight: bold;")
         entry_time_label.setAlignment(Qt.AlignCenter)
 
         self.entry_time_display = QLabel()
-        self.entry_time_display.setFixedSize(250, 80)
-        self.entry_time_display.setStyleSheet("""
-            background-color: white;
-            font-weight: bold;
-            font-size: 28px;
-            margin: 0px;
-            padding: 5px;
-        """)
+        self.entry_time_display.setFixedSize(280, 100)
+        self.entry_time_display.setStyleSheet("background-color: white; font-weight: bold; font-size: 32px; padding: 10px;")
         self.entry_time_display.setAlignment(Qt.AlignCenter)
 
         entry_time_box.addWidget(entry_time_label)
@@ -144,152 +121,151 @@ class ParkingAppFourth(QMainWindow):
 
         entry_time_container = QWidget()
         entry_time_container.setLayout(entry_time_box)
-        entry_time_container.setFixedHeight(120)
-        entry_time_container.setStyleSheet("""
-            border-radius: 10px;
-            padding: 10px;  /* Consistent padding with other containers */
-            background-color: white;
-            margin: 0px;
-        """)
+        entry_time_container.setFixedHeight(160)
+        entry_time_container.setStyleSheet("border-radius: 10px; padding: 20px; background-color: white;")
 
         left_layout.addWidget(entry_time_container)
 
-        # Optional: Add stretch at the bottom to keep everything aligned to the top
+        # Spacer at the bottom for equal spacing
         left_layout.addStretch(1)
+
 
 
         
 
-        # Center section
+        
+
         center_layout = QVBoxLayout()
 
-        # Vehicle image (camera feed)
+        # Spacer ABOVE Camera (pushes it down)
+        center_layout.addItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed))
+
+        # Camera feed layout (unchanged)
         self.vehicle_image = QLabel()
         self.vehicle_image.setScaledContents(True)
-
-        # Increase camera feed size
-        self.vehicle_image.setFixedSize(500, 400)  # Adjusted size
-
-        # Add a thick white border
+        self.vehicle_image.setFixedSize(1000, 550)
         self.vehicle_image.setStyleSheet("""
-            background-color: black;  /* Ensures visibility */
-            border: 8px solid white;  /* Fat white border */
-            border-radius: 10px;      /* Optional rounded corners */
-        """)
-
+            background-color: black;
+            border: 8px solid white;
+            border-radius: 10px;
+        """
+        )
         center_layout.addWidget(self.vehicle_image, alignment=Qt.AlignCenter)
 
+        # Spacer BELOW Camera (pushes boxes down)
+        center_layout.addItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed))
 
-        # Two side-by-side boxes below the camera feed
+        # Box Container
+        box_container = QVBoxLayout()
+
+        # Box Layout (Two side-by-side boxes)
         box_layout = QHBoxLayout()
 
-        # Add spacing between the two boxes
-        box_layout.setSpacing(20)  # Space between left and right boxes
-
-        # Push the boxes slightly upwards
-        box_layout.setContentsMargins(0, 10, 0, 0)  # (left, top, right, bottom)
-
-        # Left box
+        # Left Box (Vehicle Verification)
         verify_box = QVBoxLayout()
         verify_label = QLabel("Verify Vehicle Details")
         verify_label.setStyleSheet("color: black; font-size: 18px; font-weight: bold;")
         verify_label.setAlignment(Qt.AlignCenter)
+
         self.left_box_input = QLineEdit()
-        self.left_box_input.setStyleSheet("""
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: black;
-            text-align: center;
-            margin-bottom: 10px;
-        """)
-        self.left_box_input.setAlignment(Qt.AlignCenter)
         self.left_box_input.setFixedHeight(60)
-        self.left_box_input.textChanged.connect(self.handle_number_plate_edit)
+        self.left_box_input.setAlignment(Qt.AlignCenter)
+        self.left_box_input.setStyleSheet("""
+                background-color: white;
+                border-radius: 5px;
+                padding: 10px;
+                font-size: 24px;
+                font-weight: bold;
+                color: black;
+        """
+        )
+
         verify_box.addWidget(verify_label)
         verify_box.addWidget(self.left_box_input)
+
         verify_container = QWidget()
         verify_container.setLayout(verify_box)
-        verify_container.setStyleSheet("""
-            padding: 10px;
-            background-color: white;
-            border-radius: 10px;
-        """)
-        verify_container.setFixedHeight(120)
+        verify_container.setFixedHeight(150)
+        verify_container.setStyleSheet("background-color: white; border-radius: 10px; padding: 5px;")
+
         box_layout.addWidget(verify_container)
 
-        # Right box
+        # Right Box (Mobile Number Entry)
         right_box_layout = QVBoxLayout()
         right_box_label = QLabel("Enter Exit OTP")
         right_box_label.setStyleSheet("color: black; font-size: 18px; font-weight: bold;")
         right_box_label.setAlignment(Qt.AlignCenter)
+
         self.right_box_input = QLineEdit()
-        self.right_box_input.setStyleSheet("""
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: black;
-            text-align: center;
-            margin-bottom: 10px;
-        """)
-        self.right_box_input.setAlignment(Qt.AlignCenter)
         self.right_box_input.setFixedHeight(60)
+        self.right_box_input.setAlignment(Qt.AlignCenter)
+        self.right_box_input.setStyleSheet("""
+                background-color: white;
+                border-radius: 5px;
+                padding: 10px;
+                font-size: 24px;
+                font-weight: bold;
+                color: black;
+            """
+        )
+
         right_box_layout.addWidget(right_box_label)
         right_box_layout.addWidget(self.right_box_input)
+
         right_box_container = QWidget()
         right_box_container.setLayout(right_box_layout)
-        right_box_container.setStyleSheet("""
-            padding: 10px;
-            background-color: white;
-            border-radius: 10px;
-        """)
-        right_box_container.setFixedHeight(120)
+        right_box_container.setFixedHeight(150)
+        right_box_container.setStyleSheet("background-color: white; border-radius: 10px; padding: 5px;")
+
         box_layout.addWidget(right_box_container)
 
-        # Add the box layout to the center layout
-        center_layout.addLayout(box_layout)
+        box_container.addLayout(box_layout)
 
-        # Add space between the boxes and buttons
-        center_layout.addSpacing(30)  # Space between boxes and buttons
+        # Spacer BELOW Boxes (to maintain gaps from buttons)
+        box_container.addItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed))
 
-        # Buttons
+        # Add the box container to the center layout
+        center_layout.addLayout(box_container)
+
+        # Button Layout (unchanged)
         button_layout = QHBoxLayout()
+
         self.automatic_button = QPushButton("Start")
         self.manual_button = QPushButton("Stop")
         self.entry_button = QPushButton("Exit")
 
         for button in [self.automatic_button, self.manual_button, self.entry_button]:
-            button.setStyleSheet(
-                "background-color: #FF5733; color: white; font-size: 20px; padding: 15px; border-radius: 10px;"
-            )
-            button.setFixedSize(150, 60)  # Increased size from 120x50 to 150x60
-
-        self.automatic_button.clicked.connect(self.start_camera)
-        self.manual_button.clicked.connect(self.stop_camera)
-        self.entry_button.clicked.connect(self.submit_entry)
+            button.setFixedSize(150, 60)
+            button.setStyleSheet("""
+                    background-color: #FF5733;
+                    color: white;
+                    font-size: 20px;
+                    padding: 15px;
+                    border-radius: 10px;
+                """
+        )
 
         button_layout.addWidget(self.automatic_button)
         button_layout.addWidget(self.manual_button)
         button_layout.addWidget(self.entry_button)
 
-        # Add the button layout to the center layout
         center_layout.addLayout(button_layout)
+
+
+
+
 
 
         # Right section (Single white box with Recent Entry and Exit)
         right_layout = QVBoxLayout()
 
         # Container Widget for the right side
-        right_container = QWidget()
+        right_container = QWidget() 
         right_container.setStyleSheet("background-color: white; border-radius: 10px;")
         right_container_layout = QVBoxLayout()
-        right_container_layout.setContentsMargins(20, 20, 20, 20)  # Padding inside the white box
+        right_container_layout.setContentsMargins(20, 20, 30, 30)  # Padding inside the white box
         right_container_layout.setSpacing(20)  # Spacing between sections
-
+        right_container.setFixedWidth(450)
         # --- Recent Entry Section ---
         recent_entry_layout = QVBoxLayout()
         self.recent_entry_label = QLabel("Recent Entry")
@@ -576,7 +552,7 @@ class ParkingAppFourth(QMainWindow):
             self.entry_fees_display.setText(entry_fee_value)
             item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
             self.recent_entry_list.addItem(item)
-            self.show_popup("Added vehicle successfully")
+            self.show_popup("Exited vehicle successfully")
         else:
             print("Error: Mobile number or vehicle number is missing.")
             
