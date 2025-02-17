@@ -147,8 +147,8 @@ class ApiService:
             print(f"Error exiting vehicle: {e}")
             return None
     
-    def parkingSpaceDetails(self, employeeID):
-        url = "user-management/parking-space/fetch-parking-space-info/"+ employeeID
+    def parkingSpaceDetails(self, parkingSpaceID):
+        url = "user-management/parking-space/fetch-parking-space-info/"+ parkingSpaceID
         headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
         
         try:
