@@ -121,7 +121,7 @@ class ApiService:
     def otpExitTicket(self, otp):
         url = "ticket-handler/otp-exit-ticket"
         headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
-        payload = json.dumps({"parkingTicketID": parkingTicketID, "exitOTP": otp})
+        payload = json.dumps({ "exitOTP": otp})
         try:
             response = requests.post(BASE_URL + url, headers=headers, data=payload)
             response.raise_for_status()
