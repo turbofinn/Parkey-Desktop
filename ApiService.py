@@ -37,6 +37,15 @@ class EnvConfig:
     def set_employeeID(self, employeeID):
         self.employee_id = employeeID
         os.environ['employeeID'] = employeeID
+    
+    def set_parkingSpaceID(self, parkingSpaceID):
+        self.parkingSpace_id = parkingSpaceID
+        os.environ['parkingSpaceID'] = parkingSpaceID
+
+    def get_parkingSpaceID(self):
+        if not self.parkingSpace_id:
+            raise ValueError("Parking space id is not set.")
+        return self.parkingSpace_id
 
 
 class ApiService:
