@@ -13,8 +13,8 @@ from ApiService import ApiService
 import datetime
 import json
 
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
 
 
 
@@ -250,7 +250,9 @@ class ParkingAppSplash(QMainWindow):
         button_layout.addWidget(self.entry_button)
 
         center_layout.addLayout(button_layout)
-
+        self.automatic_button.clicked.connect(self.start_camera)
+        self.manual_button.clicked.connect(self.stop_camera)
+        self.entry_button.clicked.connect(self.submit_entry)
 
 
 
@@ -552,6 +554,9 @@ class ParkingAppSplash(QMainWindow):
             self.entry_fees_display.setText(entry_fee_value)
             item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
             self.recent_entry_list.addItem(item)
+            parkingTicketVal = response.get('parkingTicketID')
+            confirmation = self.api_service.confirmTicket(parkingTicketVal)
+            print(confirmation)
             self.show_popup("Added vehicle successfully")
         else:
             print("Error: Mobile number or vehicle number is missing.")

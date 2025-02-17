@@ -66,8 +66,8 @@ class ApiService:
 
     def confirmTicket(self, parkingTicketID):
         url = "ticket-handler/confirm-ticket"
-        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
-        payload = json.dumps({"parkingTicketID": parkingTicketID, "requestType": "CONFIRM_TICKET", "employeeID": self.env_config.get_employeeID()})
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZjgzNTc4NmUtNWY3Ny00YzRiLThkNDMtMmNjZjI5OWU4YzcyIiwiaWF0IjoxNzM5Nzk4MjUxLCJleHAiOjIwNTUxNTgyNTF9.Uxjvvd1xdlmAv7ili7V4gPtDpg01KYePcY37P7njoV4"}
+        payload = json.dumps({"parkingTicketID": parkingTicketID, "requestType": "CONFIRM_TICKET", "employeeID": "5ec10c00-7eff-48c9-ada3-bce66129246d"})
         try:
             response = requests.post(BASE_URL + url, headers=headers, data=payload)
             response.raise_for_status()
@@ -76,6 +76,12 @@ class ApiService:
             print(f"Error confirming ticket: {e}")
             return None
 
+    def _get_json_response(self, response):
+        try:
+            return response.json()
+        except requests.exceptions.JSONDecodeError:
+            print(f"Error decoding JSON response: {response.text}")
+            return None
 
 
 env_config = EnvConfig()
