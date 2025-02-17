@@ -1,3 +1,4 @@
+detect number plate in fourth UI.
+enter exit OTP & get vehicle details
 
-UI
-profile API & stop camera to be fixed
+match vehicle details from API and detected details also if match then exit vehicle if not match throw a pop up
