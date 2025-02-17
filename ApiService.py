@@ -109,7 +109,7 @@ class ApiService:
             print(f"Error confirming ticket: {e}")
             return None
     
-    def exitVehicle(self, parkingTicketID, otp):
+    def otpExitTicket(self, otp):
         url = "ticket-handler/otp-exit-ticket"
         headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
         payload = json.dumps({"parkingTicketID": parkingTicketID, "exitOTP": otp})
@@ -120,7 +120,20 @@ class ApiService:
         except requests.exceptions.RequestException as e:
             print(f"Error exiting vehicle: {e}")
             return None
-
+    
+    def exitTicket(self, parkingTicketID,employeeID):
+        url = "ticket-handler/exit-ticket"
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
+        payload = json.dumps({"parkingTicketID": parkingTicketID, "employeeID": employeeID})
+        try:
+            response = requests.post(BASE_URL + url, headers=headers, data=payload)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
+        
+ 
     def _get_json_response(self, response):
         try:
             return response.json()
