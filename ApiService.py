@@ -75,17 +75,13 @@ class ApiService:
         except requests.exceptions.RequestException as e:
             print(f"Error confirming ticket: {e}")
             return None
-
-    def _get_json_response(self, response):
-        try:
-            return response.json()
-        except requests.exceptions.JSONDecodeError:
-            print(f"Error decoding JSON response: {response.text}")
-            return None
         
-    def exitVehicle(self, parkingTicketID, otp):
+    #  ALL EXIT Api
+    
+
+    def otpExitTicket(self, otp, parkingTicketID):
         url = "ticket-handler/otp-exit-ticket"
-        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZjgzNTc4NmUtNWY3Ny00YzRiLThkNDMtMmNjZjI5OWU4YzcyIiwiaWF0IjoxNzM5Nzk4MjUxLCJleHAiOjIwNTUxNTgyNTF9.Uxjvvd1xdlmAv7ili7V4gPtDpg01KYePcY37P7njoV4"}
         payload = json.dumps({"parkingTicketID": parkingTicketID, "exitOTP": otp})
         try:
             response = requests.post(BASE_URL + url, headers=headers, data=payload)
@@ -94,6 +90,41 @@ class ApiService:
         except requests.exceptions.RequestException as e:
             print(f"Error exiting vehicle: {e}")
             return None
+    
+    def exitTicket(self, parkingTicketID):
+        url = "ticket-handler/exit-ticket"
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZjgzNTc4NmUtNWY3Ny00YzRiLThkNDMtMmNjZjI5OWU4YzcyIiwiaWF0IjoxNzM5Nzk4MjUxLCJleHAiOjIwNTUxNTgyNTF9.Uxjvvd1xdlmAv7ili7V4gPtDpg01KYePcY37P7njoV4"}
+        payload = json.dumps({"parkingTicketID": parkingTicketID, "employeeID": "5ec10c00-7eff-48c9-ada3-bce66129246d"})
+        try:
+            response = requests.post(BASE_URL + url, headers=headers, data=payload)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
+    
+    def parkingCharges(self, parkingTicketID):
+        url = "ticket-handler/get-parking-charges"
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZjgzNTc4NmUtNWY3Ny00YzRiLThkNDMtMmNjZjI5OWU4YzcyIiwiaWF0IjoxNzM5Nzk4MjUxLCJleHAiOjIwNTUxNTgyNTF9.Uxjvvd1xdlmAv7ili7V4gPtDpg01KYePcY37P7njoV4"}
+        params = {
+        'parkingTicketID': parkingTicketID  
+        }
+        try:
+            response = requests.get(BASE_URL + url, headers=headers, params=params)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
+
+    def _get_json_response(self, response):
+        try:
+            return response.json()
+        except requests.exceptions.JSONDecodeError:
+            print(f"Error decoding JSON response: {response.text}")
+            return None
+        
+    
 
 
 env_config = EnvConfig()

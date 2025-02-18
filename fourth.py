@@ -13,8 +13,8 @@ from ApiService import ApiService
 import datetime
 import json
 
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
 
 
 
@@ -41,9 +41,10 @@ class ParkingAppFourth(QMainWindow):
         self.detection_classes = None
         self.num_detections = None
         self.detected_number_plate = ""
-        self.entry_time = ""
+        self.exit_time = ""
         self.current_number_plate = ""
-        self.entered_mobile_number = ""
+        self.entered_OTP = ""
+        self.parkingTicketIDVal = None
         self.api_service = ApiService()
 
     def initUI(self):
@@ -251,7 +252,9 @@ class ParkingAppFourth(QMainWindow):
 
         center_layout.addLayout(button_layout)
 
-
+        self.automatic_button.clicked.connect(self.start_camera)
+        self.manual_button.clicked.connect(self.stop_camera)
+        self.entry_button.clicked.connect(self.finalexit)
 
 
 
@@ -436,8 +439,8 @@ class ParkingAppFourth(QMainWindow):
                             # print(DetectedNumberPlate)
                             self.update_vehicle_details(DetectedNumberPlate)
                             timing = datetime.datetime.now().strftime("%I:%M %p")
-                            self.update_entry_time(timing)  
-                            self.update_mobile_number(DetectedNumberPlate)
+                            self.update_exit_time(timing)  
+                            self.update_OTP_number(DetectedNumberPlate)
 
                         # print(f"OCR Raw Output: {text}")
 
@@ -485,81 +488,73 @@ class ParkingAppFourth(QMainWindow):
             self.current_number_plate = edited_text
             self.entry_fees_display.clear()
 
-    def update_entry_time(self, timing):
-        self.entry_time = timing
-        self.entry_time_display.setText(self.entry_time)
+    def update_exit_time(self, timing):
+        self.exit_time = timing
+        self.entry_time_display.setText(self.exit_time)
 
-    def update_mobile_number(self, number_plate):
+    def update_OTP_number(self, number_plate):
         try:
             vehicle_no = str(number_plate)
             response_data = self.api_service.getVehicleDetails(vehicle_no)  # This returns a dictionary
+            
+            self.parkingTicketIDVal = response_data.get("parkingTicketID", "")
+            self.right_box_input.setFocus()
 
-            # Debugging - Print the API response
-            print("API Response:", response_data)
+        # Disconnect previous connections to avoid duplicate triggers
+            try:
+                self.right_box_input.textChanged.disconnect(self.update_entered_OTP)
+            except TypeError:
+                pass  # Ignore if there's no previous connection
 
-            if response_data:
-                if 'errorMessage' in response_data:
-                    # Vehicle not found in the system
-                    self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
-                    self.right_box_input.clear()
-                    self.entry_fees_display.clear()
-                    self.recent_entry_list.clear()
-                    self.entered_mobile_number = ""
-
-                    # Set focus on the input field for manual entry
-                    self.right_box_input.setFocus()
-
-                    # Disconnect any previous connections to avoid duplicate triggers
-                    try:
-                        self.right_box_input.textChanged.disconnect()
-                    except TypeError:
-                        pass  # Ignore if there's no previous connection
-
-                    # Connect text change event to store the manually entered number
-                    self.right_box_input.textChanged.connect(self.store_mobile_number)
-                else:
-                    # Vehicle found - Populate mobile number and entry fees
-                    mobile_number = response_data.get("mobileNo", "")
-                    entry_fee = str(response_data.get('totalParkingCharges', '0'))
-                    item = QListWidgetItem(f"John Doe\n+91 {mobile_number}")
-                    
-                    # Update UI fields
-                    self.entered_mobile_number = mobile_number
-                    self.right_box_input.setText(self.entered_mobile_number)
-                    self.entry_fees_display.setText(f"{entry_fee} Rs")  # Adding currency symbol for clarity
-                    self.recent_entry_list.addItem(item)
-
-            else:
-                # Handle cases where API returns an empty response
-                self.show_popup("No data received from server. Please try again.")
-
+            # Connect text change event to update the entered OTP
+            self.right_box_input.textChanged.connect(self.update_entered_OTP)
         except Exception as e:
             print("Error fetching vehicle details:", str(e))
             self.show_popup(f"An error occurred: {str(e)}")
 
 
+    def update_entered_OTP(self, text):
+        """ Updates self.entered_OTP as the user types and calls otpExitTicket when OTP is 4 digits """
+        self.entered_OTP = text
 
+        # Check if the entered OTP is exactly 4 digits and numeric
+        if len(self.entered_OTP) == 4 and self.entered_OTP.isdigit():
+            # Call otpExitTicket with OTP and parkingTicketIDVal
+            response = self.api_service.otpExitTicket(self.entered_OTP, self.parkingTicketIDVal)
+            if response and "message" in response and "OTP verified" in response["message"]:
+                # OTP is verified, call parkingCharges
+                parkingdetails = self.api_service.parkingCharges(self.parkingTicketIDVal)
+                totalcharges = parkingdetails.get("totalParkingCharges", '0')
+                self.entry_fees_display.setText(f"{totalcharges} Rs") 
+            else:
+                self.show_popup("Please enter correct OTP")
 
-    def store_mobile_number(self):
-        """Store the manually entered mobile number in a variable and call the API."""
-        self.entered_mobile_number = self.right_box_input.text().strip()
-    
-    def submit_entry(self):
-        self.entry_button.setEnabled(False)
-        if self.entered_mobile_number and self.current_number_plate:
-            response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.current_number_plate)
-            entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
-            self.entry_fees_display.setText(entry_fee_value)
-            item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
-            self.recent_entry_list.addItem(item)
-            self.show_popup("Exited vehicle successfully")
+    def finalexit(self):
+        """ Handles vehicle exit process """
+        item = QListWidgetItem(f"John Doe Exited Vehicle")
+        self.recent_exit_list.addItem(item)
+
+        response = self.api_service.exitTicket(self.parkingTicketIDVal)
+
+        if response and "successMessage" in response and "Vehicle exited safely" in response["successMessage"]:
+            self.show_popup(response["successMessage"])
+            self.right_box_input.clear()
+            self.entry_fees_display.clear()
+            self.recent_exit_list.clear()
+            self.parkingTicketIDVal = None
+            self.entered_OTP = ""
+            self.left_box_input.clear()
+            self.entry_time_display.clear()
+            self.detected_image.clear()  
         else:
-            print("Error: Mobile number or vehicle number is missing.")
-            
+            self.show_popup("Error in exiting vehicle")
+
+
+
     def show_popup(self, message):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
-        msg.setWindowTitle("Vehicle Not Found")
+        msg.setWindowTitle("EXIT VEHICLE POPUP")
         msg.setText(message)
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
