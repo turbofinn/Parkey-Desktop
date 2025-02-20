@@ -120,7 +120,44 @@ class ApiService:
         except requests.exceptions.RequestException as e:
             print(f"Error exiting vehicle: {e}")
             return None
-
+    def parkingCharges(self, parkingTicketID):
+        url = "ticket-handler/exit-ticket"
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
+        params = {
+        'parkingTicketID': parkingTicketID  
+        }
+        try:
+            response = requests.get(BASE_URL + url, headers=headers, params=params)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
+    
+    def parkingSpaceDetails(self, parkingSpaceID):
+        url = "user-management/parking-space/fetch-parking-space-info/"+ parkingSpaceID
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
+        
+        try:
+            response = requests.get(BASE_URL + url, headers=headers)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
+    
+    def employeeDetails(self, employeeID):
+        url = "user-management/employee/fetch-employee-info/"+ employeeID
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
+        
+        try:
+            response = requests.get(BASE_URL + url, headers=headers)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
+        
     def _get_json_response(self, response):
         try:
             return response.json()
