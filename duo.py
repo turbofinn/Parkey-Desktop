@@ -4,6 +4,8 @@ from PyQt5.QtCore import Qt
 import sys
 from splash import ParkingAppSplash
 from fourth import ParkingAppFourth
+from ApiService import ApiService
+
 class ParkingApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -12,15 +14,25 @@ class ParkingApp(QWidget):
         self.setGeometry(screen_geometry)
         self.setStyleSheet("background-color: #117554;")
 
-        self.initUI()
+        self.api_service = ApiService()
+        
+        # Placeholder values before API call
+        self.availableSpace = "Loading..."
+        self.capacity = "Loading..."
+        self.rating = "Loading..."
+        self.charges = "20 Rs/Hours"  # Static value
+        self.parkingName = "Loading..."
+
+        self.initUI()  
+        self.calllemployeedetails()  # Fetch data after UI is initialized
 
     def initUI(self):
         # Main layout
         main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(0, 0, 0, 20)  # Added bottom margin to prevent sticking
-        main_layout.setSpacing(70)  # Space between header and other components
+        main_layout.setContentsMargins(0, 0, 0, 20)
+        main_layout.setSpacing(70)
 
-        # Header layout with white background
+        # Header layout
         header_frame = QFrame()
         header_frame.setFixedHeight(150)
         header_frame.setStyleSheet("background-color: white; padding: 10px;")
@@ -36,12 +48,12 @@ class ParkingApp(QWidget):
         # Station name box
         station_frame = QFrame()
         station_frame.setStyleSheet("background-color: #C4D9FF; color: black; border-radius: 15px;")
-        station_label = QLabel("Raipur Railway Station")
-        station_label.setFont(QFont("Arial", 16, QFont.Bold))
-        station_label.setAlignment(Qt.AlignCenter)
+        self.station_label = QLabel()
+        self.station_label.setFont(QFont("Arial", 16, QFont.Bold))
+        self.station_label.setAlignment(Qt.AlignCenter)
 
         station_layout = QVBoxLayout()
-        station_layout.addWidget(station_label)
+        station_layout.addWidget(self.station_label)
         station_frame.setLayout(station_layout)
         station_frame.setFixedSize(450, 100)
 
@@ -52,27 +64,33 @@ class ParkingApp(QWidget):
         header_frame.setLayout(header_layout)
         main_layout.addWidget(header_frame)
 
-        # Container frame for info boxes with margins
+        # Container frame for info boxes
         info_container = QFrame()
         info_container.setStyleSheet("background-color: transparent;")
         info_container_layout = QVBoxLayout()
-        info_container_layout.setContentsMargins(40, 0, 40, 0)  # Add left and right margins
+        info_container_layout.setContentsMargins(40, 0, 40, 0)
 
         # Information layout
         info_layout = QHBoxLayout()
         info_layout.setSpacing(15)
         info_layout.setAlignment(Qt.AlignCenter)
 
+        # Define labels as instance variables for dynamic updates
+        self.capacity_label = QLabel(self.capacity)
+        self.availableSpace_label = QLabel(self.availableSpace)
+        self.rating_label = QLabel(self.rating)
+        self.charges_label = QLabel(self.charges)
+
+        # Data for info boxes
         info_data = [
-            ("Capacity", "100 Vehicles"),
-            ("Charges", "20 Rs/Hours"),
-            ("Available Space", "20 Vehicles"),
-            ("Rating", "3 Star"),
+            ("Capacity", self.capacity_label),
+            ("Charges", self.charges_label),
+            ("Available Space", self.availableSpace_label),
+            ("Rating", self.rating_label),
         ]
 
-        self.info_frames = []
-
-        for title, value in info_data:
+        # Creating info boxes
+        for title, label in info_data:
             info_frame = QFrame()
             info_frame.setFixedSize(400, 350)
             info_frame.setStyleSheet(
@@ -84,20 +102,18 @@ class ParkingApp(QWidget):
             title_label.setFont(QFont("Arial", 12, QFont.Bold))
             title_label.setAlignment(Qt.AlignCenter)
 
-            value_label = QLabel(value)
-            value_label.setFont(QFont("Arial", 10))
-            value_label.setAlignment(Qt.AlignCenter)
+            label.setFont(QFont("Arial", 10))
+            label.setAlignment(Qt.AlignCenter)
 
             info_layout_inner.addWidget(title_label)
-            info_layout_inner.addWidget(value_label)
+            info_layout_inner.addWidget(label)
 
             info_frame.setLayout(info_layout_inner)
             info_layout.addWidget(info_frame)
-            self.info_frames.append(info_frame)
 
         info_container_layout.addLayout(info_layout)
         
-        # Entry and Exit buttons layout - Moved up inside the info container
+        # Entry and Exit buttons layout
         button_layout = QHBoxLayout()
         button_layout.setSpacing(50)
         button_layout.setAlignment(Qt.AlignCenter)
@@ -118,7 +134,6 @@ class ParkingApp(QWidget):
         button_layout.addSpacerItem(QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum))
         button_layout.addWidget(self.exit_button)
 
-        
         info_container_layout.addLayout(button_layout)
         
         info_container.setLayout(info_container_layout)
@@ -135,6 +150,32 @@ class ParkingApp(QWidget):
         self.parking_window = ParkingAppFourth()
         self.parking_window.show()
         self.close()
+
+    def calllemployeedetails(self):
+            """Fetch parking details and update UI dynamically."""
+            response = self.api_service.employeeDetails()
+
+            parkingID = response.get('parkingSpaceID')
+            if not parkingID:
+                print("Error: parkingSpaceID not found!")
+                return  # Stop execution if ID is missing
+
+            parkingdetres = self.api_service.parkingSpaceDetails(parkingID)
+            print("Parking Details API Response:", parkingdetres)  # Debugging Line
+
+            self.availableSpace = parkingdetres.get('availableSpace', "N/A")
+            self.capacity = parkingdetres.get('totalSpace', "N/A")
+            self.rating = parkingdetres.get('rating', "N/A")
+            self.parkingName = parkingdetres.get('parkingName', "N/A")
+
+            # ✅ Update UI labels dynamically
+            self.capacity_label.setText(str(self.capacity))
+            self.availableSpace_label.setText(str(self.availableSpace))
+            self.rating_label.setText(str(self.rating))
+            self.station_label.setText(self.parkingName)
+
+            
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -116,6 +116,31 @@ class ApiService:
         except requests.exceptions.RequestException as e:
             print(f"Error exiting vehicle: {e}")
             return None
+        
+
+    def parkingSpaceDetails(self, parkingSpaceID):
+        url = "user-management/parking-space/fetch-parking-space-info/"+ parkingSpaceID
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZjgzNTc4NmUtNWY3Ny00YzRiLThkNDMtMmNjZjI5OWU4YzcyIiwiaWF0IjoxNzM5Nzk4MjUxLCJleHAiOjIwNTUxNTgyNTF9.Uxjvvd1xdlmAv7ili7V4gPtDpg01KYePcY37P7njoV4"}
+        
+        try:
+            response = requests.get(BASE_URL + url, headers=headers)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
+    
+    def employeeDetails(self):
+        url = "user-management/employee/fetch-employee-info/"+ "5ec10c00-7eff-48c9-ada3-bce66129246d"
+        headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6IkVNUExPWUVFIiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb24tdG9rZW4iLCJpc3MiOiJQYXJra2V5Iiwic3ViIjoiMWQyMzNhNzktOTcyYS00ZDA5LTk2MTktZDc0MTE5OGMwNDQwIiwianRpIjoiZjgzNTc4NmUtNWY3Ny00YzRiLThkNDMtMmNjZjI5OWU4YzcyIiwiaWF0IjoxNzM5Nzk4MjUxLCJleHAiOjIwNTUxNTgyNTF9.Uxjvvd1xdlmAv7ili7V4gPtDpg01KYePcY37P7njoV4"}
+        
+        try:
+            response = requests.get(BASE_URL + url, headers=headers)
+            response.raise_for_status()
+            return self._get_json_response(response)
+        except requests.exceptions.RequestException as e:
+            print(f"Error exiting vehicle: {e}")
+            return None
 
     def _get_json_response(self, response):
         try:
