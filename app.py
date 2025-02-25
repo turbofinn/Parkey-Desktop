@@ -153,7 +153,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import json
-from ApiService import ApiService  
+from ApiService import ApiService 
+from ApiService import EnvConfig 
 from duo import ParkingApp
 
 class ParkKeyUI(QWidget):
@@ -162,9 +163,8 @@ class ParkKeyUI(QWidget):
         self.setWindowTitle("Parkkey - Key to Parking")
         screen_geometry = QApplication.primaryScreen().geometry()
         self.setGeometry(screen_geometry)
-
-        self.api_service = ApiService()  # Initialize API service
-
+        env_config = EnvConfig()
+        self.api_service = ApiService(env_config)
         # Main layout
         main_layout = QHBoxLayout()
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -271,8 +271,10 @@ class ParkKeyUI(QWidget):
         url = "login-service/verify-otp/employee"
         payload = json.dumps({"mobileNo": mobile_number, "otp": otp})
         response = self.api_service.verifyOtp(url, payload)
-
+        
+        
         response_data = json.loads(response)
+        print(response)
         if response_data.get("status", {}).get("code") == 1001:
             QMessageBox.information(self, "Login Successful", "You have logged in successfully!")
             self.parking_window = ParkingApp()  
@@ -281,9 +283,11 @@ class ParkKeyUI(QWidget):
         else:
             QMessageBox.warning(self, "Login Failed", "Invalid OTP. Please try again.")
 
+# pyinstaller --noconsole --onefile --name Parkey --log-level=DEBUG app.py
 
 # Run the Application
 app = QApplication([])
+
 window = ParkKeyUI()
 window.show()
 app.exec_()

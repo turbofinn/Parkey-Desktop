@@ -10,6 +10,7 @@ import re
 import time  
 import os
 from ApiService import ApiService 
+from ApiService import EnvConfig
 import datetime
 import json
 
@@ -45,7 +46,8 @@ class ParkingAppFourth(QMainWindow):
         self.current_number_plate = ""
         self.entered_OTP = ""
         self.parkingTicketIDVal = None
-        self.api_service = ApiService()
+        env_config = EnvConfig()
+        self.api_service = ApiService(env_config)
 
     def initUI(self):
         main_widget = QWidget()
@@ -436,11 +438,10 @@ class ParkingAppFourth(QMainWindow):
                             filename = f"{save_directory}/plate_{time.time()}.jpg"
                             cv2.imwrite(filename, roi) 
                             self.update_detected_image(filename)
-                            # print(DetectedNumberPlate)
                             self.update_vehicle_details(DetectedNumberPlate)
                             timing = datetime.datetime.now().strftime("%I:%M %p")
                             self.update_exit_time(timing)  
-                            self.update_OTP_number(DetectedNumberPlate)
+                            self.getVehicleData(DetectedNumberPlate)
 
                         # print(f"OCR Raw Output: {text}")
 
@@ -487,17 +488,17 @@ class ParkingAppFourth(QMainWindow):
         if edited_text != self.current_number_plate:
             self.current_number_plate = edited_text
             self.entry_fees_display.clear()
+            self.getVehicleData(self.current_number_plate)
 
     def update_exit_time(self, timing):
         self.exit_time = timing
         self.entry_time_display.setText(self.exit_time)
 
-    def update_OTP_number(self, number_plate):
+    def getVehicleData(self, number_plate):
         try:
-            vehicle_no = str(number_plate)
-            response_data = self.api_service.getVehicleDetails(vehicle_no)  # This returns a dictionary
-            
-            self.parkingTicketIDVal = response_data.get("parkingTicketID", "")
+
+            response = self.api_service.getVehicleDetails(number_plate)
+            self.parkingTicketIDVal = response.get("parkingTicketID", "")
             self.right_box_input.setFocus()
 
         # Disconnect previous connections to avoid duplicate triggers
@@ -516,38 +517,40 @@ class ParkingAppFourth(QMainWindow):
     def update_entered_OTP(self, text):
         """ Updates self.entered_OTP as the user types and calls otpExitTicket when OTP is 4 digits """
         self.entered_OTP = text
-
-        # Check if the entered OTP is exactly 4 digits and numeric
-        if len(self.entered_OTP) == 4 and self.entered_OTP.isdigit():
-            # Call otpExitTicket with OTP and parkingTicketIDVal
-            response = self.api_service.otpExitTicket(self.entered_OTP, self.parkingTicketIDVal)
-            if response and "message" in response and "OTP verified" in response["message"]:
-                # OTP is verified, call parkingCharges
-                parkingdetails = self.api_service.parkingCharges(self.parkingTicketIDVal)
-                totalcharges = parkingdetails.get("totalParkingCharges", '0')
-                self.entry_fees_display.setText(f"{totalcharges} Rs") 
-            else:
-                self.show_popup("Please enter correct OTP")
+            
 
     def finalexit(self):
-        """ Handles vehicle exit process """
-        item = QListWidgetItem(f"John Doe Exited Vehicle")
-        self.recent_exit_list.addItem(item)
+        """Handles the vehicle exit process with OTP verification"""
+        response = self.api_service.otpExitTicket(self.entered_OTP, self.parkingTicketIDVal)
 
-        response = self.api_service.exitTicket(self.parkingTicketIDVal)
+        if response and "message" in response and "OTP verified" in response["message"]:
+            # OTP is verified, call parkingCharges
+            parkingdetails = self.api_service.parkingCharges(self.parkingTicketIDVal)
+            print(parkingdetails)
+            totalcharges = parkingdetails.get("totalParkingCharges", '0')
+            self.entry_fees_display.setText(f"{totalcharges} Rs")
 
-        if response and "successMessage" in response and "Vehicle exited safely" in response["successMessage"]:
-            self.show_popup(response["successMessage"])
-            self.right_box_input.clear()
-            self.entry_fees_display.clear()
-            self.recent_exit_list.clear()
-            self.parkingTicketIDVal = None
-            self.entered_OTP = ""
-            self.left_box_input.clear()
-            self.entry_time_display.clear()
-            self.detected_image.clear()  
+            item = QListWidgetItem("John Doe Exited Vehicle")
+            self.recent_exit_list.addItem(item)
+
+            # Call exitTicket only if OTP is verified
+            exit_response = self.api_service.exitTicket(self.parkingTicketIDVal)
+
+            if exit_response and "successMessage" in exit_response and "Vehicle exited safely" in exit_response["successMessage"]:
+                self.show_popup(exit_response["successMessage"])
+                self.right_box_input.clear()
+                self.entry_fees_display.clear()
+                self.recent_exit_list.clear()
+                self.parkingTicketIDVal = None
+                self.entered_OTP = ""
+                self.left_box_input.clear()
+                self.entry_time_display.clear()
+                self.detected_image.clear()
         else:
-            self.show_popup("Error in exiting vehicle")
+                self.show_popup("Wrong OTP! Try again.")  # Show popup if OTP is incorrect
+        
+
+
 
 
 

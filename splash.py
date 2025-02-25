@@ -10,6 +10,7 @@ import re
 import time  
 import os
 from ApiService import ApiService 
+from ApiService import EnvConfig
 import datetime
 import json
 
@@ -44,7 +45,8 @@ class ParkingAppSplash(QMainWindow):
         self.entry_time = ""
         self.current_number_plate = ""
         self.entered_mobile_number = ""
-        self.api_service = ApiService()
+        env_config = EnvConfig()
+        self.api_service = ApiService(env_config)
 
     def initUI(self):
         main_widget = QWidget()
@@ -548,8 +550,9 @@ class ParkingAppSplash(QMainWindow):
     
     def submit_entry(self):
         self.entry_button.setEnabled(False)
+        print(self.current_number_plate)
         if self.entered_mobile_number and self.current_number_plate:
-            response = self.api_service.getCreateCustomer(self.entered_mobile_number, self.current_number_plate)
+            response = self.api_service.createCustomer("EMPLOYEE_APP", self.entered_mobile_number, self.current_number_plate)
             entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
             self.entry_fees_display.setText(entry_fee_value)
             item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 

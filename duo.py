@@ -5,7 +5,7 @@ import sys
 from splash import ParkingAppSplash
 from fourth import ParkingAppFourth
 from ApiService import ApiService
-
+from ApiService import EnvConfig
 class ParkingApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -13,8 +13,8 @@ class ParkingApp(QWidget):
         screen_geometry = QApplication.primaryScreen().geometry()
         self.setGeometry(screen_geometry)
         self.setStyleSheet("background-color: #117554;")
-
-        self.api_service = ApiService()
+        env_config = EnvConfig()
+        self.api_service = ApiService(env_config)
         
         # Placeholder values before API call
         self.availableSpace = "Loading..."
@@ -161,7 +161,7 @@ class ParkingApp(QWidget):
                 return  # Stop execution if ID is missing
 
             parkingdetres = self.api_service.parkingSpaceDetails(parkingID)
-            print("Parking Details API Response:", parkingdetres)  # Debugging Line
+            
 
             self.availableSpace = parkingdetres.get('availableSpace', "N/A")
             self.capacity = parkingdetres.get('totalSpace', "N/A")
