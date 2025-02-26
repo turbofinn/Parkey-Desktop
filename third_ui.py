@@ -17,7 +17,6 @@ import json
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
-
 model_path = "models/num_plate.pb"
 save_directory = r'imges'
 
@@ -33,8 +32,8 @@ class ParkingAppSplash(QMainWindow):
         self.setGeometry(screen_geometry)
         self.setStyleSheet("background-color: #117554;")
         self.initUI()
-        self.cap = None  # Camera object
-        self.timer = None  # Timer for updating frames
+        self.cap = None  
+        self.timer = None  
         self.sess = None
         self.input_tensor = None
         self.detection_boxes = None
@@ -54,12 +53,11 @@ class ParkingAppSplash(QMainWindow):
 
         # Left section layout
         left_layout = QVBoxLayout()
-        left_layout.setContentsMargins(10, 20, 10, 10)  # Uniform margins
+        left_layout.setContentsMargins(10, 20, 10, 10)  
 
-        # Spacer at the top for equal spacing
         left_layout.addStretch(1)
 
-        # --- Detected Number Plate Section ---
+
         detected_box = QVBoxLayout()
         detected_label = QLabel("Detected Number\nPlate")
         detected_label.setStyleSheet("color: black; font-size: 26px; font-weight: bold;")
@@ -223,13 +221,11 @@ class ParkingAppSplash(QMainWindow):
 
         box_container.addLayout(box_layout)
 
-        # Spacer BELOW Boxes (to maintain gaps from buttons)
         box_container.addItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed))
 
-        # Add the box container to the center layout
         center_layout.addLayout(box_container)
 
-        # Button Layout (unchanged)
+
         button_layout = QHBoxLayout()
 
         self.automatic_button = QPushButton("Start")
@@ -257,18 +253,13 @@ class ParkingAppSplash(QMainWindow):
         self.entry_button.clicked.connect(self.submit_entry)
 
 
-
-
-
-        # Right section (Single white box with Recent Entry and Exit)
         right_layout = QVBoxLayout()
 
-        # Container Widget for the right side
         right_container = QWidget() 
         right_container.setStyleSheet("background-color: white; border-radius: 10px;")
         right_container_layout = QVBoxLayout()
-        right_container_layout.setContentsMargins(20, 20, 30, 30)  # Padding inside the white box
-        right_container_layout.setSpacing(20)  # Spacing between sections
+        right_container_layout.setContentsMargins(20, 20, 30, 30) 
+        right_container_layout.setSpacing(20)  
         right_container.setFixedWidth(450)
         # --- Recent Entry Section ---
         recent_entry_layout = QVBoxLayout()
@@ -329,7 +320,7 @@ class ParkingAppSplash(QMainWindow):
 
     def start_camera(self):
         """Start the camera and begin detecting number plates."""
-        self.cap = cv2.VideoCapture(0)  # Open default camera
+        self.cap = cv2.VideoCapture(0)  
         self.entry_button.setEnabled(True)
         if not self.cap.isOpened():
             print("Error: Cannot access the camera")
@@ -354,7 +345,7 @@ class ParkingAppSplash(QMainWindow):
         # Set up a QTimer to update the vehicle image every frame
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame_with_detection)
-        self.timer.start(30)  # Update every 30ms (~33 FPS)
+        self.timer.start(30) 
 
     def stop_camera(self):
         """Stop the camera feed and close OpenCV windows."""
@@ -363,13 +354,13 @@ class ParkingAppSplash(QMainWindow):
         
         if hasattr(self, 'cap') and self.cap is not None and self.cap.isOpened():
             self.cap.release()
-            self.cap = None  # Reset cap to prevent future issues
+            self.cap = None  
             print("Camera stopped.")
         else:
             print("Camera was not running.")
 
         if hasattr(self, 'sess'):
-            self.sess.close()  # Close TensorFlow session to free resources
+            self.sess.close()  
             print("TensorFlow session closed.")
         self.right_box_input.clear()
         self.entry_fees_display.clear()
@@ -391,8 +382,8 @@ class ParkingAppSplash(QMainWindow):
             return
 
         # Preprocess the frame for the model
-        input_frame = cv2.resize(frame, (300, 300))  # Resize frame to model's input size
-        input_frame = np.expand_dims(input_frame, axis=0)  # Add batch dimension
+        input_frame = cv2.resize(frame, (300, 300))  
+        input_frame = np.expand_dims(input_frame, axis=0) 
 
         # Run inference
         outputs = self.sess.run(
@@ -404,7 +395,7 @@ class ParkingAppSplash(QMainWindow):
         num_detected = int(outputs[0][0])
         for i in range(num_detected):
             score = outputs[2][0][i]
-            if score > 0.5:  # Confidence threshold
+            if score > 0.5:  
                 box = outputs[1][0][i]
 
                 # Convert box coordinates to pixel values
@@ -425,7 +416,7 @@ class ParkingAppSplash(QMainWindow):
                         roi_thresh = cv2.threshold(roi_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
                         # Perform OCR with Tesseract
-                        custom_config = r'--oem 3 --psm 6'  # Tesseract configuration
+                        custom_config = r'--oem 3 --psm 6'  
                         text = pytesseract.image_to_string(roi_thresh, config=custom_config)
 
                         cleaned_text = re.sub(r'[^A-Za-z0-9]', '', text)
@@ -433,25 +424,16 @@ class ParkingAppSplash(QMainWindow):
                         
                         if re.match(pattern, cleaned_text):
                             
-                            DetectedNumberPlate = cleaned_text.strip()  # Strip any extra whitespace or newline characters
+                            DetectedNumberPlate = cleaned_text.strip() 
                             filename = f"{save_directory}/plate_{time.time()}.jpg"
                             cv2.imwrite(filename, roi) 
                             self.update_detected_image(filename)
-                            # print(DetectedNumberPlate)
+                          
                             self.update_vehicle_details(DetectedNumberPlate)
                             timing = datetime.datetime.now().strftime("%I:%M %p")
                             self.update_entry_time(timing)  
                             self.update_mobile_number(DetectedNumberPlate)
 
-                        # print(f"OCR Raw Output: {text}")
-
-                        # Temporarily commenting out the validation logic
-                        # text = re.sub(r'[^A-Z0-9]', '', text.strip())  # Clean the OCR output
-                        # pattern = r'^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$'  # Example: MH12AB1234
-                        # if re.match(pattern, text):
-                        #     print(f"Detected Valid Number Plate: {text}")
-                        # else:
-                        #     print(f"Ignored Invalid Plate: {text}")
 
                     else:
                         print("Ignored Invalid ROI due to size 0")
@@ -478,7 +460,7 @@ class ParkingAppSplash(QMainWindow):
 
     def update_vehicle_details(self, number_plate):
         """Update the verify vehicle details input field with the detected number plate."""
-        self.detected_number_plate = number_plate  # Store in global variable
+        self.detected_number_plate = number_plate  
         self.current_number_plate = number_plate
         self.left_box_input.setText(self.current_number_plate)
 
@@ -496,9 +478,8 @@ class ParkingAppSplash(QMainWindow):
     def update_mobile_number(self, number_plate):
         try:
             vehicle_no = str(number_plate)
-            response_data = self.api_service.getVehicleDetails(vehicle_no)  # This returns a dictionary
+            response_data = self.api_service.getVehicleDetails(vehicle_no)  
 
-            # Debugging - Print the API response
             print("API Response:", response_data)
 
             if response_data:
@@ -513,11 +494,10 @@ class ParkingAppSplash(QMainWindow):
                     # Set focus on the input field for manual entry
                     self.right_box_input.setFocus()
 
-                    # Disconnect any previous connections to avoid duplicate triggers
                     try:
                         self.right_box_input.textChanged.disconnect()
                     except TypeError:
-                        pass  # Ignore if there's no previous connection
+                        pass
 
                     # Connect text change event to store the manually entered number
                     self.right_box_input.textChanged.connect(self.store_mobile_number)
@@ -530,7 +510,7 @@ class ParkingAppSplash(QMainWindow):
                     # Update UI fields
                     self.entered_mobile_number = mobile_number
                     self.right_box_input.setText(self.entered_mobile_number)
-                    self.entry_fees_display.setText(f"{entry_fee} Rs")  # Adding currency symbol for clarity
+                    self.entry_fees_display.setText(f"{entry_fee} Rs") 
                     self.recent_entry_list.addItem(item)
 
             else:

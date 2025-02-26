@@ -16,15 +16,15 @@ class ParkingApp(QWidget):
         env_config = EnvConfig()
         self.api_service = ApiService(env_config)
         
-        # Placeholder values before API call
+  
         self.availableSpace = "Loading..."
         self.capacity = "Loading..."
         self.rating = "Loading..."
-        self.charges = "20 Rs/Hours"  # Static value
+        self.charges = "20 Rs/Hours"  
         self.parkingName = "Loading..."
 
         self.initUI()  
-        self.calllemployeedetails()  # Fetch data after UI is initialized
+        self.calllemployeedetails() 
 
     def initUI(self):
         # Main layout
@@ -158,7 +158,7 @@ class ParkingApp(QWidget):
             parkingID = response.get('parkingSpaceID')
             if not parkingID:
                 print("Error: parkingSpaceID not found!")
-                return  # Stop execution if ID is missing
+                return  
 
             parkingdetres = self.api_service.parkingSpaceDetails(parkingID)
             
@@ -168,7 +168,6 @@ class ParkingApp(QWidget):
             self.rating = parkingdetres.get('rating', "N/A")
             self.parkingName = parkingdetres.get('parkingName', "N/A")
 
-            # ✅ Update UI labels dynamically
             self.capacity_label.setText(str(self.capacity))
             self.availableSpace_label.setText(str(self.availableSpace))
             self.rating_label.setText(str(self.rating))
