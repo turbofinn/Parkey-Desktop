@@ -153,9 +153,10 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import json
-from ApiService import ApiService 
-from ApiService import EnvConfig 
-from duo import ParkingApp
+from api.ApiService import ApiService 
+from api.ApiService import EnvConfig 
+from second_ui import ParkingApp
+
 
 class ParkKeyUI(QWidget):
     def __init__(self):
@@ -174,7 +175,7 @@ class ParkKeyUI(QWidget):
         left_layout = QVBoxLayout()
 
         logo_label = QLabel()
-        pixmap = QPixmap("titlepage.png")  # Replace with actual path
+        pixmap = QPixmap('assets/titlepage.png')  # Replace with actual path
         pixmap = pixmap.scaled(500, 700, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         logo_label.setPixmap(pixmap)
         logo_label.setAlignment(Qt.AlignCenter)

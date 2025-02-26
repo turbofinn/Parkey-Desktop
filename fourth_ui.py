@@ -9,16 +9,17 @@ import pytesseract
 import re
 import time  
 import os
-from ApiService import ApiService 
-from ApiService import EnvConfig
+from api.ApiService import ApiService 
+from api.ApiService import EnvConfig
 import datetime
 import json
+
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
 
-
+model_path = "models/num_plate.pb"
 save_directory = r'imges'
 
 if not os.path.exists(save_directory):
@@ -337,7 +338,7 @@ class ParkingAppFourth(QMainWindow):
             return
 
         # Load the TensorFlow model
-        with tf.io.gfile.GFile('num_plate.pb', 'rb') as f:
+        with tf.io.gfile.GFile(model_path, 'rb') as f:
             graph_def = tf.compat.v1.GraphDef()
             graph_def.ParseFromString(f.read())
 

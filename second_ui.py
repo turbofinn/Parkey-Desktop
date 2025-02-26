@@ -2,10 +2,10 @@ from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QWidget, QVBoxLay
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import sys
-from splash import ParkingAppSplash
-from fourth import ParkingAppFourth
-from ApiService import ApiService
-from ApiService import EnvConfig
+from third_ui import ParkingAppSplash
+from fourth_ui import ParkingAppFourth
+from api.ApiService import ApiService
+from api.ApiService import EnvConfig
 class ParkingApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -40,7 +40,7 @@ class ParkingApp(QWidget):
 
         # Title image
         title_image = QLabel()
-        pixmap = QPixmap("titlepage.png")
+        pixmap = QPixmap('assets/titlepage.png')
         title_image.setPixmap(pixmap)
         title_image.setScaledContents(True)
         title_image.setFixedSize(600, 150) 
