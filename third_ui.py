@@ -16,8 +16,19 @@ import json
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
+def resource_path(relative_path):
+    """Get the absolute path to a resource, works for dev and for PyInstaller."""
+    if hasattr(sys, '_MEIPASS'):
+        # Running in a PyInstaller bundle
+        base_path = sys._MEIPASS
+    else:
+        # Running in a normal Python environment
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
-model_path = "models/num_plate.pb"
+# Use the resource_path function to locate the model file
+model_path = resource_path("models/num_plate.pb")
+
 save_directory = r'imges'
 
 if not os.path.exists(save_directory):
