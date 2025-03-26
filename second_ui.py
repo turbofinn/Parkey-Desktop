@@ -2,8 +2,8 @@ from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QWidget, QVBoxLay
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import Qt
 import sys
-from third_ui import ParkingAppSplash
-from fourth_ui import ParkingAppFourth
+from entry_ui import ParkingAppSplash
+from exit_ui import ParkingAppFourth
 from api.ApiService import ApiService
 from api.ApiService import EnvConfig
 class ParkingApp(QWidget):
