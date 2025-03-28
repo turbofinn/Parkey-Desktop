@@ -42,8 +42,10 @@ class ParkingAppSplash(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Raipur Railways Parking")
-        self.setGeometry(100, 100, 1200, 700)
-        self.setStyleSheet("background-color: #04968b;")
+        screen_geometry = QApplication.primaryScreen().geometry()
+        self.setGeometry(screen_geometry)
+        # self.setGeometry(100, 100, 1200, 700)
+        self.setStyleSheet("background-color: #009688;")
         
         # Initialize variables from original code
         self.cap = None  
@@ -75,30 +77,36 @@ class ParkingAppSplash(QMainWindow):
         sidebar = QWidget()
         sidebar.setFixedWidth(200)  # Increased width
         sidebar.setStyleSheet("background-color: white; border-radius: 15px;")
-        
+
         sidebar_layout = QVBoxLayout(sidebar)
         sidebar_layout.setContentsMargins(10, 15, 10, 15)
         sidebar_layout.setSpacing(20)
 
-        # Sidebar icons configuration
+        # Sidebar icons configuration with emoji icons
         sidebar_icons = [
-            {"icon": "user-circle", "color": "#3b7be9", "position": "top"},     # User icon
-            {"icon": "home", "color": "#e0e0e0", "position": "middle"},          # Home icon
-            {"icon": "video", "color": "#3b7be9", "position": "middle"},         # Camera/video icon
-            {"icon": "microphone", "color": "#e0e0e0", "position": "middle"},    # Microphone icon
-            {"icon": "chart-bar", "color": "#f26e56", "position": "middle"}      # Chart/stats icon
+            {"icon": "👤", "color": "#3b7be9", "position": "top"},     # User icon
+            {"icon": "🏠", "color": "#e0e0e0", "position": "middle"}, # Home icon
+            {"icon": "📹", "color": "#3b7be9", "position": "middle"}, # Camera/video icon
+            {"icon": "🎙️", "color": "#e0e0e0", "position": "middle"},# Microphone icon
+            {"icon": "📊", "color": "#f26e56", "position": "middle"} # Chart/stats icon
         ]
+
+        # Function to create icon buttons
+        def create_icon_button(icon, background_color):
+            btn = QPushButton(icon)
+            btn.setFixedSize(60, 60)
+            btn.setStyleSheet(f"""
+                font-size: 30px;
+                background-color: {background_color};
+                border-radius: 30px;
+                color: white;
+            """)
+            return btn
 
         # Add top icons
         top_icons = [icon for icon in sidebar_icons if icon["position"] == "top"]
         for icon_config in top_icons:
-            icon_btn = QPushButton()
-            icon_btn.setFixedSize(50, 50)  # Increased size
-            icon_btn.setStyleSheet(f"""
-                background-color: {icon_config['color']}; 
-                border-radius: 25px;
-                color: white;
-            """)
+            icon_btn = create_icon_button(icon_config['icon'], icon_config['color'])
             sidebar_layout.addWidget(icon_btn, 0, Qt.AlignCenter)
 
         sidebar_layout.addStretch(1)
@@ -106,26 +114,23 @@ class ParkingAppSplash(QMainWindow):
         # Add middle icons
         middle_icons = [icon for icon in sidebar_icons if icon["position"] == "middle"]
         for icon_config in middle_icons:
-            icon_btn = QPushButton()
-            icon_btn.setFixedSize(50, 50)  # Increased size
-            icon_btn.setStyleSheet(f"""
-                background-color: {icon_config['color']}; 
-                border-radius: 25px;
-                color: white;
-            """)
+            icon_btn = create_icon_button(icon_config['icon'], icon_config['color'])
             sidebar_layout.addWidget(icon_btn, 0, Qt.AlignCenter)
 
         sidebar_layout.addStretch(5)
 
         # User profile button at bottom
-        profile_btn = QPushButton()
-        profile_btn.setFixedSize(60, 60)  # Increased size
-        profile_btn.setStyleSheet("""
+        profile = QLabel("👤")
+        profile.setStyleSheet("""
+            font-size: 30px; 
+            color: #555555; 
             background-color: #e0e0e0; 
-            border-radius: 30px; 
+            border-radius: 30px;
             border: 3px solid white;
         """)
-        sidebar_layout.addWidget(profile_btn, 0, Qt.AlignCenter)
+        profile.setFixedSize(60, 60)
+        profile.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(profile, 0, Qt.AlignCenter)
 
         # Add sidebar to main layout
         main_layout.addWidget(sidebar)
@@ -188,7 +193,7 @@ class ParkingAppSplash(QMainWindow):
         self.vehicle_image.setStyleSheet("""
             background-color: black;
             border: 8px solid white;
-            border-radius: 10px;
+            border-radius: 16px;
         """)
         self.vehicle_image.setFixedSize(1000, 550)
         camera_layout.addWidget(self.vehicle_image,alignment=Qt.AlignCenter)
@@ -348,15 +353,14 @@ class ParkingAppSplash(QMainWindow):
         main_layout.addWidget(content_area, 1)
 
         # Right sidebar for recent entries and exits
+         # Modifications to the right sidebar
         vehicle_sidebar = QWidget()
         vehicle_sidebar.setFixedWidth(550)
         vehicle_sidebar.setStyleSheet("background-color: white; border-radius: 15px;")
         vehicle_layout = QVBoxLayout(vehicle_sidebar)
         vehicle_layout.setContentsMargins(10, 10, 10, 10)
         vehicle_layout.setSpacing(10)
-        # info_sidebar.setFixedWidth(600)
          
-        
         # Recent Entry section
         recent_entry_label = QLabel("Recent Entry")
         recent_entry_label.setFont(QFont("Arial", 14, QFont.Bold))
@@ -378,26 +382,29 @@ class ParkingAppSplash(QMainWindow):
         """)
         vehicle_layout.addWidget(self.recent_entry_list)
         
-        # Recent Exit section
-        # recent_exit_label = QLabel("Recent Exit")
-        # recent_exit_label.setFont(QFont("Arial", 14, QFont.Bold))
-        # recent_exit_label.setAlignment(Qt.AlignCenter)
-        # recent_exit_label.setStyleSheet("color: #666; margin-bottom: 5px; padding: 3px;")
-        # vehicle_layout.addWidget(recent_exit_label)
+        # New Message Log section
+        message_log_label = QLabel("Message Log")
+        message_log_label.setFont(QFont("Arial", 14, QFont.Bold))
+        message_log_label.setAlignment(Qt.AlignCenter)
+        message_log_label.setStyleSheet("color: #666; margin-bottom: 5px; padding: 3px;")
+        vehicle_layout.addWidget(message_log_label)
         
-        # self.recent_exit_list = QListWidget()
-        # self.recent_exit_list.setStyleSheet("""
-        #     QListWidget {
-        #         border: none;
-        #         background-color: transparent;
-        #         font-size: 14px;
-        #     }
-        #     QListWidget::item {
-        #         border-bottom: 1px solid #ddd;
-        #         padding: 5px;
-        #     }
-        # """)
-        # vehicle_layout.addWidget(self.recent_exit_list)
+        self.message_log_list = QListWidget()
+        self.message_log_list.setStyleSheet("""
+            QListWidget {
+                border: none;
+                background-color: transparent;
+                font-size: 14px;
+            }
+            QListWidget::item {
+                border-bottom: 1px solid #ddd;
+                padding: 5px;
+            }
+            QListWidget::item:first-child {
+                border-top: 1px solid #ddd;
+            }
+        """)
+        vehicle_layout.addWidget(self.message_log_list)
         
         main_layout.addWidget(vehicle_sidebar)
         
@@ -416,6 +423,7 @@ class ParkingAppSplash(QMainWindow):
         """Start the camera and begin detecting number plates."""
         self.cap = cv2.VideoCapture(0)  
         self.entry_button.setEnabled(True)
+        
         if not self.cap.isOpened():
             print("Error: Cannot access the camera")
             return
@@ -428,6 +436,7 @@ class ParkingAppSplash(QMainWindow):
         # Create a TensorFlow session and import the graph
         self.sess = tf.compat.v1.Session()
         tf.import_graph_def(graph_def, name="")
+        self.show_popup("Camera started successfully")
 
         # Get tensor references
         self.input_tensor = self.sess.graph.get_tensor_by_name('image_tensor:0')
@@ -456,6 +465,7 @@ class ParkingAppSplash(QMainWindow):
         if hasattr(self, 'sess'):
             self.sess.close()  
             print("TensorFlow session closed.")
+        self.show_popup("Camera stoped successfully")
         self.right_box_input.clear()
         self.entry_fees_display.clear()
         self.recent_entry_list.clear()
@@ -526,6 +536,7 @@ class ParkingAppSplash(QMainWindow):
                             timing = datetime.datetime.now().strftime("%I:%M %p")
                             self.update_entry_time(timing)  
                             self.update_mobile_number(DetectedNumberPlate)
+                            self.show_popup(f"Number plate detected: {DetectedNumberPlate}")
 
 
                     else:
@@ -646,12 +657,30 @@ class ParkingAppSplash(QMainWindow):
             self.entry_button.setEnabled(True)
             
     def show_popup(self, message):
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
-        msg.setWindowTitle("Parking System")
-        msg.setText(message)
-        msg.setStandardButtons(QMessageBox.Ok)
-        msg.exec_()
+        """
+        Instead of showing a dialog, log the message in the message log list
+        and optionally maintain a max number of messages. 
+        Most recent messages will appear at the top.
+        """
+        # Add the message to the message log list (insert at position 0)
+        current_time = datetime.datetime.now().strftime("%I:%M %p")
+        log_item = QListWidgetItem(f"{current_time}: {message}")
+        
+        # Optional: Set color based on message type (you can expand this)
+        if "error" in message.lower():
+            log_item.setForeground(QColor('red'))
+        elif "success" in message.lower():
+            log_item.setForeground(QColor('green'))
+        
+        # Insert at the top of the list
+        self.message_log_list.insertItem(0, log_item)
+        
+        # Optional: Limit the number of messages (e.g., keep last 10)
+        if self.message_log_list.count() > 10:
+            self.message_log_list.takeItem(self.message_log_list.count() - 1)  # Remove the oldest item
+        
+        # Scroll to the top of the list (where new items appear)
+        self.message_log_list.scrollToTop()
 
 
 if __name__ == "__main__":
