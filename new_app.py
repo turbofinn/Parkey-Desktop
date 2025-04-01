@@ -7,7 +7,7 @@ from api.ApiService import ApiService
 from api.ApiService import EnvConfig
 import os
 import sys 
-from second_ui import ParkingApp 
+from middleui import ParkingApp 
 
 
 image_path = "assets/titlepage.png"
@@ -61,6 +61,7 @@ class ParkKeyUI(QWidget):
         self.status_label.setFont(QFont("Arial", 10))
         self.status_label.setAlignment(Qt.AlignCenter)
         self.status_label.setStyleSheet("color: #118B50;")
+        
 
         # Modified login button to show loading state
         self.login_button = QPushButton("Login Now")
