@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                              QLabel, QFrame, QScrollArea, QSizePolicy, QSpacerItem, QPushButton)
-from PyQt5.QtGui import QFont, QColor, QPixmap, QImage
+from PyQt5.QtGui import QFont, QColor, QPixmap, QImage, QPainter
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon
 import sys
@@ -11,7 +11,7 @@ from new_exit_ui import ParkingAppFourth
 from api.ApiService import ApiService
 from api.ApiService import EnvConfig
 
-class HomeLabel(QLabel):
+class LogoutLabel(QLabel):
     """Custom QLabel class for home icon that emits a signal when clicked"""
     def __init__(self, text):
         super().__init__(text)
@@ -21,8 +21,9 @@ class HomeLabel(QLabel):
         # Override the mouse press event to handle click
         if event.button() == Qt.LeftButton:
             # Call the slot function directly
-            if hasattr(self.parent().parent().parent(), 'navigate_to_home'):
-                self.parent().parent().parent().navigate_to_home()
+            if hasattr(self.parent().parent().parent(), 'navigate_to_login'):
+                self.parent().parent().parent().navigate_to_login()
+                self.close()
         super().mousePressEvent(event)
 
 
@@ -76,14 +77,28 @@ class   ParkingApp(QMainWindow):
         sidebar_layout.setSpacing(20)
 
         # User icon at top
-        user_icon = QLabel("👤")
+        user_icon = QLabel()
+        # Load your image (replace with your actual image path)
+        pixmap = QPixmap("assets/titlepage.png")  # e.g., "assets/profile.png"
+        # Create circular mask for rounded effect
+        mask = QPixmap(pixmap.size())
+        mask.fill(Qt.transparent)
+        painter = QPainter(mask)
+        painter.setBrush(Qt.white)
+        painter.setPen(Qt.NoPen)
+        painter.drawRoundedRect(mask.rect(), 30, 30)  # Match your 30px border-radius
+        painter.end()
+
+        # Apply the mask and styling
+        pixmap.setMask(mask.createMaskFromColor(Qt.transparent))
+        user_icon.setPixmap(pixmap.scaled(50, 50, Qt.KeepAspectRatio, Qt.SmoothTransformation))  # 40x40 to account for padding
         user_icon.setStyleSheet("""
-            font-size: 30px;
-            background-color: #3b7be9;
+            background-color: #e0e0e0;
             border-radius: 30px;
-            color: white;
             padding: 10px;
         """)
+
+        # Keep the rest the same
         user_icon.setFixedSize(60, 60)
         user_icon.setAlignment(Qt.AlignCenter)
         sidebar_layout.addWidget(user_icon, 0, Qt.AlignCenter)
@@ -94,7 +109,7 @@ class   ParkingApp(QMainWindow):
         # Middle icons (centered)
         middle_icons = []
 
-        home_icon = HomeLabel("⏻")
+        home_icon =QLabel("🏠")
         home_icon.setStyleSheet("""
             font-size: 30px;
             background-color: #e0e0e0;
@@ -150,10 +165,10 @@ class   ParkingApp(QMainWindow):
         sidebar_layout.addStretch(2)  # Increased stretch
 
         # User profile button at bottom
-        profile = QLabel("👤")
+        profile =LogoutLabel("⏻")
         profile.setStyleSheet("""
             font-size: 30px; 
-            color: #555555; 
+            color: red; 
             background-color: #e0e0e0; 
             border-radius: 30px;
             border: 3px solid white;
@@ -333,7 +348,7 @@ class   ParkingApp(QMainWindow):
         
         # Create dashboard cards with the values from first snippet
         self.space_available_card, self.availableSpace_label = create_dashboard_card(
-            "Space Available", "Cars", self.availableSpace)
+            "Space Available", "Vehicles", self.availableSpace)
         dashboard_layout.addWidget(self.space_available_card)
         
         self.parking_charges_card, self.charges_label = create_dashboard_card(
@@ -345,17 +360,17 @@ class   ParkingApp(QMainWindow):
         dashboard_layout.addWidget(self.rating_card)
         
         self.total_capacity_card, self.capacity_label = create_dashboard_card(
-            "Total capacity", "Cars", self.capacity)
+            "Total capacity", "Vehicles", self.capacity)
         dashboard_layout.addWidget(self.total_capacity_card)
         
         content_layout.addWidget(dashboard_widget)
         main_layout.addWidget(content_area, 1)
 
-    def navigate_to_home(self):
+    def navigate_to_login(self):
         """Navigate back to the home/previous page"""
         from new_app import ParkKeyUI
         # You can put any code here to navigate to the previous page
-        self.show_popup("Navigating to home page...")
+        # self.show_popup("Navigating to home page...")
         
         self.home_window = ParkKeyUI()
         self.home_window.show()
@@ -375,6 +390,7 @@ class   ParkingApp(QMainWindow):
     def calllemployeedetails(self):
         """Fetch parking details and update UI dynamically."""
         response = self.api_service.employeeDetails()
+        
 
         parkingID = response.get('parkingSpaceID')
         if not parkingID:
@@ -382,6 +398,7 @@ class   ParkingApp(QMainWindow):
             return  
 
         parkingdetres = self.api_service.parkingSpaceDetails(parkingID)
+        print(parkingdetres)
         
         # Update the instance variables
         self.availableSpace = parkingdetres.get('availableSpace', "N/A")

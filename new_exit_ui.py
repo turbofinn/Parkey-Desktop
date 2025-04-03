@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                              QLabel, QLineEdit, QPushButton, QFrame, QScrollArea, QMessageBox,
                              QListWidget, QListWidgetItem, QSizePolicy, QSpacerItem,QMenu)
-from PyQt5.QtGui import QFont, QColor, QPixmap, QImage
+from PyQt5.QtGui import QFont, QColor, QPixmap, QImage, QPainter
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon
 import sys
@@ -36,6 +36,21 @@ save_directory = r'imges'
 
 if not os.path.exists(save_directory):
     os.makedirs(save_directory)
+
+class LogoutLabel(QLabel):
+    """Custom QLabel class for home icon that emits a signal when clicked"""
+    def __init__(self, text):
+        super().__init__(text)
+        self.setCursor(Qt.PointingHandCursor)  # Set cursor to pointing hand
+        
+    def mousePressEvent(self, event):
+        # Override the mouse press event to handle click
+        if event.button() == Qt.LeftButton:
+            # Call the slot function directly
+            if hasattr(self.parent().parent().parent(), 'navigate_to_login'):
+                self.parent().parent().parent().navigate_to_login()
+                self.close()
+        super().mousePressEvent(event)
 
 class CameraLabel(QLabel):
     """Custom QLabel class that emits a signal when clicked"""
@@ -112,14 +127,28 @@ class ParkingAppFourth (QMainWindow):
         sidebar_layout.setSpacing(20)
 
         # User icon at top
-        user_icon = QLabel("👤")
+        user_icon = QLabel()
+        # Load your image (replace with your actual image path)
+        pixmap = QPixmap("assets/titlepage.png")  # e.g., "assets/profile.png"
+        # Create circular mask for rounded effect
+        mask = QPixmap(pixmap.size())
+        mask.fill(Qt.transparent)
+        painter = QPainter(mask)
+        painter.setBrush(Qt.white)
+        painter.setPen(Qt.NoPen)
+        painter.drawRoundedRect(mask.rect(), 30, 30)  # Match your 30px border-radius
+        painter.end()
+
+        # Apply the mask and styling
+        pixmap.setMask(mask.createMaskFromColor(Qt.transparent))
+        user_icon.setPixmap(pixmap.scaled(50, 50, Qt.KeepAspectRatio, Qt.SmoothTransformation))  # 40x40 to account for padding
         user_icon.setStyleSheet("""
-            font-size: 30px;
-            background-color: #3b7be9;
+            background-color: #e0e0e0;
             border-radius: 30px;
-            color: white;
             padding: 10px;
         """)
+
+        # Keep the rest the same
         user_icon.setFixedSize(60, 60)
         user_icon.setAlignment(Qt.AlignCenter)
         sidebar_layout.addWidget(user_icon, 0, Qt.AlignCenter)
@@ -184,10 +213,10 @@ class ParkingAppFourth (QMainWindow):
         sidebar_layout.addStretch(2)  # Ensure centering
 
         # User profile button at bottom
-        profile = QLabel("👤")
+        profile = LogoutLabel("⏻")
         profile.setStyleSheet("""
             font-size: 30px; 
-            color: #555555; 
+            color: red; 
             background-color: #e0e0e0; 
             border-radius: 30px;
             border: 3px solid white;
@@ -255,6 +284,22 @@ class ParkingAppFourth (QMainWindow):
         self.vehicle_image.setFixedSize(1000, 550)
         camera_layout.addWidget(self.vehicle_image, alignment=Qt.AlignCenter)
         self.vehicle_image.setScaledContents(True)
+        
+        self.status_label = QLabel(self.vehicle_image)
+        self.status_label.setStyleSheet("""
+            QLabel {
+                color: white;
+                background-color: rgba(100, 100, 100, 0.7);  /* Semi-transparent gray */
+                border-radius: 4px;
+                font-size: 12px;
+                padding: 5px;
+                font-weight:600;                        
+                border : none;
+            }
+        """)
+        self.status_label.setText("Status: Ready")
+        self.status_label.adjustSize()
+        self.status_label.move(10, self.vehicle_image.height() - self.status_label.height() - 10)
         
         content_layout.addWidget(camera_frame)
         
@@ -445,6 +490,24 @@ class ParkingAppFourth (QMainWindow):
         self.stop_button.clicked.connect(self.stop_camera)
         self.exit_button.clicked.connect(self.finalexit)
         self.otp_input.textChanged.connect(self.update_entered_OTP)
+
+    def update_status(self, message):
+        """Update the status text at the bottom of the camera feed"""
+        self.status_label.setText(f"Status: {message}")
+        self.status_label.adjustSize()
+        self.status_label.move(10, self.vehicle_image.height() - self.status_label.height() - 10)
+        self.status_label.show()
+
+    def navigate_to_login(self):
+        """Navigate back to the home/previous page"""
+        from new_app import ParkKeyUI
+        # You can put any code here to navigate to the previous page
+        # self.show_popup("Navigating to home page...")
+        
+        self.home_window = ParkKeyUI()
+        self.home_window.show()
+        self.close()
+
     def navigate_to_home(self):
         """Navigate back to the home/previous page"""
         from middleui import ParkingApp
@@ -503,6 +566,7 @@ class ParkingAppFourth (QMainWindow):
 
     def start_camera(self):
         """Start the camera and begin detecting number plates."""
+        self.update_status("Starting camera...")
         # Change button text to indicate operation in progress
         self.automatic_button.setText("Starting...")
         self.automatic_button.setEnabled(False)
@@ -517,6 +581,7 @@ class ParkingAppFourth (QMainWindow):
             self.show_popup(f"Camera with index {self.current_camera_index} not available. Try another camera.")
             self.automatic_button.setText("Start")
             self.automatic_button.setEnabled(True)
+            self.update_status("Camera failed to start")
             return
 
         # Load the TensorFlow model
@@ -547,9 +612,11 @@ class ParkingAppFourth (QMainWindow):
         # Reset button text
         self.automatic_button.setText("Start")
         self.automatic_button.setEnabled(True)
+        self.update_status("Live")
 
     def stop_camera(self):
         """Stop the camera feed and close OpenCV windows."""
+        self.update_status("Stopping camera...")
         # Change button text to indicate operation in progress
         self.stop_button.setText("Stopping...")
         self.stop_button.setEnabled(False)
@@ -587,6 +654,7 @@ class ParkingAppFourth (QMainWindow):
         # Reset button text
         self.stop_button.setText("Stop Camera")
         self.stop_button.setEnabled(True)
+        self.update_status("Camera stopped")
 
     def update_frame_with_detection(self):
         """Capture a frame, run number plate detection, and display the result."""
@@ -595,6 +663,7 @@ class ParkingAppFourth (QMainWindow):
             print("Error: Failed to grab frame")
             self.timer.stop()
             self.cap.release()
+            self.update_status("Camera error - Failed to grab frame")
             return
 
         # Preprocess the frame for the model
@@ -648,11 +717,13 @@ class ParkingAppFourth (QMainWindow):
                             self.update_exit_time(timing)  
                             self.getVehicleData(DetectedNumberPlate)
                             self.show_popup(f"Number plate detected: {DetectedNumberPlate}")
+                            self.update_status(f"Detected: {DetectedNumberPlate}")
 
                     else:
                         print("Ignored Invalid ROI due to size 0")
                 except Exception as e:
                     print(f"Error with OCR: {e}")
+                    self.update_status(f"OCR Error: {str(e)}")
         
         # Convert the frame to RGB format for PyQt
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -688,6 +759,7 @@ class ParkingAppFourth (QMainWindow):
         except Exception as e:
             print("Error fetching vehicle details:", str(e))
             self.show_popup(f"An error occurred: {str(e)}")
+            self.update_status(f"Error: {str(e)}")
 
     def update_entered_OTP(self, text):
         """Updates self.entered_OTP as the user types"""
@@ -698,6 +770,7 @@ class ParkingAppFourth (QMainWindow):
         # Disable the exit button and show loading state
         self.exit_button.setEnabled(False)
         self.exit_button.setText("Processing...")
+        self.update_status("Processing exit...")
         
         # Force UI update
         QApplication.processEvents()
@@ -706,10 +779,12 @@ class ParkingAppFourth (QMainWindow):
             self.show_popup("Please detect a vehicle number and enter OTP")
             self.exit_button.setText("Process Exit")
             self.exit_button.setEnabled(True)
+            self.update_status("Error: Missing plate or OTP")
             return
             
         try:
             self.show_popup("Verifying OTP...")
+            self.update_status("Verifying OTP...")
             QApplication.processEvents()
             
             response = self.api_service.otpExitTicket(self.entered_OTP, self.parkingTicketIDVal)
@@ -717,6 +792,7 @@ class ParkingAppFourth (QMainWindow):
             if response and "message" in response and "OTP verified" in response["message"]:
                 # OTP is verified, call parkingCharges
                 self.show_popup("Calculating charges...")
+                self.update_status("Calculating charges...")
                 QApplication.processEvents()
                 
                 parkingdetails = self.api_service.parkingCharges(self.parkingTicketIDVal)
@@ -729,21 +805,26 @@ class ParkingAppFourth (QMainWindow):
 
                 # Call exitTicket only if OTP is verified
                 self.show_popup("Processing exit...")
+                self.update_status("Processing exit...")
                 QApplication.processEvents()
                 
                 exit_response = self.api_service.exitTicket(self.parkingTicketIDVal)
 
                 if exit_response and "successMessage" in exit_response and "Vehicle exited safely" in exit_response["successMessage"]:
                     self.show_popup(exit_response["successMessage"])
+                    self.update_status("Exit successful")
                     self.clear_fields_after_exit()
                 else:
                     self.show_popup("Exit failed. Please try again.")
+                    self.update_status("Exit failed")
             else:
                 self.show_popup("Wrong OTP! Try again.") 
+                self.update_status("Wrong OTP")
                 
         except Exception as e:
             print(f"Error processing exit: {str(e)}")
             self.show_popup(f"Error processing exit: {str(e)}")
+            self.update_status(f"Error: {str(e)}")
             
         # Reset button state
         self.exit_button.setText("Process Exit")
@@ -790,6 +871,6 @@ class ParkingAppFourth (QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = ParkingAppFourth ()
+    window = ParkingAppFourth()
     window.show()
     sys.exit(app.exec_())

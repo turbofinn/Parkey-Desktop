@@ -1,8 +1,7 @@
-
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                              QLabel, QLineEdit, QPushButton, QFrame, QScrollArea, QMessageBox,
                              QListWidget, QListWidgetItem, QSizePolicy, QSpacerItem, QMenu)
-from PyQt5.QtGui import QFont, QColor, QPixmap, QImage
+from PyQt5.QtGui import QFont, QColor, QPixmap, QImage, QPainter
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon
 import sys
@@ -38,6 +37,21 @@ save_directory = r'imges'
 
 if not os.path.exists(save_directory):
     os.makedirs(save_directory)
+
+class LogoutLabel(QLabel):
+    """Custom QLabel class for home icon that emits a signal when clicked"""
+    def __init__(self, text):
+        super().__init__(text)
+        self.setCursor(Qt.PointingHandCursor)  # Set cursor to pointing hand
+        
+    def mousePressEvent(self, event):
+        # Override the mouse press event to handle click
+        if event.button() == Qt.LeftButton:
+            # Call the slot function directly
+            if hasattr(self.parent().parent().parent(), 'navigate_to_login'):
+                self.parent().parent().parent().navigate_to_login()
+                self.close()
+        super().mousePressEvent(event)
 
 
 class CameraLabel(QLabel):
@@ -114,14 +128,28 @@ class ParkingAppSplash(QMainWindow):
         sidebar_layout.setSpacing(20)
 
         # User icon at top
-        user_icon = QLabel("👤")
+        user_icon = QLabel()
+        # Load your image (replace with your actual image path)
+        pixmap = QPixmap("assets/titlepage.png")  # e.g., "assets/profile.png"
+        # Create circular mask for rounded effect
+        mask = QPixmap(pixmap.size())
+        mask.fill(Qt.transparent)
+        painter = QPainter(mask)
+        painter.setBrush(Qt.white)
+        painter.setPen(Qt.NoPen)
+        painter.drawRoundedRect(mask.rect(), 30, 30)  # Match your 30px border-radius
+        painter.end()
+
+        # Apply the mask and styling
+        pixmap.setMask(mask.createMaskFromColor(Qt.transparent))
+        user_icon.setPixmap(pixmap.scaled(50, 50, Qt.KeepAspectRatio, Qt.SmoothTransformation))  # 40x40 to account for padding
         user_icon.setStyleSheet("""
-            font-size: 30px;
-            background-color: #3b7be9;
+            background-color: #e0e0e0;
             border-radius: 30px;
-            color: white;
             padding: 10px;
         """)
+
+        # Keep the rest the same
         user_icon.setFixedSize(60, 60)
         user_icon.setAlignment(Qt.AlignCenter)
         sidebar_layout.addWidget(user_icon, 0, Qt.AlignCenter)
@@ -186,10 +214,10 @@ class ParkingAppSplash(QMainWindow):
         sidebar_layout.addStretch(2)  # Ensure centering
 
         # User profile button at bottom
-        profile = QLabel("👤")
+        profile = LogoutLabel("⏻")
         profile.setStyleSheet("""
             font-size: 30px; 
-            color: #555555; 
+            color: red; 
             background-color: #e0e0e0; 
             border-radius: 30px;
             border: 3px solid white;
@@ -275,6 +303,23 @@ class ParkingAppSplash(QMainWindow):
 
         # Add the container to the main camera layout
         camera_layout.addWidget(camera_container)
+
+        # Add status label to vehicle image
+        self.status_label = QLabel(self.vehicle_image)
+        self.status_label.setStyleSheet("""
+            QLabel {
+                color: white;
+                background-color: rgba(100, 100, 100, 0.7);  /* Semi-transparent gray */
+                border-radius: 4px;
+                font-size: 12px;
+                padding: 5px;
+                font-weight:600;                        
+                border : none;
+            }
+        """)
+        self.status_label.setText("Status: Ready")
+        self.status_label.adjustSize()
+        self.status_label.move(10, self.vehicle_image.height() - self.status_label.height() - 10)
 
         content_layout.addWidget(camera_frame)
         
@@ -487,6 +532,24 @@ class ParkingAppSplash(QMainWindow):
         self.manual_button.clicked.connect(self.stop_camera)
         self.entry_button.clicked.connect(self.submit_entry)
         self.right_box_input.textChanged.connect(self.store_mobile_number)
+
+    def update_status(self, message):
+        """Update the status text at the bottom of the camera feed"""
+        self.status_label.setText(f"Status: {message}")
+        self.status_label.adjustSize()
+        self.status_label.move(10, self.vehicle_image.height() - self.status_label.height() - 10)
+        self.status_label.show()
+
+    def navigate_to_login(self):
+        """Navigate back to the home/previous page"""
+        from new_app import ParkKeyUI
+        # You can put any code here to navigate to the previous page
+        # self.show_popup("Navigating to home page...")
+        
+        self.home_window = ParkKeyUI()
+        self.home_window.show()
+        self.close()
+
     def navigate_to_home(self):
         """Navigate back to the home/previous page"""
         from middleui import ParkingApp
@@ -545,6 +608,7 @@ class ParkingAppSplash(QMainWindow):
 
     def start_camera(self):
         """Start the camera and begin detecting number plates."""
+        self.update_status("Starting camera...")
         # Change button text to indicate operation in progress
         self.automatic_button.setText("Starting...")
         self.automatic_button.setEnabled(False)
@@ -559,6 +623,7 @@ class ParkingAppSplash(QMainWindow):
             self.show_popup(f"Camera with index {self.current_camera_index} not available. Try another camera.")
             self.automatic_button.setText("Start")
             self.automatic_button.setEnabled(True)
+            self.update_status("Camera failed to start")
             return
 
         # Load the TensorFlow model
@@ -589,9 +654,11 @@ class ParkingAppSplash(QMainWindow):
         # Reset button text
         self.automatic_button.setText("Start")
         self.automatic_button.setEnabled(True)
+        self.update_status("Live")
 
     def stop_camera(self):
         """Stop the camera feed and close OpenCV windows."""
+        self.update_status("Stopping camera...")
         # Change button text to indicate operation in progress
         self.manual_button.setText("Stopping...")
         self.manual_button.setEnabled(False)
@@ -625,6 +692,8 @@ class ParkingAppSplash(QMainWindow):
         # Reset button text
         self.manual_button.setText("Stop")
         self.manual_button.setEnabled(True)
+        self.update_status("Camera stopped")
+        
 
     def update_frame_with_detection(self):
         """Capture a frame, run number plate detection, and display the result."""
@@ -703,26 +772,7 @@ class ParkingAppSplash(QMainWindow):
         qt_image = QImage(rgb_frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(qt_image)
         # In the initUI method, remove the first live_label implementation
-# and its positioning code
-
-# Then in the update_frame_with_detection method, replace the live_label code with:
-        if not hasattr(self, 'live_label'):
-            self.live_label = QLabel("LIVE", self.vehicle_image)
-            self.live_label.setStyleSheet("""
-                background-color: rgba(255, 0, 0, 0.7); 
-                color: white; 
-                padding: 2px 8px; 
-                border-radius: 3px; 
-                font-size: 12px;
-                font-weight: bold;
-            """)
-            self.live_label.setFixedSize(40, 20)
-
-        # And make sure this code is still present after the pixmap update
-        self.live_label.move(20, self.vehicle_image.height() - self.live_label.height() - 20)
-        self.live_label.raise_()  # Ensure it's on top
-        self.live_label.show()    # Make sure it's visible
-
+        # and its positioning code
         # Update the QLabel in the GUI with the new frame
         self.vehicle_image.setPixmap(pixmap.scaled(self.vehicle_image.width(), self.vehicle_image.height(), Qt.KeepAspectRatio))
 
@@ -845,7 +895,7 @@ class ParkingAppSplash(QMainWindow):
         else:
             print("Error: Mobile number or vehicle number is missing.")
             self.show_popup("Please enter both mobile number and vehicle number")
-            self.entry_button.setText("Enter Vehicle")
+            self.entry_button.setText("Park Vehicle")
             self.entry_button.setEnabled(True)
 
             

@@ -1,1 +1,7 @@
-ParkingApp
+login_layout.addWidget(login_header)
+        login_layout.addWidget(mobile_container, alignment=Qt.AlignCenter)
+        login_layout.addWidget(otp_container, alignment=Qt.AlignCenter)
+        login_layout.addWidget(self.status_label)
+        login_layout.addWidget(button_container, alignment=Qt.AlignCenter)
+        login_layout.addWidget(line_frame, alignment=Qt.AlignCenter)
+        login_layout.addWidget(resend_container, alignment=Qt.AlignCenter)

@@ -75,47 +75,78 @@ class ParkingAppSplash(QMainWindow):
         
         # Left sidebar
         sidebar = QWidget()
-        sidebar.setFixedWidth(200)  # Increased width
+        sidebar.setFixedWidth(140)
         sidebar.setStyleSheet("background-color: white; border-radius: 15px;")
 
         sidebar_layout = QVBoxLayout(sidebar)
         sidebar_layout.setContentsMargins(10, 15, 10, 15)
         sidebar_layout.setSpacing(20)
 
-        # Sidebar icons configuration with emoji icons
-        sidebar_icons = [
-            {"icon": "👤", "color": "#3b7be9", "position": "top"},     # User icon
-            {"icon": "🏠", "color": "#e0e0e0", "position": "middle"}, # Home icon
-            {"icon": "📹", "color": "#3b7be9", "position": "middle"}, # Camera/video icon
-            {"icon": "🎙️", "color": "#e0e0e0", "position": "middle"},# Microphone icon
-            {"icon": "📊", "color": "#f26e56", "position": "middle"} # Chart/stats icon
-        ]
-
-        # Function to create icon buttons
-        def create_icon_button(icon, background_color):
-            btn = QPushButton(icon)
-            btn.setFixedSize(60, 60)
-            btn.setStyleSheet(f"""
-                font-size: 30px;
-                background-color: {background_color};
-                border-radius: 30px;
-                color: white;
-            """)
-            return btn
-
-        # Add top icons
-        top_icons = [icon for icon in sidebar_icons if icon["position"] == "top"]
-        for icon_config in top_icons:
-            icon_btn = create_icon_button(icon_config['icon'], icon_config['color'])
-            sidebar_layout.addWidget(icon_btn, 0, Qt.AlignCenter)
+        # User icon at top
+        user_icon = QLabel("👤")
+        user_icon.setStyleSheet("""
+            font-size: 30px;
+            background-color: #3b7be9;
+            border-radius: 30px;
+            color: white;
+            padding: 10px;
+        """)
+        user_icon.setFixedSize(60, 60)
+        user_icon.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(user_icon, 0, Qt.AlignCenter)
 
         sidebar_layout.addStretch(1)
 
-        # Add middle icons
-        middle_icons = [icon for icon in sidebar_icons if icon["position"] == "middle"]
-        for icon_config in middle_icons:
-            icon_btn = create_icon_button(icon_config['icon'], icon_config['color'])
-            sidebar_layout.addWidget(icon_btn, 0, Qt.AlignCenter)
+        # Middle icons
+        home_icon = QLabel("🏠")
+        home_icon.setStyleSheet("""
+            font-size: 30px;
+            background-color: #e0e0e0;
+            border-radius: 30px;
+            color: white;
+            padding: 10px;
+        """)
+        home_icon.setFixedSize(60, 60)
+        home_icon.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(home_icon, 0, Qt.AlignCenter)
+        
+        camera_icon = QLabel("📹")
+        camera_icon.setStyleSheet("""
+            font-size: 30px;
+            background-color: #3b7be9;
+            border-radius: 30px;
+            color: white;
+            padding: 10px;
+        """)
+        camera_icon.setFixedSize(60, 60)
+        camera_icon.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(camera_icon, 0, Qt.AlignCenter)
+        camera_icon.clicked.connect(self.show_camera_options)
+
+        
+        mic_icon = QLabel("🎙️")
+        mic_icon.setStyleSheet("""
+            font-size: 30px;
+            background-color: #e0e0e0;
+            border-radius: 30px;
+            color: white;
+            padding: 10px;
+        """)
+        mic_icon.setFixedSize(60, 60)
+        mic_icon.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(mic_icon, 0, Qt.AlignCenter)
+        
+        stats_icon = QLabel("📊")
+        stats_icon.setStyleSheet("""
+            font-size: 30px;
+            background-color: #f26e56;
+            border-radius: 30px;
+            color: white;
+            padding: 10px;
+        """)
+        stats_icon.setFixedSize(60, 60)
+        stats_icon.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(stats_icon, 0, Qt.AlignCenter)
 
         sidebar_layout.addStretch(5)
 
@@ -127,13 +158,15 @@ class ParkingAppSplash(QMainWindow):
             background-color: #e0e0e0; 
             border-radius: 30px;
             border: 3px solid white;
+            padding: 10px;
         """)
         profile.setFixedSize(60, 60)
         profile.setAlignment(Qt.AlignCenter)
         sidebar_layout.addWidget(profile, 0, Qt.AlignCenter)
 
-        # Add sidebar to main layout
         main_layout.addWidget(sidebar)
+
+        
         
         # Main content area
         content_area = QWidget()
