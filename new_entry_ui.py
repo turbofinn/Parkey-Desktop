@@ -458,7 +458,7 @@ class ParkingAppSplash(QMainWindow):
         self.automatic_button.setStyleSheet(get_button_style("#007bff"))
         button_layout.addWidget(self.automatic_button)
 
-        self.entry_button = QPushButton("Enter Vehicle")
+        self.entry_button = QPushButton("Park Vehicle")
         self.entry_button.setFixedSize(150, 45)
         self.entry_button.setStyleSheet(get_button_style("#1a8539"))
         button_layout.addWidget(self.entry_button)

@@ -375,7 +375,7 @@ class ParkKeyUI(QWidget):
                     response_data = json.loads(response)
                     if response_data.get("status", {}).get("code") == 1001:
                         # Success
-                        self.status_label.setText("Login successful!")
+                        self.status_label.setText("Login successful! Redirecting Please Wait.....")
                         self.status_label.setStyleSheet("color: white;")
                         
                         # Open main window after delay

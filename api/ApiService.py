@@ -184,25 +184,7 @@ class ApiService:
             print(f"Error exiting vehicle: {e}")
             return None
         
-    def get_parking_space_stats(self):
-        """Fetch recent entry and exit statistics for the employee's parking space"""
-        url = "employee-handler/get-parking-space-stats"
-        headers = {
-            'Content-Type': 'application/json', 
-            'Authorization': "Bearer " + self.env_config.get_token()
-        }
-        params = {
-            'employeeID': self.env_config.get_employeeID()
-        }
-        
-        try:
-            response = requests.get(BASE_URL + url, headers=headers, params=params)
-            response.raise_for_status()
-            return self._get_json_response(response)
-        except requests.exceptions.RequestException as e:
-            print(f"Error getting parking space stats: {e}")
-            return None
-        
+
  
     def _get_json_response(self, response):
         try:
@@ -227,13 +209,7 @@ def main():
         payload = json.dumps({"mobileNo": mobileNo, "otp": otp})
         print(api.verifyOtp(url, payload))
 
-        stats = api.get_parking_space_stats()
-        if stats:
-            print("\nParking Space Statistics:")
-            print(f"Recent Entries: {stats.get('recentEntries', [])}")
-            print(f"Recent Exits: {stats.get('recentExits', [])}")
-            print(f"Available Spaces: {stats.get('availableSpaces', 'N/A')}\n")
-
+    
         vehicleNo = input("Input Vehicle: ")
 
         vehicleNo = input("Input Vehicle: ")
