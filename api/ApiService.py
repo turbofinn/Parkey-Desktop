@@ -184,8 +184,32 @@ class ApiService:
             print(f"Error exiting vehicle: {e}")
             return None
         
+    def get_parking_space_stats(self, employee_id):
+        """Get recent entries from API"""
+        try:
+            if not employee_id:
+                raise ValueError("Employee ID required")
 
- 
+            url = f"employee-handler/get-parking-space-stats?employeeID={employee_id}"
+            headers = {
+                'Authorization': f"Bearer {self.env_config.get_token()}",
+                'Content-Type': 'application/json'
+            }
+
+            response = requests.get(BASE_URL + url, headers=headers)
+            response.raise_for_status()
+            return response.json()
+
+        except requests.exceptions.RequestException as e:
+            print(f"API Error: {e}")
+            return None
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            return None
+            
+        except Exception as e:
+            print(f"Error getting recent entries: {e}")
+            return []
     def _get_json_response(self, response):
         try:
             return response.json()
@@ -208,9 +232,6 @@ def main():
         url = "login-service/verify-otp/employee"
         payload = json.dumps({"mobileNo": mobileNo, "otp": otp})
         print(api.verifyOtp(url, payload))
-
-    
-        vehicleNo = input("Input Vehicle: ")
 
         vehicleNo = input("Input Vehicle: ")
         vehicle_details = api.getVehicleDetails(vehicleNo)

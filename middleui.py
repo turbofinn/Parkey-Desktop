@@ -240,7 +240,7 @@ class   ParkingApp(QMainWindow):
         entry_button = QPushButton("Entry")
         entry_button.setStyleSheet("""
             QPushButton {
-                background-color: #ff3b30;
+                background-color: #0e9f51;
                 color: white;
                 border-radius: 25px;
                 padding: 10px;
@@ -249,7 +249,7 @@ class   ParkingApp(QMainWindow):
                 min-width: 150px;
             }
             QPushButton:hover {
-                background-color: #ff291f;
+                background-color: #0e9f51;
             }
         """)
         entry_button.setFixedHeight(50)
@@ -261,7 +261,7 @@ class   ParkingApp(QMainWindow):
         exit_button = QPushButton("Exit")
         exit_button.setStyleSheet("""
             QPushButton {
-                background-color: #0e9f51;
+                background-color: #ff3b30;
                 color: white;
                 border-radius: 25px;
                 padding: 10px;
@@ -270,7 +270,7 @@ class   ParkingApp(QMainWindow):
                 min-width: 150px;
             }
             QPushButton:hover {
-                background-color: #0c8a46;
+                background-color: #ff291f;
             }
         """)
         exit_button.setFixedHeight(50)
@@ -398,7 +398,7 @@ class   ParkingApp(QMainWindow):
             return  
 
         parkingdetres = self.api_service.parkingSpaceDetails(parkingID)
-        print(parkingdetres)
+        # print(parkingdetres)
         
         # Update the instance variables
         self.availableSpace = parkingdetres.get('availableSpace', "N/A")
