@@ -104,8 +104,8 @@ class ParkingAppFourth (QMainWindow):
         self.entered_OTP = ""
         self.parkingTicketIDVal = None
         self.current_camera_index = 0
-        env_config = EnvConfig()
-        self.api_service = ApiService(env_config)
+        self.env_config = EnvConfig()
+        self.api_service = ApiService(self.env_config)
         
         self.initUI()
 
@@ -453,7 +453,10 @@ class ParkingAppFourth (QMainWindow):
             }
             QListWidget::item {
                 border-bottom: 1px solid #ddd;
-                padding: 5px;
+                padding: 8px 5px;
+            }
+            QListWidget::item:first-child {
+                border-top: 1px solid #ddd;
             }
         """)
         vehicle_layout.addWidget(self.recent_exit_list)
@@ -490,6 +493,8 @@ class ParkingAppFourth (QMainWindow):
         self.stop_button.clicked.connect(self.stop_camera)
         self.exit_button.clicked.connect(self.finalexit)
         self.otp_input.textChanged.connect(self.update_entered_OTP)
+        self.update_recent_exits()
+
 
     def update_status(self, message):
         """Update the status text at the bottom of the camera feed"""
@@ -765,6 +770,70 @@ class ParkingAppFourth (QMainWindow):
         """Updates self.entered_OTP as the user types"""
         self.entered_OTP = text
 
+    # def finalexit(self):
+    #     """Handles the vehicle exit process with OTP verification"""
+    #     # Disable the exit button and show loading state
+    #     self.exit_button.setEnabled(False)
+    #     self.exit_button.setText("Processing...")
+    #     self.update_status("Processing exit...")
+        
+    #     # Force UI update
+    #     QApplication.processEvents()
+        
+    #     if not self.current_number_plate or not self.entered_OTP:
+    #         self.show_popup("Please detect a vehicle number and enter OTP")
+    #         self.exit_button.setText("Process Exit")
+    #         self.exit_button.setEnabled(True)
+    #         self.update_status("Error: Missing plate or OTP")
+    #         return
+            
+    #     try:
+    #         self.show_popup("Verifying OTP...")
+    #         self.update_status("Verifying OTP...")
+    #         QApplication.processEvents()
+            
+    #         response = self.api_service.otpExitTicket(self.entered_OTP, self.parkingTicketIDVal)
+
+    #         if response and "message" in response and "OTP verified" in response["message"]:
+    #             # OTP is verified, call parkingCharges
+    #             self.show_popup("Calculating charges...")
+    #             self.update_status("Calculating charges...")
+    #             QApplication.processEvents()
+                
+    #             parkingdetails = self.api_service.parkingCharges(self.parkingTicketIDVal)
+    #             print(parkingdetails)
+    #             totalcharges = parkingdetails.get("totalParkingCharges", '0')
+    #             self.exit_fees_display.setText(f"{totalcharges} Rs")
+
+    #             item = QListWidgetItem(f"Vehicle {self.current_number_plate} exited")
+    #             self.recent_exit_list.addItem(item)
+
+    #             # Call exitTicket only if OTP is verified
+    #             self.show_popup("Processing exit...")
+    #             self.update_status("Processing exit...")
+    #             QApplication.processEvents()
+                
+    #             exit_response = self.api_service.exitTicket(self.parkingTicketIDVal)
+
+    #             if exit_response and "successMessage" in exit_response and "Vehicle exited safely" in exit_response["successMessage"]:
+    #                 self.show_popup(exit_response["successMessage"])
+    #                 self.update_status("Exit successful")
+    #                 self.clear_fields_after_exit()
+    #             else:
+    #                 self.show_popup("Exit failed. Please try again.")
+    #                 self.update_status("Exit failed")
+    #         else:
+    #             self.show_popup("Wrong OTP! Try again.") 
+    #             self.update_status("Wrong OTP")
+                
+    #     except Exception as e:
+    #         print(f"Error processing exit: {str(e)}")
+    #         self.show_popup(f"Error processing exit: {str(e)}")
+    #         self.update_status(f"Error: {str(e)}")
+            
+    #     # Reset button state
+    #     self.exit_button.setText("Process Exit")
+    #     self.exit_button.setEnabled(True)
     def finalexit(self):
         """Handles the vehicle exit process with OTP verification"""
         # Disable the exit button and show loading state
@@ -800,9 +869,6 @@ class ParkingAppFourth (QMainWindow):
                 totalcharges = parkingdetails.get("totalParkingCharges", '0')
                 self.exit_fees_display.setText(f"{totalcharges} Rs")
 
-                item = QListWidgetItem(f"Vehicle {self.current_number_plate} exited")
-                self.recent_exit_list.addItem(item)
-
                 # Call exitTicket only if OTP is verified
                 self.show_popup("Processing exit...")
                 self.update_status("Processing exit...")
@@ -813,6 +879,10 @@ class ParkingAppFourth (QMainWindow):
                 if exit_response and "successMessage" in exit_response and "Vehicle exited safely" in exit_response["successMessage"]:
                     self.show_popup(exit_response["successMessage"])
                     self.update_status("Exit successful")
+                    
+                    # Only update recent exits after successful exit
+                    self.update_recent_exits()
+                    
                     self.clear_fields_after_exit()
                 else:
                     self.show_popup("Exit failed. Please try again.")
@@ -829,6 +899,85 @@ class ParkingAppFourth (QMainWindow):
         # Reset button state
         self.exit_button.setText("Process Exit")
         self.exit_button.setEnabled(True)
+    def update_recent_exits(self):
+        try:
+            # Clear existing items
+            self.recent_exit_list.clear()
+            
+            # Get employee ID
+            employee_id = self.env_config.get_employeeID()
+            if not employee_id:
+                self.show_popup("Employee ID not set")
+                return
+
+            # Get recent exits from API
+            response = self.api_service.get_parking_space_stats(employee_id)
+            print("API Response:", response)
+            
+            if not response or 'exitVehicleList' not in response:
+                self.recent_exit_list.addItem("No recent exits found")
+                return
+
+            # Sort exits by date (newest first)
+            exits = sorted(
+                response['exitVehicleList'],
+                key=lambda x: datetime.datetime.strptime(
+                    x['updatedDate'].replace('\u202f', ' '),
+                    "%b %d, %Y, %I:%M:%S %p"
+                ),
+                reverse=True
+            )
+
+            # Add exits to the list (show last 5 exits)
+            for exit in exits[:5]:
+                vehicle_no = exit.get('vehicleNo', 'N/A')
+                mobile_no = exit.get('customerNo', 'N/A')
+                duration = exit.get('parkingDuration', 'N/A')
+                charges = exit.get('parkingCharge', 'N/A')
+                
+                # Create the item widget
+                item_widget = QWidget()
+                layout = QHBoxLayout(item_widget)
+                
+                # Left side - Vehicle and Mobile
+                left_label = QLabel(f"{vehicle_no}\nMobile: {mobile_no[:4]}XXXXX{mobile_no[-1:]}")
+                left_label.setFont(QFont("Arial", 11))
+                
+                # Right side - Duration and Charges with labels
+                right_widget = QWidget()
+                right_layout = QVBoxLayout(right_widget)
+                
+                duration_label = QLabel(f"Duration: {duration}")
+                charges_label = QLabel(f"Charges: ₹{charges}")
+                
+                for label in [duration_label, charges_label]:
+                    label.setFont(QFont("Arial", 10))
+                    label.setStyleSheet("color: #0674B4;")
+                    right_layout.addWidget(label)
+                
+                right_layout.setSpacing(5)  # Increased spacing between duration and charges
+                right_layout.setContentsMargins(0, 0, 10, 0)
+                
+                # Add widgets to main layout
+                layout.addWidget(left_label)
+                layout.addStretch()
+                layout.addWidget(right_widget)
+                layout.setContentsMargins(10, 12, 10, 12)  # Increased vertical padding
+                
+                # Create list item
+                item = QListWidgetItem()
+                # Set a fixed height for each item
+                custom_size = QSize(item_widget.sizeHint().width(), 80)  # Increased height to 80px
+                item.setSizeHint(custom_size)
+                self.recent_exit_list.addItem(item)
+                self.recent_exit_list.setItemWidget(item, item_widget)
+                
+            # Add spacing between items in the list
+            self.recent_exit_list.setSpacing(5)
+
+        except Exception as e:
+            self.show_popup(f"Error loading exits: {str(e)}")
+            print(f"Error in update_recent_exits: {e}")
             
     def clear_fields_after_exit(self):
         """Clear all fields after successful exit"""

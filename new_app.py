@@ -220,7 +220,7 @@ class ParkKeyUI(QWidget):
         resend_layout = QHBoxLayout(resend_container)
         resend_layout.setContentsMargins(0, 0, 0, 0)
         
-        self.resend_label = QLabel("resend otp")
+        self.resend_label = QLabel("Resend OTP")
         self.resend_label.setFont(QFont("Arial", 12))
         self.resend_label.setStyleSheet("color: white; text-decoration: none;")
         # Fix cursor property by using proper Qt way
