@@ -7,6 +7,19 @@ import sys
 import os
 from api.ApiService import ApiService, EnvConfig
 from middleui import ParkingApp
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QIcon
+
+
+def resource_path(relative_path):
+    """Get the absolute path to a resource, works for dev and for PyInstaller."""
+    if hasattr(sys, '_MEIPASS'):
+        # Running in a PyInstaller bundle
+        base_path = sys._MEIPASS
+    else:
+        # Running in a normal Python environment
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class ParkKeyUI(QWidget):
     def __init__(self):
@@ -35,7 +48,7 @@ class ParkKeyUI(QWidget):
                 
         # Single image for the entire left panel
         image_label = QLabel()
-        image_path = "assets/left_panel_image.jpg"
+        image_path = resource_path("assets/left_panel_image.jpg")
         if os.path.exists(image_path):
             self.original_pixmap = QPixmap(image_path)
             # We'll set the actual size in the resizeEvent initially
@@ -420,6 +433,11 @@ if __name__ == "__main__":
     sys.excepthook = exception_hook
     
     app = QApplication([])
+    window = QMainWindow()
+    icon_path = resource_path("assets/parkkey.ico")
+    window.setWindowIcon(QIcon(icon_path))
+    window.setWindowTitle("Parkkey - Key to Parking")
+    app.setWindowIcon(QIcon(icon_path))
     window = ParkKeyUI()
     window.show()
     sys.exit(app.exec_())

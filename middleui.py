@@ -79,7 +79,9 @@ class   ParkingApp(QMainWindow):
         # User icon at top
         user_icon = QLabel()
         # Load your image (replace with your actual image path)
-        pixmap = QPixmap("assets/titlepage.png")  # e.g., "assets/profile.png"
+        img_path = resource_path("assets/profile.png")
+        pixmap = QPixmap(img_path)
+
         # Create circular mask for rounded effect
         mask = QPixmap(pixmap.size())
         mask.fill(Qt.transparent)
@@ -287,6 +289,7 @@ class   ParkingApp(QMainWindow):
         
         # Main illustration - Parking image
         parking_image_frame = QFrame()
+        parking_img_path = resource_path("assets/secondpage.png")
         parking_image_layout = QVBoxLayout(parking_image_frame)
         parking_image_layout.setContentsMargins(0, 0, 0, 0)
         parking_image_layout.setAlignment(Qt.AlignCenter)
@@ -294,7 +297,7 @@ class   ParkingApp(QMainWindow):
         parking_image = QLabel()
         # Try to load the title image from assets as in the first snippet
         try:
-            placeholder_image = QPixmap('assets/secondpage.png')
+            placeholder_image = QPixmap(parking_img_path)
         except:
             # Fallback to a placeholder if image not found
             placeholder_image = QPixmap(600, 400)

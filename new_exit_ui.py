@@ -129,7 +129,8 @@ class ParkingAppFourth (QMainWindow):
         # User icon at top
         user_icon = QLabel()
         # Load your image (replace with your actual image path)
-        pixmap = QPixmap("assets/titlepage.png")  # e.g., "assets/profile.png"
+        img_path = resource_path("assets/profile.png")
+        pixmap = QPixmap(img_path)  # e.g., "assets/profile.png"
         # Create circular mask for rounded effect
         mask = QPixmap(pixmap.size())
         mask.fill(Qt.transparent)
