@@ -103,8 +103,9 @@ class ParkKeyUI(QWidget):
        
         mobile_icon = QLabel()
         # Load your image (replace "otp_icon.png" with your actual image path)
-        pixmap = QPixmap("assets/Solid.png")  # e.g., "assets/otp_icon.png"
+        # pixmap = QPixmap("assets/Solid.png")  # e.g., "assets/otp_icon.png"
         # Scale the image to fit while maintaining aspect ratio
+        pixmap = QPixmap(resource_path("assets/Solid.png"))
         mobile_icon.setPixmap(pixmap.scaled(26, 26, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         mobile_icon.setFixedSize(26, 26)
         mobile_icon.setStyleSheet("background: transparent;")
@@ -137,8 +138,9 @@ class ParkKeyUI(QWidget):
         # OTP icon
         otp_icon = QLabel()
         # Load your image (replace "otp_icon.png" with your actual image path)
-        pixmap = QPixmap("assets/Solid.png")  # e.g., "assets/otp_icon.png"
+        # pixmap = QPixmap("assets/Solid.png")  # e.g., "assets/otp_icon.png"
         # Scale the image to fit while maintaining aspect ratio
+        pixmap = QPixmap(resource_path("assets/Solid.png"))
         otp_icon.setPixmap(pixmap.scaled(26, 26, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         otp_icon.setFixedSize(26, 26)
         otp_icon.setStyleSheet("background: transparent;")

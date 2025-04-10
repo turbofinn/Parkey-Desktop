@@ -79,7 +79,7 @@ class   ParkingApp(QMainWindow):
         # User icon at top
         user_icon = QLabel()
         # Load your image (replace with your actual image path)
-        img_path = resource_path("assets/profile.png")
+        img_path = resource_path("assets/titlepage.png")
         pixmap = QPixmap(img_path)
 
         # Create circular mask for rounded effect
@@ -167,7 +167,7 @@ class   ParkingApp(QMainWindow):
         sidebar_layout.addStretch(2)  # Increased stretch
 
         # User profile button at bottom
-        profile =LogoutLabel("⏻")
+        profile =LogoutLabel("🔓")
         profile.setStyleSheet("""
             font-size: 30px; 
             color: red; 

@@ -85,6 +85,16 @@ class HomeLabel(QLabel):
 class ParkingAppSplash(QMainWindow):
     def __init__(self):
         super().__init__()
+        QApplication.instance().setStyleSheet("""
+            QToolTip {
+                background-color: #0674B4;
+                color: white;
+                border: 1px solid #0674B4;
+                border-radius: 4px;
+                padding: 3px;
+                font-weight: bold;
+            }
+        """)
         self.setWindowTitle("Raipur Railways Parking")
         screen_geometry = QApplication.primaryScreen().geometry()
         self.setGeometry(screen_geometry)
@@ -130,7 +140,7 @@ class ParkingAppSplash(QMainWindow):
         # User icon at top
         user_icon = QLabel()
         # Load your image (replace with your actual image path)
-        img_path = resource_path("assets/profile.png")
+        img_path = resource_path("assets/titlepage.png")
         pixmap = QPixmap(img_path)  # e.g., "assets/profile.png"
         # Create circular mask for rounded effect
         mask = QPixmap(pixmap.size())
@@ -215,7 +225,7 @@ class ParkingAppSplash(QMainWindow):
         sidebar_layout.addStretch(2)  # Ensure centering
 
         # User profile button at bottom
-        profile = LogoutLabel("⏻")
+        profile = LogoutLabel("🔓")
         profile.setStyleSheet("""
             font-size: 30px; 
             color: red; 
@@ -249,10 +259,7 @@ class ParkingAppSplash(QMainWindow):
         title_label.setFont(QFont("Arial", 20, QFont.Bold))
         header_layout.addWidget(title_label)
         
-        # back_btn = QPushButton("Back to home")
-        # back_btn.setStyleSheet("color: #3b7be9; border: none; font-size: 14px;")
-        # back_btn.setCursor(Qt.PointingHandCursor)
-        # # header_layout.addWidget(back_btn, alignment=Qt.AlignRight)
+
         
         content_layout.addWidget(header_widget)
         
@@ -323,41 +330,95 @@ class ParkingAppSplash(QMainWindow):
         self.status_label.move(10, self.vehicle_image.height() - self.status_label.height() - 10)
 
         content_layout.addWidget(camera_frame)
-        
-        # Number plate display
+
         plate_frame = QFrame()
         plate_frame.setFixedSize(990, 80)
-        # plate_frame.setFixedWidth(550)
         plate_frame.setStyleSheet("background-color: #0674B4; border-radius: 6px;")
         plate_layout = QHBoxLayout(plate_frame)
-        plate_layout.setContentsMargins(0, 0, 0, 0)
+        plate_layout.setContentsMargins(15, 10, 15, 10)
+        plate_layout.setSpacing(30)  # Increased spacing between elements
 
-        # # Detected plate container
-        # plate_container = QFrame()
-        # plate_container.setStyleSheet("background-color: white; border-radius: 4px; padding: 2px;")
-        # plate_container.setFixedWidth(180)
-        # plate_container.setFixedHeight(40)
-        # plate_container_layout = QHBoxLayout(plate_container)
-        # plate_container_layout.setContentsMargins(5, 2, 5, 2)
-
-        # plate_icon = QLabel()
-        # plate_icon.setFixedSize(20, 20)
-        # plate_icon.setStyleSheet("background-color: #ccc; border-radius: 2px;")
-        # # plate_container_layout.addWidget(plate_icon)
-
-        # self.detected_plate_display = QLabel("-- -- -- ----")
-        # self.detected_plate_display.setStyleSheet("font-weight: bold; font-size: 14px;")
-        # # plate_container_layout.addWidget(self.detected_plate_display)
-
-        # Add the detected image display to the center
+        # Add the detected image display to the left
         self.detected_image = QLabel()
         self.detected_image.setFixedSize(200, 60)
         self.detected_image.setStyleSheet("background-color: white; border-radius: 4px;")
         self.detected_image.setAlignment(Qt.AlignCenter)
+        plate_layout.addWidget(self.detected_image, alignment=Qt.AlignLeft)
 
-        plate_layout.addWidget(self.detected_image, alignment=Qt.AlignCenter)
+        # Create horizontal layout to hold the label and emoji buttons
+        vehicle_type_layout = QHBoxLayout()
+        vehicle_type_layout.setContentsMargins(0, 0, 0, 0)
+        vehicle_type_layout.setSpacing(0)  # Reduced spacing between label and buttons
+
+        # Create a container widget for the entire vehicle type section
+        vehicle_type_container = QWidget()
+        vehicle_type_container.setFixedWidth(380)  # Set your desired fixed width here
+        vehicle_type_container.setLayout(vehicle_type_layout)
+
+        # Vehicle type label
+        vehicle_type_label = QLabel("Vehicle Type:")
+        vehicle_type_label.setStyleSheet("color: white; font-size: 14px; font-weight: bold;")
+        vehicle_type_layout.addWidget(vehicle_type_label, alignment=Qt.AlignLeft)
+
+        # Widget + layout for the buttons
+        radio_buttons_widget = QWidget()
+        radio_buttons_layout = QHBoxLayout(radio_buttons_widget)
+        radio_buttons_layout.setContentsMargins(0, 0, 0, 0)
+        radio_buttons_layout.setSpacing(20)  # Increased spacing between buttons
+
+        # Create the emoji buttons
+        self.bike_radio = QPushButton("🏍️")
+        self.car_radio = QPushButton("🚗")
+        self.truck_radio = QPushButton("🚚")
+        self.cycle_radio = QPushButton("🚲")
+
+        # Tooltips
+        self.bike_radio.setToolTip("Bike")
+        self.car_radio.setToolTip("Car")
+        self.truck_radio.setToolTip("Truck")
+        self.cycle_radio.setToolTip("Cycle")
+
+        # Button style
+        radio_style = """
+            QPushButton {
+                background-color: white;
+                border-radius: 25px;
+                padding: 5px;
+                font-size: 24px;
+                width: 50px;
+                height: 50px;
+                color: #0674B4;
+                border: 2px solid #e0e0e0;
+            }
+            QPushButton:checked {
+                background-color: #3b7be9;
+                color: white;
+                border: 2px solid white;
+            }
+        """
+        
+
+        # Apply style, make checkable, add to layout
+        for btn in [self.bike_radio, self.car_radio, self.truck_radio, self.cycle_radio]:
+            btn.setStyleSheet(radio_style)
+            btn.setCheckable(True)
+            btn.setFixedSize(50, 50)
+            radio_buttons_layout.addWidget(btn)
+            btn.clicked.connect(self.handle_vehicle_type_selection)
+
+        # Default selected button
+        self.bike_radio.setChecked(True)
+        self.current_vehicle_type = "Bike"
+
+        # Add the buttons beside the label
+        vehicle_type_layout.addWidget(radio_buttons_widget, alignment=Qt.AlignLeft)
+
+
+        # Add the vehicle type widget to the main plate layout
+        plate_layout.addWidget(vehicle_type_container)
 
         content_layout.addWidget(plate_frame, alignment=Qt.AlignCenter)
+        # content_layout.addWidget(plate_frame, alignment=Qt.AlignCenter)
 
         
         # Input fields section
@@ -387,6 +448,7 @@ class ParkingAppSplash(QMainWindow):
         plate_layout.addWidget(self.left_box_input)
 
         input_layout.addWidget(plate_widget)
+        self.left_box_input.textChanged.connect(self.handle_number_plate_edit)
 
         # Mobile number input
         mobile_widget = QWidget()
@@ -538,7 +600,34 @@ class ParkingAppSplash(QMainWindow):
         self.right_box_input.textChanged.connect(self.store_mobile_number)
         # At the end of initUI method
         self.update_recent_entries()
-
+        
+    def handle_vehicle_type_selection(self):
+        """Handle mutual exclusion for vehicle type emoji buttons"""
+        sender = self.sender()
+        
+        # First check if any button is currently checked
+        any_checked = False
+        for btn in [self.bike_radio, self.car_radio, self.truck_radio, self.cycle_radio]:
+            if btn != sender and btn.isChecked():
+                any_checked = True
+                btn.setChecked(False)  # Uncheck the previously selected button
+        
+        # Always set the sender to checked
+        sender.setChecked(True)
+        
+        # Store the selected vehicle type
+        if sender == self.bike_radio:
+            self.current_vehicle_type = "Bike"
+        elif sender == self.car_radio:
+            self.current_vehicle_type = "Car"
+        elif sender == self.truck_radio:
+            self.current_vehicle_type = "Truck"
+        elif sender == self.cycle_radio:
+            self.current_vehicle_type = "cycle"
+        
+        print(f"Vehicle type selected: {self.current_vehicle_type}")
+        # Update entry fees based on vehicle type if needed
+        # self.update_entry_fees_for_vehicle_type()
     def update_status(self, message):
         """Update the status text at the bottom of the camera feed"""
         self.status_label.setText(f"Status: {message}")
@@ -626,7 +715,7 @@ class ParkingAppSplash(QMainWindow):
         
         if not self.cap.isOpened():
             print(f"Error: Cannot access camera with index {self.current_camera_index}")
-            self.show_popup(f"Camera with index {self.current_camera_index} not available. Try another camera.")
+            self.show_popup(f"Camera with index {self.current_camera_index} not available. Try ancycle camera.")
             self.automatic_button.setText("Start")
             self.automatic_button.setEnabled(True)
             self.update_status("Camera failed to start")
@@ -688,7 +777,7 @@ class ParkingAppSplash(QMainWindow):
         self.show_popup(f"Camera {self.current_camera_index} stopped successfully")
         self.right_box_input.clear()
         self.entry_fees_display.clear()
-        self.recent_entry_list.clear()
+        # self.recent_entry_list.clear()
         self.left_box_input.clear()
         # self.recent_exit_list.clear()
         self.entry_time_display.clear()
@@ -743,56 +832,6 @@ class ParkingAppSplash(QMainWindow):
             print(f"Error updating recent entries: {e}")
             self.show_popup(f"Couldn't update recent entries: {e}")
 
-    # def update_recent_entries(self):
-    #     try:
-    #         # Clear existing items
-    #         self.recent_entry_list.clear()
-            
-    #         # Get employee ID
-    #         employee_id = self.env_config.get_employeeID()
-    #         if not employee_id:
-    #             self.show_popup("Employee ID not set")
-    #             return
-
-    #         # Get recent entries from API
-    #         response = self.api_service.get_parking_space_stats(employee_id)
-    #         print("API Response:", response)  # Debug print
-            
-    #         if not response or 'entryVehicleList' not in response:
-    #             self.recent_entry_list.addItem("No recent entries found")
-    #             return
-
-    #         # Add entries to the list (show last 5 entries)
-    #         for entry in response['entryVehicleList'][:5]:
-    #             vehicle_no = entry.get('vehicleNo', 'N/A')
-    #             updated_date = entry.get('updatedDate', '')
-                
-    #             # Format time to match screenshot (02:32 am)
-    #             if updated_date:
-    #                 try:
-    #                     # Parse the date string (assuming format like "Apr 3, 2025, 5:03:27 PM")
-    #                     # First remove the \u202f character if present
-    #                     cleaned_date = updated_date.replace('\u202f', ' ')
-    #                     dt = datetime.datetime.strptime(cleaned_date, "%b %d, %Y, %I:%M:%S %p")
-    #                     # Format as 02:32 am (with leading zero and lowercase am/pm)
-    #                     time_str = dt.strftime("%I:%M %p").lower()
-    #                 except ValueError as e:
-    #                     print(f"Error parsing date: {e}")
-    #                     time_str = "--:--"
-    #             else:
-    #                 time_str = "--:--"
-
-    #             # Create list item with vehicle number and time (exactly like screenshot)
-    #             item = QListWidgetItem(f"{vehicle_no}  {time_str}")
-                
-    #             # Optional: Set custom font or styling
-    #             item.setFont(QFont("Arial", 12))
-                
-    #             self.recent_entry_list.addItem(item)
-
-    #     except Exception as e:
-    #         self.show_popup(f"Error loading entries: {str(e)}")
-    #         print(f"Error in update_recent_entries: {e}")
     def update_frame_with_detection(self):
         """Capture a frame, run number plate detection, and display the result."""
         ret, frame = self.cap.read()
@@ -869,9 +908,6 @@ class ParkingAppSplash(QMainWindow):
         bytes_per_line = ch * w
         qt_image = QImage(rgb_frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(qt_image)
-        # In the initUI method, remove the first live_label implementation
-        # and its positioning code
-        # Update the QLabel in the GUI with the new frame
         self.vehicle_image.setPixmap(pixmap.scaled(self.vehicle_image.width(), self.vehicle_image.height(), Qt.KeepAspectRatio))
 
     def update_detected_image(self, image_path):
@@ -882,71 +918,46 @@ class ParkingAppSplash(QMainWindow):
 
     def update_vehicle_details(self, number_plate):
         """Update the verify vehicle details input field with the detected number plate."""
-        self.detected_number_plate = number_plate  
-        self.current_number_plate = number_plate
+        self.detected_number_plate = number_plate  # Store the originally detected plate
+        self.current_number_plate = number_plate   # Initial value of current plate is same as detected
         self.left_box_input.setText(self.current_number_plate)
-        # self.detected_plate_display.setText(self.current_number_plate)
+
 
     def handle_number_plate_edit(self):
         """Handle changes to the number plate input field"""
         edited_text = self.left_box_input.text().strip()
+        
+        # Don't process if field is being cleared or is empty
+        if not edited_text:
+            return
+            
         if edited_text != self.current_number_plate:
             self.current_number_plate = edited_text
+            
+            # Only show message if we had a previous detected plate
+            if self.detected_number_plate:
+                self.show_popup("Number plate edited manually. Checking database...")
+            
+            # Clear related fields that would need to be recalculated
             self.entry_fees_display.clear()
+            
+            # Try to fetch vehicle details with the new plate number
+            if len(edited_text) >= 6:  # Only try if the plate number seems long enough
+                try:
+                    self.update_mobile_number(edited_text)
+                except Exception as e:
+                    print(f"Error fetching updated vehicle details: {str(e)}")
+                    self.show_popup("Please enter mobile number manually")
 
     def update_entry_time(self, timing):
         self.entry_time = timing
         self.entry_time_display.setText(f"Entry time {timing}")
 
-    # def update_mobile_number(self, number_plate):
-    #     try:
-    #         vehicle_no = str(number_plate)
-    #         response_data = self.api_service.getVehicleDetails(vehicle_no)  
-
-    #         print("API Response:", response_data)
-
-    #         if response_data:
-    #             if 'errorMessage' in response_data:
-    #                 # Vehicle not found in the system
-                    
-    #                 self.show_popup("Vehicle not present in the system.\nPlease enter the mobile number manually.")
-    #                 self.right_box_input.clear()
-    #                 self.entry_fees_display.clear()
-    #                 self.entered_mobile_number = ""
-
-    #                 # Set focus on the input field for manual entry
-    #                 self.right_box_input.setFocus()
-
-    #                 try:
-    #                     self.right_box_input.textChanged.disconnect()
-    #                 except TypeError:
-    #                     pass
-
-    #                 # Connect text change event to store the manually entered number
-    #                 self.right_box_input.textChanged.connect(self.store_mobile_number)
-    #             else:
-    #                 # Vehicle found - Populate mobile number and entry fees
-    #                 mobile_number = response_data.get("mobileNo", "")
-    #                 entry_fee = str(response_data.get('totalParkingCharges', '0'))
-    #                 item = QListWidgetItem(f"John Doe\n+91 {mobile_number}")
-                    
-    #                 # Update UI fields
-    #                 self.entered_mobile_number = mobile_number
-    #                 self.right_box_input.setText(self.entered_mobile_number)
-    #                 self.entry_fees_display.setText(f"{entry_fee} Rs") 
-    #                 self.recent_entry_list.addItem(item)
-
-    #         else:
-    #             # Handle cases where API returns an empty response
-    #             self.show_popup("No data received from server. Please try again.")
-
-    #     except Exception as e:
-    #         print("Error fetching vehicle details:", str(e))
-    #         self.show_popup(f"An error occurred: {str(e)}")
     
     def update_mobile_number(self, number_plate):
         try:
-            vehicle_no = str(number_plate)
+            # Use the current_number_plate instead of the parameter
+            vehicle_no = str(self.current_number_plate)
             response_data = self.api_service.getVehicleDetails(vehicle_no)  
 
             print("API Response:", response_data)
@@ -969,7 +980,7 @@ class ParkingAppSplash(QMainWindow):
                     mobile_number = response_data.get("mobileNo", "")
                     entry_fee = str(response_data.get('totalParkingCharges', '0'))
                     
-                    # Update UI fields (removed the QListWidgetItem addition)
+                    # Update UI fields
                     self.entered_mobile_number = mobile_number
                     self.right_box_input.setText(self.entered_mobile_number)
                     self.entry_fees_display.setText(f"{entry_fee} Rs")
@@ -981,49 +992,6 @@ class ParkingAppSplash(QMainWindow):
             print("Error fetching vehicle details:", str(e))
             self.show_popup(f"An error occurred: {str(e)}")
 
-    def submit_entry(self):
-        # Disable the entry button and show loading state
-        self.entry_button.setEnabled(False)
-        self.entry_button.setText("Please wait...")
-        
-        # Force UI update
-        QApplication.processEvents()
-        
-        if self.entered_mobile_number and self.current_number_plate:
-            try:
-                self.show_popup("Processing vehicle entry...")
-                QApplication.processEvents()
-                
-                # Make API call
-                response = self.api_service.createCustomer("EMPLOYEE_APP", self.entered_mobile_number, self.current_number_plate)
-                entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
-                self.entry_fees_display.setText(entry_fee_value)
-                
-                parkingTicketVal = response.get('parkingTicketID')
-                
-                self.show_popup("Confirming ticket...")
-                QApplication.processEvents()
-                
-                confirmation = self.api_service.confirmTicket(parkingTicketVal)
-                print(confirmation)
-                
-                # Success message
-                self.show_popup("Added vehicle successfully")
-                
-                # Only update recent entries after successful submission
-                self.update_recent_entries()
-                
-            except Exception as e:
-                print(f"Error submitting entry: {str(e)}")
-                self.show_popup(f"Error submitting entry: {str(e)}")
-            finally:
-                self.entry_button.setText("Park Vehicle")
-                self.entry_button.setEnabled(True)
-        else:
-            print("Error: Mobile number or vehicle number is missing.")
-            self.show_popup("Please enter both mobile number and vehicle number")
-            self.entry_button.setText("Park Vehicle")
-            self.entry_button.setEnabled(True)
 
     def update_recent_entries(self):
         try:
@@ -1109,104 +1077,98 @@ class ParkingAppSplash(QMainWindow):
         """Store the manually entered mobile number in a variable."""
         self.entered_mobile_number = self.right_box_input.text().strip()
     
-    # def submit_entry(self):
-    #     # Disable the entry button and show loading state
-    #     self.entry_button.setEnabled(False)
-    #     self.entry_button.setText("Please wait...")
-        
-    #     # Force UI update
-    #     QApplication.processEvents()
-        
-    #     print(self.current_number_plate)
-    #     if self.entered_mobile_number and self.current_number_plate:
-    #         try:
-    #             # Show loading message in the log
-    #             self.show_popup("Processing vehicle entry...")
-    #             QApplication.processEvents()
-                
-    #             # Make API call
-    #             response = self.api_service.createCustomer("EMPLOYEE_APP", self.entered_mobile_number, self.current_number_plate)
-    #             entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
-    #             self.entry_fees_display.setText(entry_fee_value)
-                
-    #             item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
-    #             self.recent_entry_list.addItem(item)
-                
-    #             parkingTicketVal = response.get('parkingTicketID')
-                
-    #             # Show another loading message
-    #             self.show_popup("Confirming ticket...")
-    #             QApplication.processEvents()
-                
-    #             confirmation = self.api_service.confirmTicket(parkingTicketVal)
-    #             print(confirmation)
-                
-    #             # Success message
-    #             self.show_popup("Added vehicle successfully")
-                
-    #         except Exception as e:
-    #             print(f"Error submitting entry: {str(e)}")
-    #             self.show_popup(f"Error submitting entry: {str(e)}")
-    #         finally:
-    #             # Always reset button state
-    #             self.entry_button.setText("Enter Vehicle")
-    #             self.entry_button.setEnabled(True)
-    #     else:
-    #         print("Error: Mobile number or vehicle number is missing.")
-    #         self.show_popup("Please enter both mobile number and vehicle number")
-    #         self.entry_button.setText("Park Vehicle")
-    #         self.entry_button.setEnabled(True)
+   
+    def submit_entry(self):
+        # Disable the entry button and show loading state
+        self.entry_button.setEnabled(False)
+        self.entry_button.setText("Please wait...")
 
-    # def submit_entry(self):
-    #     # Disable the entry button and show loading state
-    #     self.entry_button.setEnabled(False)
-    #     self.entry_button.setText("Please wait...")
-        
-    #     # Force UI update
-    #     QApplication.processEvents()
-        
-    #     print(self.current_number_plate)
-    #     if self.entered_mobile_number and self.current_number_plate:
-    #         try:
-    #             # Show loading message in the log
-    #             self.show_popup("Processing vehicle entry...")
-    #             QApplication.processEvents()
-                
-    #             # Make API call
-    #             response = self.api_service.createCustomer("EMPLOYEE_APP", self.entered_mobile_number, self.current_number_plate)
-    #             entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
-    #             self.entry_fees_display.setText(entry_fee_value)
-                
-    #             item = QListWidgetItem(f"John Doe\n+91 {self.entered_mobile_number}") 
-    #             self.recent_entry_list.addItem(item)
-                
-    #             parkingTicketVal = response.get('parkingTicketID')
-                
-    #             # Show another loading message
-    #             self.show_popup("Confirming ticket...")
-    #             QApplication.processEvents()
-                
-    #             confirmation = self.api_service.confirmTicket(parkingTicketVal)
-    #             print(confirmation)
-                
-    #             # Success message
-    #             self.show_popup("Added vehicle successfully")
-                
-    #             # Update the recent entries list after successful submission
-    #             self.update_recent_entries()
-                
-    #         except Exception as e:
-    #             print(f"Error submitting entry: {str(e)}")
-    #             self.show_popup(f"Error submitting entry: {str(e)}")
-    #         finally:
-    #             # Always reset button state
-    #             self.entry_button.setText("Enter Vehicle")
-    #             self.entry_button.setEnabled(True)
-    #     else:
-    #         print("Error: Mobile number or vehicle number is missing.")
-    #         self.show_popup("Please enter both mobile number and vehicle number")
-    #         self.entry_button.setText("Park Vehicle")
-    #         self.entry_button.setEnabled(True)
+        # Force UI update
+        QApplication.processEvents()
+
+        # Get the latest values from the input fields
+        self.current_number_plate = self.left_box_input.text().strip()
+        self.entered_mobile_number = self.right_box_input.text().strip()
+
+        if self.entered_mobile_number and self.current_number_plate:
+            try:
+                self.show_popup("Processing vehicle entry...")
+                QApplication.processEvents()
+
+                # Make API call to create customer
+                response = self.api_service.createCustomer("EMPLOYEE_APP", self.entered_mobile_number, self.current_number_plate)
+
+                # Handle possible API errors in response
+                if isinstance(response, dict) and 'errorMessage' in response:
+                    self.show_popup(f"API Error: {response['errorMessage']}")
+                    return
+
+                entry_fee_value = f"{response.get('initialCharge', 'N/A')} Rs/h"
+                self.entry_fees_display.setText(entry_fee_value)
+                parkingTicketVal = response.get('parkingTicketID')
+
+                self.show_popup("Confirming ticket...")
+                QApplication.processEvents()
+
+                # Confirm the ticket
+                confirmation = self.api_service.confirmTicket(parkingTicketVal)
+                print(confirmation)
+
+                # Handle confirmation errors
+                if isinstance(confirmation, dict) and 'errorMessage' in confirmation:
+                    self.show_popup(f"Ticket confirmation error: {confirmation['errorMessage']}")
+                    return
+
+                # Success message
+                self.show_popup("Added vehicle successfully")
+
+                # Clear all fields and update UI
+                self.clear_fields_after_entry()
+                self.update_recent_entries()
+
+            except Exception as e:
+                error_message = str(e)
+                print(f"Error submitting entry: {error_message}")
+
+                # Error type detection from message
+                if "500" in error_message:
+                    self.show_popup("Server error (500): The server encountered an internal error")
+                elif "400" in error_message:
+                    self.show_popup("Bad request (400): Please check your input data")
+                elif "401" in error_message or "403" in error_message:
+                    self.show_popup("Authentication error: Please check your credentials")
+                else:
+                    self.show_popup(f"Error submitting entry: {error_message}")
+
+            finally:
+                self.entry_button.setText("Park Vehicle")
+                self.entry_button.setEnabled(True)
+
+        else:
+            print("Error: Mobile number or vehicle number is missing.")
+            self.show_popup("Please enter both mobile number and vehicle number")
+            self.entry_button.setText("Park Vehicle")
+            self.entry_button.setEnabled(True)
+    def clear_fields_after_entry(self):
+        """Clear all input fields and reset UI after successful entry"""
+        try:
+            self.left_box_input.textChanged.disconnect(self.handle_number_plate_edit)
+        except TypeError:
+            pass
+
+        self.left_box_input.clear()
+        self.right_box_input.clear()
+        self.entry_fees_display.clear()
+        self.entry_time_display.setText("Entry time --:--")
+        self.detected_image.clear()
+
+        self.current_number_plate = ""
+        self.entered_mobile_number = ""
+        self.detected_number_plate = ""
+
+        self.left_box_input.textChanged.connect(self.handle_number_plate_edit)
+
+
 
             
     def show_popup(self, message):

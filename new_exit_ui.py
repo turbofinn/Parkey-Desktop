@@ -129,7 +129,7 @@ class ParkingAppFourth (QMainWindow):
         # User icon at top
         user_icon = QLabel()
         # Load your image (replace with your actual image path)
-        img_path = resource_path("assets/profile.png")
+        img_path = resource_path("assets/titlepage.png")
         pixmap = QPixmap(img_path)  # e.g., "assets/profile.png"
         # Create circular mask for rounded effect
         mask = QPixmap(pixmap.size())
@@ -214,7 +214,7 @@ class ParkingAppFourth (QMainWindow):
         sidebar_layout.addStretch(2)  # Ensure centering
 
         # User profile button at bottom
-        profile = LogoutLabel("⏻")
+        profile = LogoutLabel("🔓")
         profile.setStyleSheet("""
             font-size: 30px; 
             color: red; 
@@ -345,6 +345,7 @@ class ParkingAppFourth (QMainWindow):
         plate_layout.addWidget(self.plate_input)
 
         input_layout.addWidget(plate_widget)
+        self.plate_input.textChanged.connect(self.handle_number_plate_edit)
 
         # OTP input
         otp_widget = QWidget()
@@ -747,24 +748,45 @@ class ParkingAppFourth (QMainWindow):
         self.detected_image.setPixmap(pixmap.scaled(self.detected_image.width(), self.detected_image.height(), Qt.KeepAspectRatio))
         self.detected_image.setAlignment(Qt.AlignCenter)
 
+    # def update_vehicle_details(self, number_plate):
+    #     """Update the vehicle details input field with the detected number plate."""
+    #     self.detected_number_plate = number_plate  
+    #     self.current_number_plate = number_plate
+    #     self.plate_input.setText(self.current_number_plate)
+
     def update_vehicle_details(self, number_plate):
-        """Update the vehicle details input field with the detected number plate."""
-        self.detected_number_plate = number_plate  
-        self.current_number_plate = number_plate
+        """Update the vehicle details with the detected number plate"""
+        self.detected_number_plate = number_plate  # Store original detection
+        self.current_number_plate = number_plate   # Current value starts as detected
         self.plate_input.setText(self.current_number_plate)
 
     def update_exit_time(self, timing):
         self.exit_time = timing
         self.exit_time_display.setText(f"Exit time {timing}")
 
+    # def getVehicleData(self, number_plate):
+    #     try:
+    #         response = self.api_service.getVehicleDetails(number_plate)
+    #         self.parkingTicketIDVal = response.get("parkingTicketID", "")
+    #         self.otp_input.setFocus()
+    #     except Exception as e:
+    #         print("Error fetching vehicle details:", str(e))
+    #         self.show_popup(f"An error occurred: {str(e)}")
+    #         self.update_status(f"Error: {str(e)}")
+
     def getVehicleData(self, number_plate):
         try:
             response = self.api_service.getVehicleDetails(number_plate)
-            self.parkingTicketIDVal = response.get("parkingTicketID", "")
-            self.otp_input.setFocus()
+            if response and 'parkingTicketID' in response:
+                self.parkingTicketIDVal = response['parkingTicketID']
+                self.show_popup("Vehicle details found. Please enter OTP.")
+                self.otp_input.setFocus()
+            else:
+                self.show_popup("Vehicle not found. Please verify plate number.")
+                self.parkingTicketIDVal = None
         except Exception as e:
             print("Error fetching vehicle details:", str(e))
-            self.show_popup(f"An error occurred: {str(e)}")
+            self.show_popup(f"Error: {str(e)}")
             self.update_status(f"Error: {str(e)}")
 
     def update_entered_OTP(self, text):
@@ -835,6 +857,54 @@ class ParkingAppFourth (QMainWindow):
     #     # Reset button state
     #     self.exit_button.setText("Process Exit")
     #     self.exit_button.setEnabled(True)
+    # def handle_number_plate_edit(self):
+    #     """Handle changes to the number plate input field"""
+    #     edited_text = self.plate_input.text().strip()
+        
+    #     if edited_text != self.current_number_plate:
+    #         self.current_number_plate = edited_text
+    #         self.show_popup("Number plate edited manually. Checking database...")
+            
+    #         # Clear related fields
+    #         self.exit_fees_display.clear()
+    #         self.otp_input.clear()
+    #         self.parkingTicketIDVal = None
+            
+    #         # Try to fetch vehicle details if plate seems valid
+    #         if len(edited_text) >= 6:
+    #             try:
+    #                 self.getVehicleData(edited_text)
+    #             except Exception as e:
+    #                 print(f"Error fetching vehicle details: {str(e)}")
+    #                 self.show_popup("Could not verify vehicle. Please enter OTP manually.")
+
+    def handle_number_plate_edit(self):
+        """Handle changes to the number plate input field"""
+        edited_text = self.plate_input.text().strip()
+        
+        # Don't process if field is being cleared
+        if not edited_text:
+            return
+            
+        if edited_text != self.current_number_plate:
+            self.current_number_plate = edited_text
+            
+            # Only show message if we had a previous value
+            if self.detected_number_plate:
+                self.show_popup("Number plate edited manually. Checking database...")
+            
+            # Clear related fields
+            self.exit_fees_display.clear()
+            self.otp_input.clear()
+            self.parkingTicketIDVal = None
+            
+            # Try to fetch vehicle details if plate seems valid
+            if len(edited_text) >= 6:
+                try:
+                    self.getVehicleData(edited_text)
+                except Exception as e:
+                    print(f"Error fetching vehicle details: {str(e)}")
+                    self.show_popup("Could not verify vehicle. Please enter OTP manually.")
     def finalexit(self):
         """Handles the vehicle exit process with OTP verification"""
         # Disable the exit button and show loading state
@@ -844,6 +914,10 @@ class ParkingAppFourth (QMainWindow):
         
         # Force UI update
         QApplication.processEvents()
+            # Get current values at submission time
+        self.current_number_plate = self.plate_input.text().strip()
+        self.entered_OTP = self.otp_input.text().strip()
+    
         
         if not self.current_number_plate or not self.entered_OTP:
             self.show_popup("Please detect a vehicle number and enter OTP")
@@ -980,16 +1054,39 @@ class ParkingAppFourth (QMainWindow):
             self.show_popup(f"Error loading exits: {str(e)}")
             print(f"Error in update_recent_exits: {e}")
             
+    # def clear_fields_after_exit(self):
+    #     """Clear all fields after successful exit"""
+    #     self.plate_input.clear()
+    #     self.otp_input.clear()
+    #     self.exit_fees_display.clear()
+    #     self.exit_time_display.setText("Exit time --:--")
+    #     self.detected_image.clear()
+    #     self.current_number_plate = ""
+    #     self.parkingTicketIDVal = None
+    #     self.entered_OTP = ""
     def clear_fields_after_exit(self):
         """Clear all fields after successful exit"""
+        # Disconnect the signal temporarily to prevent edit messages
+        try:
+            self.plate_input.textChanged.disconnect()
+        except TypeError:
+            pass
+        
+        # Clear all fields
         self.plate_input.clear()
         self.otp_input.clear()
         self.exit_fees_display.clear()
         self.exit_time_display.setText("Exit time --:--")
         self.detected_image.clear()
+        
+        # Reset all state variables
         self.current_number_plate = ""
+        self.detected_number_plate = ""
         self.parkingTicketIDVal = None
         self.entered_OTP = ""
+        
+        # Reconnect the signal
+        self.plate_input.textChanged.connect(self.handle_number_plate_edit)
             
     def show_popup(self, message):
         """
