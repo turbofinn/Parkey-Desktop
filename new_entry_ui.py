@@ -187,7 +187,7 @@ class ParkingAppSplash(QMainWindow):
         camera_icon = CameraLabel("📹")
         camera_icon.setStyleSheet("""
             font-size: 30px;
-            background-color: #3b7be9;
+            background-color: #e0e0e0;
             border-radius: 30px;
             color: white;
             padding: 10px;
@@ -211,7 +211,7 @@ class ParkingAppSplash(QMainWindow):
         stats_icon = QLabel("📊")
         stats_icon.setStyleSheet("""
             font-size: 30px;
-            background-color: #f26e56;
+            background-color: #e0e0e0;
             border-radius: 30px;
             color: white;
             padding: 10px;
@@ -391,7 +391,7 @@ class ParkingAppSplash(QMainWindow):
                 border: 2px solid #e0e0e0;
             }
             QPushButton:checked {
-                background-color: #3b7be9;
+                background-color:#90EE90;
                 color: white;
                 border: 2px solid white;
             }
@@ -623,7 +623,7 @@ class ParkingAppSplash(QMainWindow):
         elif sender == self.truck_radio:
             self.current_vehicle_type = "Truck"
         elif sender == self.cycle_radio:
-            self.current_vehicle_type = "cycle"
+            self.current_vehicle_type = "Cycle"
         
         print(f"Vehicle type selected: {self.current_vehicle_type}")
         # Update entry fees based on vehicle type if needed
@@ -775,62 +775,23 @@ class ParkingAppSplash(QMainWindow):
             self.sess.close()  
             print("TensorFlow session closed.")
         self.show_popup(f"Camera {self.current_camera_index} stopped successfully")
+        
+        # Only clear camera-related fields
+        self.detected_image.clear()
+        self.left_box_input.clear()
         self.right_box_input.clear()
         self.entry_fees_display.clear()
-        # self.recent_entry_list.clear()
-        self.left_box_input.clear()
-        # self.recent_exit_list.clear()
-        self.entry_time_display.clear()
-        self.detected_image.clear()
+        self.entry_time_display.setText("Entry time --:--")
+        for btn in [self.car_radio, self.truck_radio, self.cycle_radio]:
+            btn.setChecked(False)
+        self.bike_radio.setChecked(True)
+        self.current_vehicle_type = "Bike"
         cv2.destroyAllWindows()
         
         # Reset button text
         self.manual_button.setText("Stop")
         self.manual_button.setEnabled(True)
         self.update_status("Camera stopped")
-
-
-
-        """Fetch and display recent entries from the API"""
-        try:
-            # Get employee ID from environment config
-            employee_id = self.env_config.get_employeeID()
-            
-            # Get recent entries and exits from API
-            stats_data = self.api_service.get_parking_space_stats(employee_id)
-            print(stats_data)
-            
-            if stats_data:
-                # Clear the current list
-                self.recent_entry_list.clear()
-                
-                # Add recent entries to the list
-                for entry in stats_data.get("recentEntries", [])[:5]:  # Show last 5 entries
-                    vehicle_no = entry.get("vehicleNo", "Unknown")
-                    mobile_no = entry.get("mobileNo", "Unknown")
-                    time_str = entry.get("entryTime", "")
-                    
-                    # Format the time if available
-                    if time_str:
-                        try:
-                            # Parse ISO format time and convert to local format
-                            entry_time = datetime.datetime.fromisoformat(time_str.replace('Z', '+00:00'))
-                            time_str = entry_time.strftime("%I:%M %p")
-                        except ValueError:
-                            pass
-                    
-                    # Create the list item
-                    item_text = f"{vehicle_no}\nMobile: {mobile_no} • Entry: {time_str}"
-                    item = QListWidgetItem(item_text)
-                    self.recent_entry_list.addItem(item)
-                
-                # Optional: You could also update recent exits if you have that section
-                # for exit in stats_data.get("recentExits", [])[:5]:
-                #     ... similar formatting for exits ...
-                
-        except Exception as e:
-            print(f"Error updating recent entries: {e}")
-            self.show_popup(f"Couldn't update recent entries: {e}")
 
     def update_frame_with_detection(self):
         """Capture a frame, run number plate detection, and display the result."""
@@ -993,11 +954,90 @@ class ParkingAppSplash(QMainWindow):
             self.show_popup(f"An error occurred: {str(e)}")
 
 
+    # def update_recent_entries(self):
+    #     try:
+    #         # Clear existing items
+    #         self.recent_entry_list.clear()
+            
+    #         # Get employee ID
+    #         employee_id = self.env_config.get_employeeID()
+    #         if not employee_id:
+    #             self.show_popup("Employee ID not set")
+    #             return
+
+    #         # Get recent entries from API
+    #         response = self.api_service.get_parking_space_stats(employee_id)
+    #         print("API Response:", response)
+            
+    #         if not response or 'entryVehicleList' not in response:
+    #             self.recent_entry_list.addItem("No recent entries found")
+    #             return
+
+    #         # Sort entries by date (newest first)
+    #         entries = sorted(
+    #             response['entryVehicleList'],
+    #             key=lambda x: datetime.datetime.strptime(
+    #                 x['updatedDate'].replace('\u202f', ' '),
+    #                 "%b %d, %Y, %I:%M:%S %p"
+    #             ),
+    #             reverse=True
+    #         )
+
+    #         # Add entries to the list (show last 5 entries)
+    #         # 
+    #         for entry in entries[:5]:
+    #             vehicle_no = entry.get('vehicleNo', 'N/A')
+    #             mobile_no = entry.get('customerNo', 'N/A')
+    #             duration = entry.get('parkingDuration', 'N/A')
+    #             charges = entry.get('parkingCharge', 'N/A')
+                
+    #             # Create the item widget
+    #             item_widget = QWidget()
+    #             layout = QHBoxLayout(item_widget)
+                
+    #             # Left side - Vehicle and Mobile
+    #             left_label = QLabel(f"{vehicle_no}\nMobile: {mobile_no[:4]}XXXXX{mobile_no[-1:]}")
+    #             left_label.setFont(QFont("Arial", 11))
+                
+    #             # Right side - Duration and Charges with labels
+    #             right_widget = QWidget()
+    #             right_layout = QVBoxLayout(right_widget)
+                
+    #             duration_label = QLabel(f"Duration: {duration}")
+    #             charges_label = QLabel(f"Charges: ₹{charges}")
+                
+    #             for label in [duration_label, charges_label]:
+    #                 label.setFont(QFont("Arial", 10))
+    #                 label.setStyleSheet("color: #0674B4;")
+    #                 right_layout.addWidget(label)
+                
+    #             right_layout.setSpacing(5)  # Increased spacing between duration and charges
+    #             right_layout.setContentsMargins(0, 0, 10, 0)
+                
+    #             # Add widgets to main layout
+    #             layout.addWidget(left_label)
+    #             layout.addStretch()
+    #             layout.addWidget(right_widget)
+    #             layout.setContentsMargins(10, 12, 10, 12)  # Increased vertical padding
+                
+    #             # Create list item
+    #             item = QListWidgetItem()
+    #             # Set a fixed height for each item
+    #             custom_size = QSize(item_widget.sizeHint().width(), 80)  # Increased height to 80px
+    #             item.setSizeHint(custom_size)
+    #             self.recent_entry_list.addItem(item)
+    #             self.recent_entry_list.setItemWidget(item, item_widget)
+
+    #         # Add spacing between items in the list
+    #         self.recent_entry_list.setSpacing(5)
+    #     except Exception as e:
+    #         self.show_popup(f"Error loading entries: {str(e)}")
+    #         print(f"Error in update_recent_entries: {e}")
     def update_recent_entries(self):
         try:
             # Clear existing items
             self.recent_entry_list.clear()
-            
+
             # Get employee ID
             employee_id = self.env_config.get_employeeID()
             if not employee_id:
@@ -1007,7 +1047,7 @@ class ParkingAppSplash(QMainWindow):
             # Get recent entries from API
             response = self.api_service.get_parking_space_stats(employee_id)
             print("API Response:", response)
-            
+
             if not response or 'entryVehicleList' not in response:
                 self.recent_entry_list.addItem("No recent entries found")
                 return
@@ -1022,56 +1062,89 @@ class ParkingAppSplash(QMainWindow):
                 reverse=True
             )
 
+            # Function to parse duration like "6 days and 1 hours" to "145:00:00 hrs"
+            import re
+
+            def parse_duration_to_hms(duration_str):
+                try:
+                    days = hours = minutes = seconds = 0
+
+                    if 'day' in duration_str:
+                        day_match = re.search(r'(\d+)\s*day', duration_str)
+                        if day_match:
+                            days = int(day_match.group(1))
+
+                    if 'hour' in duration_str:
+                        hour_match = re.search(r'(\d+)\s*hour', duration_str)
+                        if hour_match:
+                            hours = int(hour_match.group(1))
+
+                    if 'minute' in duration_str:
+                        min_match = re.search(r'(\d+)\s*minute', duration_str)
+                        if min_match:
+                            minutes = int(min_match.group(1))
+
+                    if 'second' in duration_str:
+                        sec_match = re.search(r'(\d+)\s*second', duration_str)
+                        if sec_match:
+                            seconds = int(sec_match.group(1))
+
+                    total_hours = days * 24 + hours
+                    return f"{total_hours:02d}:{minutes:02d}:{seconds:02d} hrs"
+                except:
+                    return "Invalid Duration"
+
             # Add entries to the list (show last 5 entries)
-            # 
             for entry in entries[:5]:
                 vehicle_no = entry.get('vehicleNo', 'N/A')
                 mobile_no = entry.get('customerNo', 'N/A')
-                duration = entry.get('parkingDuration', 'N/A')
                 charges = entry.get('parkingCharge', 'N/A')
-                
+
+                # Format the duration
+                raw_duration = entry.get('parkingDuration')
+                duration = parse_duration_to_hms(raw_duration) if raw_duration else 'N/A'
+
                 # Create the item widget
                 item_widget = QWidget()
                 layout = QHBoxLayout(item_widget)
-                
+
                 # Left side - Vehicle and Mobile
                 left_label = QLabel(f"{vehicle_no}\nMobile: {mobile_no[:4]}XXXXX{mobile_no[-1:]}")
                 left_label.setFont(QFont("Arial", 11))
-                
+
                 # Right side - Duration and Charges with labels
                 right_widget = QWidget()
                 right_layout = QVBoxLayout(right_widget)
-                
+
                 duration_label = QLabel(f"Duration: {duration}")
                 charges_label = QLabel(f"Charges: ₹{charges}")
-                
+
                 for label in [duration_label, charges_label]:
                     label.setFont(QFont("Arial", 10))
                     label.setStyleSheet("color: #0674B4;")
                     right_layout.addWidget(label)
-                
-                right_layout.setSpacing(5)  # Increased spacing between duration and charges
+
+                right_layout.setSpacing(5)
                 right_layout.setContentsMargins(0, 0, 10, 0)
-                
+
                 # Add widgets to main layout
                 layout.addWidget(left_label)
                 layout.addStretch()
                 layout.addWidget(right_widget)
-                layout.setContentsMargins(10, 12, 10, 12)  # Increased vertical padding
-                
+                layout.setContentsMargins(10, 12, 10, 12)
+
                 # Create list item
                 item = QListWidgetItem()
-                # Set a fixed height for each item
-                custom_size = QSize(item_widget.sizeHint().width(), 80)  # Increased height to 80px
+                custom_size = QSize(item_widget.sizeHint().width(), 80)
                 item.setSizeHint(custom_size)
                 self.recent_entry_list.addItem(item)
                 self.recent_entry_list.setItemWidget(item, item_widget)
 
-            # Add spacing between items in the list
             self.recent_entry_list.setSpacing(5)
         except Exception as e:
             self.show_popup(f"Error loading entries: {str(e)}")
             print(f"Error in update_recent_entries: {e}")
+
 
     def store_mobile_number(self):
         """Store the manually entered mobile number in a variable."""
@@ -1096,7 +1169,7 @@ class ParkingAppSplash(QMainWindow):
                 QApplication.processEvents()
 
                 # Make API call to create customer
-                response = self.api_service.createCustomer("EMPLOYEE_APP", self.entered_mobile_number, self.current_number_plate)
+                response = self.api_service.createCustomer("EMPLOYEE_APP", self.entered_mobile_number, self.current_number_plate,self.current_vehicle_type)
 
                 # Handle possible API errors in response
                 if isinstance(response, dict) and 'errorMessage' in response:
@@ -1165,6 +1238,11 @@ class ParkingAppSplash(QMainWindow):
         self.current_number_plate = ""
         self.entered_mobile_number = ""
         self.detected_number_plate = ""
+
+        for btn in [self.car_radio, self.truck_radio, self.cycle_radio]:
+            btn.setChecked(False)
+        self.bike_radio.setChecked(True)
+        self.current_vehicle_type = "Bike"
 
         self.left_box_input.textChanged.connect(self.handle_number_plate_edit)
 

@@ -126,7 +126,7 @@ class   ParkingApp(QMainWindow):
         camera_icon = QLabel("📹")
         camera_icon.setStyleSheet("""
             font-size: 30px;
-            background-color: #3b7be9;
+            background-color: #e0e0e0;
             border-radius: 30px;
             color: white;
             padding: 10px;
@@ -150,7 +150,7 @@ class   ParkingApp(QMainWindow):
         stats_icon = QLabel("📊")
         stats_icon.setStyleSheet("""
             font-size: 30px;
-            background-color: #f26e56;
+            background-color: #e0e0e0;
             border-radius: 30px;
             color: white;
             padding: 10px;

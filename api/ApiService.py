@@ -97,10 +97,10 @@ class ApiService:
             print(f"Error getting vehicle details: {e}")
             return None
 
-    def createCustomer(self, source, mobileNo, vehicleNo):
+    def createCustomer(self, source, mobileNo, vehicleNo,vehicleType):
         url = "customer-flow-handler/create-customer"
         headers = {'Content-Type': 'application/json', 'Authorization': "Bearer " + self.env_config.get_token()}
-        payload = json.dumps({"source": source, "mobileNo": mobileNo, "vehicleNo": vehicleNo, "employeeID": self.env_config.get_employeeID()})
+        payload = json.dumps({"source": source, "mobileNo": mobileNo, "vehicleNo": vehicleNo, "employeeID": self.env_config.get_employeeID(),"vehicleType": vehicleType})
         try:
             response = requests.post(BASE_URL + url, headers=headers, data=payload)
             response.raise_for_status()

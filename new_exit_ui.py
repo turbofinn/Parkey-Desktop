@@ -176,7 +176,7 @@ class ParkingAppFourth (QMainWindow):
         camera_icon = CameraLabel("📹")
         camera_icon.setStyleSheet("""
             font-size: 30px;
-            background-color: #3b7be9;
+            background-color: #e0e0e0;
             border-radius: 30px;
             color: white;
             padding: 10px;
@@ -200,7 +200,7 @@ class ParkingAppFourth (QMainWindow):
         stats_icon = QLabel("📊")
         stats_icon.setStyleSheet("""
             font-size: 30px;
-            background-color: #f26e56;
+            background-color: #e0e0e0;
             border-radius: 30px;
             color: white;
             padding: 10px;
@@ -974,11 +974,91 @@ class ParkingAppFourth (QMainWindow):
         # Reset button state
         self.exit_button.setText("Process Exit")
         self.exit_button.setEnabled(True)
+    # def update_recent_exits(self):
+    #     try:
+    #         # Clear existing items
+    #         self.recent_exit_list.clear()
+            
+    #         # Get employee ID
+    #         employee_id = self.env_config.get_employeeID()
+    #         if not employee_id:
+    #             self.show_popup("Employee ID not set")
+    #             return
+
+    #         # Get recent exits from API
+    #         response = self.api_service.get_parking_space_stats(employee_id)
+    #         print("API Response:", response)
+            
+    #         if not response or 'exitVehicleList' not in response:
+    #             self.recent_exit_list.addItem("No recent exits found")
+    #             return
+
+    #         # Sort exits by date (newest first)
+    #         exits = sorted(
+    #             response['exitVehicleList'],
+    #             key=lambda x: datetime.datetime.strptime(
+    #                 x['updatedDate'].replace('\u202f', ' '),
+    #                 "%b %d, %Y, %I:%M:%S %p"
+    #             ),
+    #             reverse=True
+    #         )
+
+    #         # Add exits to the list (show last 5 exits)
+    #         for exit in exits[:5]:
+    #             vehicle_no = exit.get('vehicleNo', 'N/A')
+    #             mobile_no = exit.get('customerNo', 'N/A')
+    #             duration = exit.get('parkingDuration', 'N/A')
+    #             charges = exit.get('parkingCharge', 'N/A')
+                
+    #             # Create the item widget
+    #             item_widget = QWidget()
+    #             layout = QHBoxLayout(item_widget)
+                
+    #             # Left side - Vehicle and Mobile
+    #             left_label = QLabel(f"{vehicle_no}\nMobile: {mobile_no[:4]}XXXXX{mobile_no[-1:]}")
+    #             left_label.setFont(QFont("Arial", 11))
+                
+    #             # Right side - Duration and Charges with labels
+    #             right_widget = QWidget()
+    #             right_layout = QVBoxLayout(right_widget)
+                
+    #             duration_label = QLabel(f"Duration: {duration}")
+    #             charges_label = QLabel(f"Charges: ₹{charges}")
+                
+    #             for label in [duration_label, charges_label]:
+    #                 label.setFont(QFont("Arial", 10))
+    #                 label.setStyleSheet("color: #0674B4;")
+    #                 right_layout.addWidget(label)
+                
+    #             right_layout.setSpacing(5)  # Increased spacing between duration and charges
+    #             right_layout.setContentsMargins(0, 0, 10, 0)
+                
+    #             # Add widgets to main layout
+    #             layout.addWidget(left_label)
+    #             layout.addStretch()
+    #             layout.addWidget(right_widget)
+    #             layout.setContentsMargins(10, 12, 10, 12)  # Increased vertical padding
+                
+    #             # Create list item
+    #             item = QListWidgetItem()
+    #             # Set a fixed height for each item
+    #             custom_size = QSize(item_widget.sizeHint().width(), 80)  # Increased height to 80px
+    #             item.setSizeHint(custom_size)
+    #             self.recent_exit_list.addItem(item)
+    #             self.recent_exit_list.setItemWidget(item, item_widget)
+                
+    #         # Add spacing between items in the list
+    #         self.recent_exit_list.setSpacing(5)
+
+    #     except Exception as e:
+    #         self.show_popup(f"Error loading exits: {str(e)}")
+    #         print(f"Error in update_recent_exits: {e}")
+
     def update_recent_exits(self):
         try:
             # Clear existing items
             self.recent_exit_list.clear()
-            
+
             # Get employee ID
             employee_id = self.env_config.get_employeeID()
             if not employee_id:
@@ -988,7 +1068,7 @@ class ParkingAppFourth (QMainWindow):
             # Get recent exits from API
             response = self.api_service.get_parking_space_stats(employee_id)
             print("API Response:", response)
-            
+
             if not response or 'exitVehicleList' not in response:
                 self.recent_exit_list.addItem("No recent exits found")
                 return
@@ -1003,56 +1083,88 @@ class ParkingAppFourth (QMainWindow):
                 reverse=True
             )
 
+            # Function to parse duration like "1 hours", "6 days and 2 hours", etc.
+            import re
+
+            def parse_duration_to_hms(duration_str):
+                try:
+                    days = hours = minutes = seconds = 0
+
+                    if 'day' in duration_str:
+                        day_match = re.search(r'(\d+)\s*day', duration_str)
+                        if day_match:
+                            days = int(day_match.group(1))
+
+                    if 'hour' in duration_str:
+                        hour_match = re.search(r'(\d+)\s*hour', duration_str)
+                        if hour_match:
+                            hours = int(hour_match.group(1))
+
+                    if 'minute' in duration_str:
+                        min_match = re.search(r'(\d+)\s*minute', duration_str)
+                        if min_match:
+                            minutes = int(min_match.group(1))
+
+                    if 'second' in duration_str:
+                        sec_match = re.search(r'(\d+)\s*second', duration_str)
+                        if sec_match:
+                            seconds = int(sec_match.group(1))
+
+                    total_hours = days * 24 + hours
+                    return f"{total_hours:02d}:{minutes:02d}:{seconds:02d} hrs"
+                except:
+                    return "Invalid Duration"
+
             # Add exits to the list (show last 5 exits)
             for exit in exits[:5]:
                 vehicle_no = exit.get('vehicleNo', 'N/A')
                 mobile_no = exit.get('customerNo', 'N/A')
-                duration = exit.get('parkingDuration', 'N/A')
+                raw_duration = exit.get('parkingDuration')
+                duration = parse_duration_to_hms(raw_duration) if raw_duration else 'N/A'
                 charges = exit.get('parkingCharge', 'N/A')
-                
+
                 # Create the item widget
                 item_widget = QWidget()
                 layout = QHBoxLayout(item_widget)
-                
+
                 # Left side - Vehicle and Mobile
                 left_label = QLabel(f"{vehicle_no}\nMobile: {mobile_no[:4]}XXXXX{mobile_no[-1:]}")
                 left_label.setFont(QFont("Arial", 11))
-                
+
                 # Right side - Duration and Charges with labels
                 right_widget = QWidget()
                 right_layout = QVBoxLayout(right_widget)
-                
+
                 duration_label = QLabel(f"Duration: {duration}")
                 charges_label = QLabel(f"Charges: ₹{charges}")
-                
+
                 for label in [duration_label, charges_label]:
                     label.setFont(QFont("Arial", 10))
                     label.setStyleSheet("color: #0674B4;")
                     right_layout.addWidget(label)
-                
-                right_layout.setSpacing(5)  # Increased spacing between duration and charges
+
+                right_layout.setSpacing(5)
                 right_layout.setContentsMargins(0, 0, 10, 0)
-                
+
                 # Add widgets to main layout
                 layout.addWidget(left_label)
                 layout.addStretch()
                 layout.addWidget(right_widget)
-                layout.setContentsMargins(10, 12, 10, 12)  # Increased vertical padding
-                
+                layout.setContentsMargins(10, 12, 10, 12)
+
                 # Create list item
                 item = QListWidgetItem()
-                # Set a fixed height for each item
-                custom_size = QSize(item_widget.sizeHint().width(), 80)  # Increased height to 80px
+                custom_size = QSize(item_widget.sizeHint().width(), 80)
                 item.setSizeHint(custom_size)
                 self.recent_exit_list.addItem(item)
                 self.recent_exit_list.setItemWidget(item, item_widget)
-                
-            # Add spacing between items in the list
+
             self.recent_exit_list.setSpacing(5)
 
         except Exception as e:
             self.show_popup(f"Error loading exits: {str(e)}")
             print(f"Error in update_recent_exits: {e}")
+
             
     # def clear_fields_after_exit(self):
     #     """Clear all fields after successful exit"""
