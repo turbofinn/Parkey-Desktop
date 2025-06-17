@@ -9,6 +9,8 @@ from api.ApiService import ApiService, EnvConfig
 from middleui import ParkingApp
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QRegularExpressionValidator
+from PyQt5.QtCore import QRegularExpression
 
 
 def resource_path(relative_path):
@@ -28,6 +30,9 @@ class ParkKeyUI(QWidget):
         self.setWindowTitle("Parkkey - Key to Parking")
         screen_geometry = QApplication.primaryScreen().geometry()
         self.setGeometry(screen_geometry)
+        # Set window icon
+        icon_path = resource_path("assets/parkkey.ico")
+        self.setWindowIcon(QIcon(icon_path))
         
         # Initialize API service
         env_config = EnvConfig()
@@ -121,6 +126,9 @@ class ParkKeyUI(QWidget):
                 background: transparent;
             }
         """)
+        validator = QRegularExpressionValidator(QRegularExpression("^[0-9]{10}$"))
+        self.mobile_input.setValidator(validator)
+
         self.mobile_input.textChanged.connect(self.check_mobile_number)
         
         mobile_layout.addWidget(mobile_icon)
@@ -156,6 +164,8 @@ class ParkKeyUI(QWidget):
                 background: transparent;
             }
         """)
+        validator = QRegularExpressionValidator(QRegularExpression("^[0-9]{4}$"))
+        self.otp_input.setValidator(validator)
         
         otp_layout.addWidget(otp_icon)
         otp_layout.addWidget(self.otp_input)
@@ -435,10 +445,9 @@ if __name__ == "__main__":
     sys.excepthook = exception_hook
     
     app = QApplication([])
-    window = QMainWindow()
+    
     icon_path = resource_path("assets/parkkey.ico")
-    window.setWindowIcon(QIcon(icon_path))
-    window.setWindowTitle("Parkkey - Key to Parking")
+   
     app.setWindowIcon(QIcon(icon_path))
     window = ParkKeyUI()
     window.show()

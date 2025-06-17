@@ -903,7 +903,7 @@ class ParkingAppSplash(QMainWindow):
             self.entry_fees_display.clear()
             
             # Try to fetch vehicle details with the new plate number
-            if len(edited_text) >= 6:  # Only try if the plate number seems long enough
+            if len(edited_text) >=10:  # Only try if the plate number seems long enough
                 try:
                     self.update_mobile_number(edited_text)
                 except Exception as e:
