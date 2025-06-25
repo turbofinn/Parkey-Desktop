@@ -427,7 +427,10 @@ class ParkKeyUI(QWidget):
         """Open the main application window"""
         try:
             self.parking_window = ParkingApp()
-            self.parking_window.show()
+            if self.isMaximized():
+                self.parking_window.showMaximized()
+            else:
+                self.parking_window.show()
             self.close()
         except Exception as e:
             self.status_label.setText("Error loading main window.")

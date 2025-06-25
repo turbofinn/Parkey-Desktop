@@ -132,7 +132,7 @@ class ParkingAppSplash(QMainWindow):
         # Left sidebar
         sidebar = QWidget()
         sidebar.setFixedWidth(140)
-        sidebar.setStyleSheet("background-color: white; border-radius: 25px;")
+        sidebar.setStyleSheet("background-color: white; border-radius: 15px;")
 
         sidebar_layout = QVBoxLayout(sidebar)
         sidebar_layout.setContentsMargins(10, 15, 10, 15)
@@ -319,7 +319,7 @@ class ParkingAppSplash(QMainWindow):
             QLabel {
                 color: white;
                 background-color: rgba(100, 100, 100, 0.7);  /* Semi-transparent gray */
-                border-radius: 8px;
+                border-radius: 4px;
                 font-size: 12px;
                 padding: 5px;
                 font-weight:600;                        
@@ -369,7 +369,7 @@ class ParkingAppSplash(QMainWindow):
                 border: 2px solid #e0e0e0;
             }
             QPushButton:checked {
-                background-color:#8A2BE2;
+                background-color:#90EE90;
                 color: white;
                 border: 2px solid white;
             }
@@ -564,14 +564,14 @@ class ParkingAppSplash(QMainWindow):
 
         # Recent Entry section wrapped in a frame
         recent_entry_frame = QFrame()
-        recent_entry_frame.setStyleSheet("background-color: #f9f9f9; border-radius: 10px;")
+        recent_entry_frame.setStyleSheet("background-color: #0674B4; border-radius: 10px;")
         recent_entry_layout = QVBoxLayout(recent_entry_frame)
         recent_entry_layout.setContentsMargins(10, 10, 10, 10)
 
         recent_entry_label = QLabel("Recent Entry")
         recent_entry_label.setFont(QFont("Arial", 14, QFont.Bold))
         recent_entry_label.setAlignment(Qt.AlignCenter)
-        recent_entry_label.setStyleSheet("color: #666; margin-bottom: 5px; padding: 3px;")
+        recent_entry_label.setStyleSheet("color: white; margin-bottom: 5px; padding: 3px;")
 
         self.recent_entry_list = QListWidget()
         self.recent_entry_list.setStyleSheet("""
@@ -595,14 +595,14 @@ class ParkingAppSplash(QMainWindow):
 
         # Message Log section wrapped in a frame
         message_log_frame = QFrame()
-        message_log_frame.setStyleSheet("background-color: #f9f9f9; border-radius: 10px;")
+        message_log_frame.setStyleSheet("background-color: #0674B4; border-radius: 10px;")
         message_log_layout = QVBoxLayout(message_log_frame)
         message_log_layout.setContentsMargins(10, 10, 10, 10)
 
         message_log_label = QLabel("Message Log")
         message_log_label.setFont(QFont("Arial", 14, QFont.Bold))
         message_log_label.setAlignment(Qt.AlignCenter)
-        message_log_label.setStyleSheet("color: #666; margin-bottom: 5px; padding: 3px;")
+        message_log_label.setStyleSheet("color: white; margin-bottom: 5px; padding: 3px;")
 
         self.message_log_list = QListWidget()
         self.message_log_list.setStyleSheet("""
@@ -674,10 +674,7 @@ class ParkingAppSplash(QMainWindow):
         # self.show_popup("Navigating to home page...")
         
         self.home_window = ParkKeyUI()
-        if self.isMaximized():
-            self.home_window.showMaximized()
-        else:
-            self.home_window.show()
+        self.home_window.show()
         self.close()
 
     def navigate_to_home(self):
@@ -687,10 +684,7 @@ class ParkingAppSplash(QMainWindow):
         self.show_popup("Navigating to home page...")
         
         self.home_window = ParkingApp()
-        if self.isMaximized():
-            self.home_window.showMaximized()
-        else:
-            self.home_window.show()
+        self.home_window.show()
         self.close() 
 
 

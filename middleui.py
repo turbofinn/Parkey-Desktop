@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
 from PyQt5.QtGui import QFont, QColor, QPixmap, QImage, QPainter
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QGraphicsDropShadowEffect
+from PyQt5.QtCore import QTimer  
 import sys
 import os
 import datetime
@@ -10,6 +12,7 @@ from new_entry_ui import ParkingAppSplash
 from new_exit_ui import ParkingAppFourth
 from api.ApiService import ApiService
 from api.ApiService import EnvConfig
+import cv2
 
 class LogoutLabel(QLabel):
     """Custom QLabel class for home icon that emits a signal when clicked"""
@@ -238,30 +241,45 @@ class   ParkingApp(QMainWindow):
         buttons_layout.setContentsMargins(0, 0, 0, 0)
         buttons_layout.setSpacing(15)  # Space between buttons
         
-        # Entry button - Red with rounded corners
-        entry_button = QPushButton("Entry")
-        entry_button.setStyleSheet("""
+        
+        # Entry button - Green with rounded corners, shadow, and pressed color effect
+        self.entry_button = QPushButton("Entry")
+        self.entry_button.setStyleSheet("""
             QPushButton {
-                background-color: #0e9f51;
-                color: white;
-                border-radius: 25px;
-                padding: 10px;
-                font-size: 16px;
-                font-weight: bold;
-                min-width: 150px;
-            }
+            background-color: #0e9f51;
+            color: white;
+            border-radius: 25px;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            min-width: 150px;
+        }
             QPushButton:hover {
-                background-color: #0e9f51;
-            }
-        """)
-        entry_button.setFixedHeight(50)
-        entry_button.setFixedWidth(200)
-        entry_button.clicked.connect(self.handle_entry_click)
-        buttons_layout.addWidget(entry_button)
+                background-color: #0e9f51;  /* Same or slightly lighter if you like */
+        }
+            QPushButton:pressed {
+                background-color: #0a7e3e;  /* Slightly duller green */
+        }
+    """)
+        self.entry_button.setFixedHeight(50)
+        self.entry_button.setFixedWidth(200)
 
-        # Exit button - Green with rounded corners
-        exit_button = QPushButton("Exit")
-        exit_button.setStyleSheet("""
+        # Add shadow effect
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(15)
+        shadow.setColor(QColor(0, 0, 0, 160))  # Semi-transparent black
+        shadow.setOffset(0, 4)
+        self.entry_button.setGraphicsEffect(shadow)
+        self.entry_button.clicked.connect(self.handle_entry_click)
+        buttons_layout.addWidget(self.entry_button)
+
+
+        
+        
+
+        # Exit button - Red with rounded corners and shadow
+        self.exit_button = QPushButton("Exit")
+        self.exit_button.setStyleSheet("""
             QPushButton {
                 background-color: #ff3b30;
                 color: white;
@@ -274,12 +292,23 @@ class   ParkingApp(QMainWindow):
             QPushButton:hover {
                 background-color: #ff291f;
             }
-        """)
-        exit_button.setFixedHeight(50)
-        exit_button.setFixedWidth(200)
-        exit_button.clicked.connect(self.handle_exit_click)
-        buttons_layout.addWidget(exit_button)
-        
+            QPushButton:pressed {
+                background-color: #cc2a23;  /* Optional: a duller red when pressed */
+            }
+    """)
+        self.exit_button.setFixedHeight(50)
+        self.exit_button.setFixedWidth(200)
+
+        # Apply shadow effect
+        self.exit_shadow = QGraphicsDropShadowEffect()
+        self.exit_shadow.setBlurRadius(15)
+        self.exit_shadow.setColor(QColor(0, 0, 0, 160))  # Semi-transparent black shadow
+        self.exit_shadow.setOffset(0, 4)
+        self.exit_button.setGraphicsEffect(self.exit_shadow)
+
+        self.exit_button.clicked.connect(self.handle_exit_click)
+        buttons_layout.addWidget(self.exit_button)
+
         # Align buttons with the title
         buttons_widget.setFixedHeight(80)
         header_layout.addWidget(buttons_widget, 0, Qt.AlignRight | Qt.AlignTop)
@@ -381,13 +410,31 @@ class   ParkingApp(QMainWindow):
 
     # Functions from the first snippet
     def handle_entry_click(self):
+        self.entry_button.setEnabled(False)
+        self.exit_button.setEnabled(False)
+        self.entry_button.setText("Loading...")  # Optional feedback
+        QTimer.singleShot(100, self.open_entry_window)  # Delay to allow UI update
+    
+    def open_entry_window(self):
         self.parking_window = ParkingAppSplash()
-        self.parking_window.show()
+        if self.isMaximized():
+            self.parking_window.showMaximized()
+        else:
+            self.parking_window.show()
         self.close()
-
+    
     def handle_exit_click(self):
+        self.exit_button.setEnabled(False)
+        self.entry_button.setEnabled(False)
+        self.exit_button.setText("Loading...")  # Optional feedback
+        QTimer.singleShot(100, self.open_exit_window)  # Delay to allow UI update
+
+    def open_exit_window(self):
         self.parking_window = ParkingAppFourth()
-        self.parking_window.show()
+        if self.isMaximized():
+            self.parking_window.showMaximized()
+        else:
+            self.parking_window.show()
         self.close()
 
     def calllemployeedetails(self):
